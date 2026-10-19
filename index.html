@@ -3,17 +3,19 @@
 
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
+
   <title>Georgis</title>
 
   <style>
     * {
       box-sizing: border-box;
     }
-    
+
     [hidden] {
       display: none !important;
     }
@@ -207,6 +209,9 @@
       }
     }
   </style>
+
+  <!-- Bibliothek für den Excel-Export -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -261,7 +266,7 @@
   </section>
 
 
-  <!-- Website wird erst nach Anmeldung angezeigt -->
+  <!-- Website wird erst nach der Anmeldung angezeigt -->
 
   <div id="websiteBereich" hidden>
 
@@ -369,7 +374,7 @@
       </nav>
 
 
-      <!-- Unterreiter 1: Eingabe -->
+      <!-- Unterreiter: Eingabe -->
 
       <div
         id="eingabe"
@@ -440,7 +445,7 @@
       </div>
 
 
-      <!-- Unterreiter 2: Tabelle -->
+      <!-- Unterreiter: Datentabelle -->
 
       <div
         id="tabelle"
@@ -448,15 +453,48 @@
       >
         <h3>Gespeicherte Zählerstände</h3>
 
+        <button
+          class="primary-button"
+          type="button"
+          id="exportExcelButton"
+        >
+          Als Excel-Datei herunterladen
+        </button>
+
         <div class="table-wrapper">
           <table>
             <thead>
               <tr>
-                <th>Datum</th>
-                <th>Strom</th>
-                <th>Warmwasser</th>
-                <th>Kaltwasser</th>
-                <th>Aktion</th>
+                <th rowspan="2">
+                  Datum
+                </th>
+
+                <th colspan="2">
+                  Strom (kWh)
+                </th>
+
+                <th colspan="2">
+                  Kaltwasser (m³)
+                </th>
+
+                <th colspan="2">
+                  Warmwasser (m³)
+                </th>
+
+                <th rowspan="2">
+                  Aktion
+                </th>
+              </tr>
+
+              <tr>
+                <th>Zählerstand</th>
+                <th>Verbrauch</th>
+
+                <th>Zählerstand</th>
+                <th>Verbrauch</th>
+
+                <th>Zählerstand</th>
+                <th>Verbrauch</th>
               </tr>
             </thead>
 
@@ -473,21 +511,23 @@
       </div>
 
 
-      <!-- Unterreiter 3: Diagramme -->
+      <!-- Unterreiter: Diagramme -->
 
       <div
         id="diagramme"
         class="meter-tab"
       >
-        <h3>Verlauf der Zählerstände</h3>
+        <h3>Verbrauch zum Vormonat</h3>
 
         <div class="chart-card">
-          <h4>Strom</h4>
+          <h4>Stromverbrauch</h4>
+
           <canvas id="stromChart"></canvas>
         </div>
 
         <div class="chart-card">
-          <h4>Wasser</h4>
+          <h4>Wasserverbrauch</h4>
+
           <canvas id="wasserChart"></canvas>
         </div>
       </div>
@@ -534,7 +574,7 @@
   </div>
 
 
-  <!-- Normales JavaScript -->
+  <!-- Zählerstände, Tabellen und Diagramme -->
 
   <script>
 
@@ -578,10 +618,7 @@
           .classList
           .contains("active-meter")
       ) {
-
-        requestAnimationFrame(
-          renderCharts
-        );
+        requestAnimationFrame(renderCharts);
       }
     }
 
@@ -597,7 +634,7 @@
     });
 
 
-    /* Unterreiter für Zählerstände */
+    /* Unterreiter */
 
     const meterTabButtons =
       document.querySelectorAll(
@@ -636,7 +673,6 @@
 
 
       if (tabId === "diagramme") {
-
         requestAnimationFrame(
           renderCharts
         );
@@ -678,6 +714,13 @@
 
     function formatValue(value) {
 
+      if (
+        value === null ||
+        value === undefined
+      ) {
+        return "–";
+      }
+
       const number = Number(value);
 
       return Number.isFinite(number)
@@ -688,6 +731,88 @@
             }
           ).format(number)
         : "–";
+    }
+
+
+    function formatDate(date) {
+
+      return new Intl.DateTimeFormat(
+        "de-DE"
+      ).format(
+        new Date(
+          date + "T00:00:00"
+        )
+      );
+    }
+
+
+    function calculateConsumption(
+      currentReading,
+      previousReading,
+      property
+    ) {
+
+      if (!previousReading) {
+        return null;
+      }
+
+      const consumption =
+        Number(
+          currentReading[property]
+        ) -
+        Number(
+          previousReading[property]
+        );
+
+      return Number.isFinite(
+        consumption
+      )
+        ? consumption
+        : null;
+    }
+
+
+    function getTableRows() {
+
+      const sortedReadings =
+        getSortedReadings();
+
+
+      return sortedReadings.map(
+        (reading, index) => {
+
+          const previousReading =
+            sortedReadings[index - 1] ||
+            null;
+
+
+          return {
+            reading,
+            previousReading,
+
+            stromVerbrauch:
+              calculateConsumption(
+                reading,
+                previousReading,
+                "strom"
+              ),
+
+            kaltVerbrauch:
+              calculateConsumption(
+                reading,
+                previousReading,
+                "kalt"
+              ),
+
+            warmVerbrauch:
+              calculateConsumption(
+                reading,
+                previousReading,
+                "warm"
+              )
+          };
+        }
+      );
     }
 
 
@@ -707,22 +832,46 @@
       table.innerHTML = "";
 
 
-      getSortedReadings().forEach(
-        (reading) => {
+      getTableRows().forEach(
+        (rowData) => {
 
-          const originalIndex =
-            readings.indexOf(reading);
+          const reading =
+            rowData.reading;
 
           const row =
             document.createElement("tr");
 
 
-          [
-            reading.date,
-            formatValue(reading.strom),
-            formatValue(reading.warm),
-            formatValue(reading.kalt)
-          ].forEach((value) => {
+          const values = [
+            formatDate(reading.date),
+
+            formatValue(
+              reading.strom
+            ),
+
+            formatValue(
+              rowData.stromVerbrauch
+            ),
+
+            formatValue(
+              reading.kalt
+            ),
+
+            formatValue(
+              rowData.kaltVerbrauch
+            ),
+
+            formatValue(
+              reading.warm
+            ),
+
+            formatValue(
+              rowData.warmVerbrauch
+            )
+          ];
+
+
+          values.forEach((value) => {
 
             const cell =
               document.createElement("td");
@@ -741,6 +890,7 @@
               "button"
             );
 
+
           deleteButton.type = "button";
 
           deleteButton.className =
@@ -752,9 +902,17 @@
 
           deleteButton.addEventListener(
             "click",
-            () => deleteReading(
-              originalIndex
-            )
+            () => {
+
+              const originalIndex =
+                readings.indexOf(
+                  reading
+                );
+
+              deleteReading(
+                originalIndex
+              );
+            }
           );
 
 
@@ -762,7 +920,9 @@
             deleteButton
           );
 
-          row.appendChild(actionCell);
+          row.appendChild(
+            actionCell
+          );
 
           table.appendChild(row);
         }
@@ -802,6 +962,11 @@
         ).value;
 
 
+      message.textContent = "";
+      message.className =
+        "form-message";
+
+
       if (
         !date ||
         strom === "" ||
@@ -819,7 +984,46 @@
       }
 
 
-      const entry = {
+      const selectedDate =
+        new Date(
+          date + "T00:00:00"
+        );
+
+
+      if (
+        selectedDate.getDate() !== 1
+      ) {
+
+        message.textContent =
+          "Zählerstände können nur für den 1. eines Monats gespeichert werden.";
+
+        message.className =
+          "form-message error";
+
+        return;
+      }
+
+
+      const dateAlreadyExists =
+        readings.some(
+          (reading) =>
+            reading.date === date
+        );
+
+
+      if (dateAlreadyExists) {
+
+        message.textContent =
+          "Für diesen Monat ist bereits ein Zählerstand gespeichert.";
+
+        message.className =
+          "form-message error";
+
+        return;
+      }
+
+
+      const newReading = {
         date,
         strom: Number(strom),
         warm: Number(warm),
@@ -827,7 +1031,42 @@
       };
 
 
-      readings.push(entry);
+      const previousReading =
+        [...getSortedReadings()]
+          .reverse()
+          .find(
+            (reading) =>
+              reading.date < date
+          );
+
+
+      if (
+        previousReading &&
+        (
+          newReading.strom <
+            previousReading.strom ||
+
+          newReading.warm <
+            previousReading.warm ||
+
+          newReading.kalt <
+            previousReading.kalt
+        )
+      ) {
+
+        message.textContent =
+          "Ein Zählerstand darf nicht kleiner als der vorherige Zählerstand sein.";
+
+        message.className =
+          "form-message error";
+
+        return;
+      }
+
+
+      readings.push(
+        newReading
+      );
 
 
       localStorage.setItem(
@@ -837,7 +1076,6 @@
 
 
       renderReadings();
-
       renderCharts();
 
 
@@ -864,7 +1102,10 @@
 
     function deleteReading(index) {
 
-      readings.splice(index, 1);
+      readings.splice(
+        index,
+        1
+      );
 
 
       localStorage.setItem(
@@ -874,8 +1115,530 @@
 
 
       renderReadings();
-
       renderCharts();
+    }
+
+
+    /* Excel-Export */
+
+    function exportExcel() {
+
+      if (readings.length === 0) {
+
+        alert(
+          "Es sind noch keine Zählerstände vorhanden."
+        );
+
+        return;
+      }
+
+
+      if (
+        typeof XLSX === "undefined"
+      ) {
+
+        alert(
+          "Die Excel-Bibliothek konnte nicht geladen werden."
+        );
+
+        return;
+      }
+
+
+      const excelData =
+        getTableRows().map(
+          (rowData) => {
+
+            return {
+              "Datum":
+                formatDate(
+                  rowData.reading.date
+                ),
+
+              "Strom Zählerstand (kWh)":
+                rowData.reading.strom,
+
+              "Strom Verbrauch (kWh)":
+                rowData.stromVerbrauch,
+
+              "Kaltwasser Zählerstand (m³)":
+                rowData.reading.kalt,
+
+              "Kaltwasser Verbrauch (m³)":
+                rowData.kaltVerbrauch,
+
+              "Warmwasser Zählerstand (m³)":
+                rowData.reading.warm,
+
+              "Warmwasser Verbrauch (m³)":
+                rowData.warmVerbrauch
+            };
+          }
+        );
+
+
+      const worksheet =
+        XLSX.utils.json_to_sheet(
+          excelData
+        );
+
+
+      worksheet["!cols"] = [
+        { wch: 14 },
+        { wch: 26 },
+        { wch: 24 },
+        { wch: 30 },
+        { wch: 28 },
+        { wch: 30 },
+        { wch: 28 }
+      ];
+
+
+      const workbook =
+        XLSX.utils.book_new();
+
+
+      XLSX.utils.book_append_sheet(
+        workbook,
+        worksheet,
+        "Zählerstände"
+      );
+
+
+      XLSX.writeFile(
+        workbook,
+        "zaehlerstaende.xlsx"
+      );
+    }
+
+
+    /* Liniendiagramme */
+
+    function drawLineChart(
+      canvas,
+      chartSeries,
+      labels
+    ) {
+
+      const context =
+        canvas.getContext("2d");
+
+      const pixelRatio =
+        window.devicePixelRatio || 1;
+
+      const width =
+        Math.max(
+          canvas.clientWidth,
+          300
+        );
+
+      const height = 300;
+
+
+      canvas.width =
+        width * pixelRatio;
+
+      canvas.height =
+        height * pixelRatio;
+
+
+      context.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0
+      );
+
+
+      context.clearRect(
+        0,
+        0,
+        width,
+        height
+      );
+
+
+      const allValues =
+        chartSeries
+          .flatMap(
+            (series) =>
+              series.values
+          )
+          .filter(
+            (value) =>
+              Number.isFinite(value)
+          );
+
+
+      if (allValues.length === 0) {
+
+        context.fillStyle =
+          "#64748b";
+
+        context.font =
+          "15px Arial";
+
+        context.textAlign =
+          "center";
+
+
+        context.fillText(
+          "Für den Verbrauch werden mindestens zwei Monatsstände benötigt.",
+          width / 2,
+          height / 2
+        );
+
+        return;
+      }
+
+
+      const padding = {
+        left: 58,
+        right: 20,
+        top: 30,
+        bottom: 45
+      };
+
+
+      const maximum =
+        Math.max(
+          ...allValues,
+          1
+        );
+
+      const minimum =
+        Math.min(
+          0,
+          ...allValues
+        );
+
+
+      const graphWidth =
+        width -
+        padding.left -
+        padding.right;
+
+      const graphHeight =
+        height -
+        padding.top -
+        padding.bottom;
+
+
+      const pointCount =
+        Math.max(
+          labels.length,
+          1
+        );
+
+
+      function getX(index) {
+
+        if (pointCount <= 1) {
+          return padding.left;
+        }
+
+        return (
+          padding.left +
+          graphWidth *
+            index /
+            (pointCount - 1)
+        );
+      }
+
+
+      function getY(value) {
+
+        const range =
+          maximum - minimum || 1;
+
+        return (
+          padding.top +
+          (
+            maximum - value
+          ) /
+          range *
+          graphHeight
+        );
+      }
+
+
+      /* Gitternetz und Y-Achse */
+
+      context.strokeStyle =
+        "#cbd5e1";
+
+      context.fillStyle =
+        "#64748b";
+
+      context.font =
+        "12px Arial";
+
+
+      for (
+        let index = 0;
+        index <= 4;
+        index += 1
+      ) {
+
+        const y =
+          padding.top +
+          graphHeight *
+            index /
+            4;
+
+        const value =
+          maximum -
+          (
+            maximum - minimum
+          ) *
+          index /
+          4;
+
+
+        context.beginPath();
+
+        context.moveTo(
+          padding.left,
+          y
+        );
+
+        context.lineTo(
+          width - padding.right,
+          y
+        );
+
+        context.stroke();
+
+
+        context.textAlign =
+          "right";
+
+        context.fillText(
+          formatValue(value),
+          padding.left - 8,
+          y + 4
+        );
+      }
+
+
+      /* X-Achsen-Beschriftung */
+
+      context.fillStyle =
+        "#64748b";
+
+      context.textAlign =
+        "center";
+
+
+      labels.forEach(
+        (label, index) => {
+
+          context.fillText(
+            label,
+            getX(index),
+            height - 18
+          );
+        }
+      );
+
+
+      /* Linien zeichnen */
+
+      chartSeries.forEach(
+        (series) => {
+
+          context.strokeStyle =
+            series.color;
+
+          context.fillStyle =
+            series.color;
+
+          context.lineWidth = 2;
+
+          context.beginPath();
+
+
+          let firstPoint = true;
+
+
+          series.values.forEach(
+            (value, index) => {
+
+              if (
+                !Number.isFinite(value)
+              ) {
+                return;
+              }
+
+
+              const x =
+                getX(index);
+
+              const y =
+                getY(value);
+
+
+              if (firstPoint) {
+
+                context.moveTo(
+                  x,
+                  y
+                );
+
+                firstPoint = false;
+
+              } else {
+
+                context.lineTo(
+                  x,
+                  y
+                );
+              }
+            }
+          );
+
+
+          context.stroke();
+
+
+          series.values.forEach(
+            (value, index) => {
+
+              if (
+                !Number.isFinite(value)
+              ) {
+                return;
+              }
+
+
+              context.beginPath();
+
+              context.arc(
+                getX(index),
+                getY(value),
+                3,
+                0,
+                Math.PI * 2
+              );
+
+              context.fill();
+            }
+          );
+        }
+      );
+
+
+      /* Legende */
+
+      chartSeries.forEach(
+        (series, index) => {
+
+          const legendX =
+            padding.left +
+            index * 150;
+
+
+          context.fillStyle =
+            series.color;
+
+          context.fillRect(
+            legendX,
+            8,
+            12,
+            3
+          );
+
+
+          context.textAlign =
+            "left";
+
+          context.fillText(
+            series.name,
+            legendX + 17,
+            13
+          );
+        }
+      );
+    }
+
+
+    function renderCharts() {
+
+      const rowsWithConsumption =
+        getTableRows().slice(1);
+
+
+      const labels =
+        rowsWithConsumption.map(
+          (rowData) => {
+
+            return new Intl.DateTimeFormat(
+              "de-DE",
+              {
+                month: "2-digit",
+                year: "numeric"
+              }
+            ).format(
+              new Date(
+                rowData.reading.date +
+                "T00:00:00"
+              )
+            );
+          }
+        );
+
+
+      drawLineChart(
+        document.getElementById(
+          "stromChart"
+        ),
+        [
+          {
+            name: "Strom",
+            color: "#2d6cdf",
+
+            values:
+              rowsWithConsumption.map(
+                (rowData) =>
+                  rowData.stromVerbrauch
+              )
+          }
+        ],
+        labels
+      );
+
+
+      drawLineChart(
+        document.getElementById(
+          "wasserChart"
+        ),
+        [
+          {
+            name: "Kaltwasser",
+            color: "#2d6cdf",
+
+            values:
+              rowsWithConsumption.map(
+                (rowData) =>
+                  rowData.kaltVerbrauch
+              )
+          },
+
+          {
+            name: "Warmwasser",
+            color: "#374151",
+
+            values:
+              rowsWithConsumption.map(
+                (rowData) =>
+                  rowData.warmVerbrauch
+              )
+          }
+        ],
+        labels
+      );
     }
 
 
@@ -890,74 +1653,71 @@
 
 
     document
+      .getElementById(
+        "exportExcelButton"
+      )
+      .addEventListener(
+        "click",
+        exportExcel
+      );
+
+
+    /* Datum automatisch auf den 1. setzen */
+
+    const today =
+      new Date();
+
+    const currentMonth =
+      String(
+        today.getMonth() + 1
+      ).padStart(
+        2,
+        "0"
+      );
+
+
+    document
       .getElementById("datum")
-      .valueAsDate = new Date();
+      .value =
+        today.getFullYear() +
+        "-" +
+        currentMonth +
+        "-01";
 
-
-        /* Diagramme vorläufig vereinfacht */
-
-    function renderCharts() {
-      const stromCanvas =
-        document.getElementById("stromChart");
-
-      const wasserCanvas =
-        document.getElementById("wasserChart");
-
-      [stromCanvas, wasserCanvas].forEach((canvas) => {
-        const context = canvas.getContext("2d");
-
-        canvas.width =
-          Math.max(canvas.clientWidth, 300);
-
-        canvas.height = 300;
-
-        context.clearRect(
-          0,
-          0,
-          canvas.width,
-          canvas.height
-        );
-
-        context.fillStyle = "#64748b";
-        context.font = "15px Arial";
-        context.textAlign = "center";
-
-        context.fillText(
-          readings.length === 0
-            ? "Noch keine Daten vorhanden"
-            : "Diagramm wird später ergänzt",
-          canvas.width / 2,
-          canvas.height / 2
-        );
-      });
-    }
 
     window.addEventListener(
       "resize",
       () => {
+
         if (
           document
-            .getElementById("diagramme")
+            .getElementById(
+              "diagramme"
+            )
             .classList
-            .contains("active-meter")
+            .contains(
+              "active-meter"
+            )
         ) {
           renderCharts();
         }
       }
     );
 
+
     renderReadings();
 
   </script>
 
 
-  <!-- Firebase, Anmeldung und Einkaufsliste -->
+  <!-- Firebase-Anmeldung und Einkaufsliste -->
 
   <script type="module">
 
     import {
       initializeApp
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+
 
     import {
       getFirestore,
@@ -968,6 +1728,7 @@
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
+
     import {
       getAuth,
       signInWithEmailAndPassword,
@@ -977,17 +1738,30 @@
 
 
     const firebaseConfig = {
-      apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
-      authDomain: "die-georgis.firebaseapp.com",
-      projectId: "die-georgis",
-      storageBucket: "die-georgis.firebasestorage.app",
-      messagingSenderId: "548614823934",
-      appId: "1:548614823934:web:3373a1862a42d92350aaaf"
+      apiKey:
+        "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+
+      authDomain:
+        "die-georgis.firebaseapp.com",
+
+      projectId:
+        "die-georgis",
+
+      storageBucket:
+        "die-georgis.firebasestorage.app",
+
+      messagingSenderId:
+        "548614823934",
+
+      appId:
+        "1:548614823934:web:3373a1862a42d92350aaaf"
     };
 
 
     const app =
-      initializeApp(firebaseConfig);
+      initializeApp(
+        firebaseConfig
+      );
 
     const db =
       getFirestore(app);
@@ -996,7 +1770,10 @@
       getAuth(app);
 
     const shoppingRef =
-      collection(db, "shopping");
+      collection(
+        db,
+        "shopping"
+      );
 
 
     const loginBereich =
@@ -1060,7 +1837,69 @@
       );
 
 
-    let shoppingUnsubscribe = null;
+    let shoppingUnsubscribe =
+      null;
+
+
+    function getLoginErrorMessage(
+      errorCode
+    ) {
+
+      switch (errorCode) {
+
+        case "auth/invalid-credential":
+
+          return (
+            "E-Mail-Adresse oder " +
+            "Passwort ist falsch."
+          );
+
+
+        case "auth/invalid-email":
+
+          return (
+            "Die E-Mail-Adresse " +
+            "ist ungültig."
+          );
+
+
+        case "auth/user-disabled":
+
+          return (
+            "Dieses Benutzerkonto " +
+            "ist deaktiviert."
+          );
+
+
+        case "auth/operation-not-allowed":
+
+          return (
+            "E-Mail/Passwort ist " +
+            "in Firebase nicht aktiviert."
+          );
+
+
+        case "auth/too-many-requests":
+
+          return (
+            "Zu viele Versuche. " +
+            "Bitte später erneut versuchen."
+          );
+
+
+        case "auth/network-request-failed":
+
+          return (
+            "Netzwerkfehler. Bitte " +
+            "Internetverbindung prüfen."
+          );
+
+
+        default:
+
+          return errorCode;
+      }
+    }
 
 
     async function anmelden() {
@@ -1073,6 +1912,7 @@
 
 
       loginMessage.textContent = "";
+
       loginMessage.className =
         "form-message";
 
@@ -1113,6 +1953,7 @@
           error.message
         );
 
+
         loginMessage.textContent =
           "Anmeldung fehlgeschlagen: " +
           getLoginErrorMessage(
@@ -1128,36 +1969,6 @@
 
         loginButton.textContent =
           "Anmelden";
-      }
-    }
-
-
-    function getLoginErrorMessage(
-      errorCode
-    ) {
-
-      switch (errorCode) {
-
-        case "auth/invalid-credential":
-          return "E-Mail-Adresse oder Passwort ist falsch.";
-
-        case "auth/invalid-email":
-          return "Die E-Mail-Adresse ist ungültig.";
-
-        case "auth/user-disabled":
-          return "Dieses Benutzerkonto ist deaktiviert.";
-
-        case "auth/operation-not-allowed":
-          return "E-Mail/Passwort ist in Firebase nicht aktiviert.";
-
-        case "auth/too-many-requests":
-          return "Zu viele Versuche. Bitte später erneut versuchen.";
-
-        case "auth/network-request-failed":
-          return "Netzwerkfehler. Bitte Internetverbindung prüfen.";
-
-        default:
-          return errorCode;
       }
     }
 
@@ -1212,6 +2023,7 @@
           error
         );
 
+
         shoppingMessage.textContent =
           "Artikel konnte nicht gespeichert werden.";
 
@@ -1227,10 +2039,15 @@
         return;
       }
 
+
       try {
 
         await deleteDoc(
-          doc(db, "shopping", id)
+          doc(
+            db,
+            "shopping",
+            id
+          )
         );
 
       } catch (error) {
@@ -1258,25 +2075,29 @@
 
             shoppingList.innerHTML = "";
 
+
             snapshot.forEach(
               (itemDocument) => {
 
                 const data =
                   itemDocument.data();
 
-                const li =
+                const listItem =
                   document.createElement(
                     "li"
                   );
 
-                li.style.display =
+
+                listItem.style.display =
                   "flex";
 
-                li.style.justifyContent =
-                  "space-between";
+                listItem.style
+                  .justifyContent =
+                    "space-between";
 
-                li.style.alignItems =
-                  "center";
+                listItem.style
+                  .alignItems =
+                    "center";
 
 
                 const text =
@@ -1294,11 +2115,14 @@
                   );
 
                 button.type = "button";
+
                 button.textContent = "✔";
+
 
                 button.addEventListener(
                   "click",
                   () => {
+
                     removeItem(
                       itemDocument.id
                     );
@@ -1306,10 +2130,13 @@
                 );
 
 
-                li.append(text, button);
+                listItem.append(
+                  text,
+                  button
+                );
 
                 shoppingList.appendChild(
-                  li
+                  listItem
                 );
               }
             );
@@ -1321,6 +2148,7 @@
               "Einkaufsliste konnte nicht geladen werden:",
               error
             );
+
 
             shoppingMessage.textContent =
               "Einkaufsliste konnte nicht geladen werden.";
@@ -1350,11 +2178,6 @@
 
           startShoppingListener();
 
-          console.log(
-            "Erfolgreich angemeldet:",
-            user.email
-          );
-
         } else {
 
           websiteBereich.hidden = true;
@@ -1364,18 +2187,17 @@
           angemeldeterBenutzer.textContent =
             "";
 
+
           if (shoppingUnsubscribe) {
 
             shoppingUnsubscribe();
 
-            shoppingUnsubscribe = null;
+            shoppingUnsubscribe =
+              null;
           }
 
-          shoppingList.innerHTML = "";
 
-          console.log(
-            "Niemand ist angemeldet."
-          );
+          shoppingList.innerHTML = "";
         }
       }
     );
@@ -1418,11 +2240,6 @@
           addItem();
         }
       }
-    );
-
-
-    console.log(
-      "Firebase-Anmeldesystem geladen."
     );
 
   </script>
