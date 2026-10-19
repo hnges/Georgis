@@ -307,7 +307,31 @@ renderReadings();
 renderShopping();
 renderReadings();
 
-</script>
+console.log("Javascript läuft ✅");
 
+</script>
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+
+import { getFirestore }
+from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+  authDomain: "die-georgis.firebaseapp.com",
+  projectId: "die-georgis",
+  storageBucket: "die-georgis.firebasestorage.app",
+  messagingSenderId: "548614823934",
+  appId: "1:548614823934:web:3373a1862a42d92350aaaf"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+console.log("Firebase verbunden ✅");
+
+</script>
 </body>
 </html>
