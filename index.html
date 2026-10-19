@@ -123,6 +123,43 @@ Hinzufügen
 <!-- Zaehler -->
 
 <div id="zaehler" class="tab">
+<div class="subtabs">
+
+<button onclick="showMeterTab('eingabe')">
+Daten eingeben
+</button>
+
+<button onclick="showMeterTab('tabelle')">
+Datentabelle
+</button>
+
+<button onclick="showMeterTab('diagramme')">
+Diagramme
+</button>
+
+</div>
+
+<div id="eingabe" class="meterTab activeMeter">
+
+...
+Formular ...
+...
+</div>
+
+<div id="tabelle" class="meterTab">
+
+...
+Tabelle ...
+...
+</div>
+
+<div id="diagramme" class="meterTab">
+
+<canvas id="stromChart"></canvas>
+
+<canvas id="wasserChart"></canvas>
+
+</div>
 
 <h2>⚡ Zählerstände</h2>
 
