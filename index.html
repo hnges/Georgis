@@ -1,383 +1,661 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Georgis</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Georgis</title>
 
-<style>
-body {
-    font-family: Arial, sans-serif;
-    max-width: 1000px;
-    margin: auto;
-    background: #f4f4f4;
-    padding: 20px;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-h1 {
-    text-align: center;
-}
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 1000px;
+      margin: auto;
+      background: #f4f4f4;
+      padding: 20px;
+      color: #1f2937;
+    }
 
-.tabs {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
+    h1 {
+      text-align: center;
+    }
 
-.tab-button {
-    padding: 12px 20px;
-    border: none;
-    background: #2d6cdf;
-    color: white;
-    cursor: pointer;
-    border-radius: 8px;
-}
+    .tabs,
+    .subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-.tab-button:hover {
-    background: #1f4fa8;
-}
+    button {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.95rem;
+    }
 
-.tab {
-    display: none;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-}
+    .tab-button {
+      padding: 12px 20px;
+      background: #2d6cdf;
+      color: white;
+    }
 
-.active {
-    display: block;
-}
+    .tab-button:hover,
+    .tab-button.is-active {
+      background: #1f4fa8;
+    }
 
-input {
-    padding: 8px;
-    margin: 5px;
-}
+    .subtab-button {
+      background: #e5e7eb;
+      color: #1f2937;
+    }
 
-button {
-    padding: 8px 12px;
-}
+    .subtab-button:hover,
+    .subtab-button.is-active {
+      background: #374151;
+      color: white;
+    }
 
-ul {
-    list-style: none;
-    padding: 0;
-}
+    .tab,
+    .meter-tab {
+      display: none;
+    }
 
-li {
-    background: #e8e8e8;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 5px;
-}
+    .tab.active,
+    .meter-tab.active-meter {
+      display: block;
+    }
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
+    .tab {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+    }
 
-table, th, td {
-    border: 1px solid #ccc;
-}
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 15px;
+    }
 
-th, td {
-    padding: 10px;
-    text-align: center;
-}
-</style>
+    label {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 7px;
+      font: inherit;
+    }
+
+    .primary-button {
+      background: #2d6cdf;
+      color: white;
+    }
+
+    .primary-button:hover {
+      background: #1f4fa8;
+    }
+
+    .delete-button {
+      background: #dc2626;
+      color: white;
+      padding: 6px 9px;
+    }
+
+    .shopping-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      background: #e8e8e8;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ccc;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #eff6ff;
+    }
+
+    .empty-message,
+    .form-message {
+      color: #64748b;
+    }
+
+    .form-message.success {
+      color: #15803d;
+    }
+
+    .form-message.error {
+      color: #b91c1c;
+    }
+
+    .chart-card {
+      margin-top: 18px;
+      padding: 15px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 300px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 10px;
+      }
+
+      .tabs,
+      .subtabs,
+      .shopping-row {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <h1>🏠 Georgis</h1>
 
-<h1>🏠 Georgis</h1>
-
-<div class="tabs">
-    <button class="tab-button" onclick="showTab('einkauf')">
-        Einkaufsliste
+  <nav class="tabs" aria-label="Hauptnavigation">
+    <button class="tab-button is-active" type="button" data-tab="einkauf">
+      Einkaufsliste
     </button>
-
-    <button class="tab-button" onclick="showTab('zaehler')">
-        Zählerstände
+    <button class="tab-button" type="button" data-tab="zaehler">
+      Zählerstände
     </button>
-
-    <button class="tab-button" onclick="showTab('zukunft')">
-        Zukunft
+    <button class="tab-button" type="button" data-tab="zukunft">
+      Zukunft
     </button>
-</div>
-
-<!-- Einkaufsliste -->
-
-<div id="einkauf" class="tab active">
-
-<h2>🛒 Einkaufsliste</h2>
-
-<input type="text" id="itemInput" placeholder="Artikel eingeben">
-
-<button onclick="addItem()">
-Hinzufügen
-</button>
-
-<ul id="shoppingList"></ul>
-
-</div>
-
-<!-- Zaehler -->
-
-<div id="zaehler" class="tab">
-<div class="subtabs">
-
-<button onclick="showMeterTab('eingabe')">
-Daten eingeben
-</button>
-
-<button onclick="showMeterTab('tabelle')">
-Datentabelle
-</button>
-
-<button onclick="showMeterTab('diagramme')">
-Diagramme
-</button>
-
-</div>
-
-<div id="eingabe" class="meterTab activeMeter">
-
-...
-Formular ...
-...
-</div>
-
-<div id="tabelle" class="meterTab">
-
-...
-Tabelle ...
-...
-</div>
-
-<div id="diagramme" class="meterTab">
-
-<canvas id="stromChart"></canvas>
-
-<canvas id="wasserChart"></canvas>
-
-</div>
-
-<h2>⚡ Zählerstände</h2>
-
-<input type="date" id="datum">
-
-<input type="number" id="strom"
-placeholder="Strom">
-
-<input type="number" id="warmwasser"
-placeholder="Warmwasser">
-
-<input type="number" id="kaltwasser"
-placeholder="Kaltwasser">
-
-<button onclick="saveReading()">
-Speichern
-</button>
-
-<table>
-<thead>
-<tr>
-<th>Datum</th>
-<th>Strom</th>
-<th>Warmwasser</th>
-<th>Kaltwasser</th>
-</tr>
-</thead>
-
-<tbody id="meterTable">
-</tbody>
-
-</table>
-
-</div>
-
-<!-- Zukunft -->
-
-<div id="zukunft" class="tab">
-
-<h2>🚧 Bereich in Planung</h2>
-
-<p>
-Hier können später weitere Funktionen ergänzt werden.
-</p>
-
-</div>
-
-<script>
-
-/* Tabs */
-
-function showTab(tabId){
-
-document.querySelectorAll(".tab")
-.forEach(tab => tab.classList.remove("active"));
-
-document.getElementById(tabId)
-.classList.add("active");
-
-}
-
-/* Zählerstände */
-
-let readings =
-JSON.parse(localStorage.getItem("readings")) || [];
-
-function renderReadings(){
-
-const table =
-document.getElementById("meterTable");
-
-table.innerHTML = "";
-
-readings.forEach(r => {
-
-table.innerHTML += `
-<tr>
-<td>${r.date}</td>
-<td>${r.strom}</td>
-<td>${r.warm}</td>
-<td>${r.kalt}</td>
-</tr>
-`;
-
-});
-
-}
-
-function saveReading(){
-
-const entry = {
-
-date:
-document.getElementById("datum").value,
-
-strom:
-document.getElementById("strom").value,
-
-warm:
-document.getElementById("warmwasser").value,
-
-kalt:
-document.getElementById("kaltwasser").value
-
-};
-
-readings.push(entry);
-
-localStorage.setItem(
-"readings",
-JSON.stringify(readings)
-);
-
-renderReadings();
-
-}
-
-renderReadings();
-
-console.log("Javascript läuft ✅");
-
-</script>
-<script type="module">
-
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  deleteDoc,
-  doc,
-  onSnapshot
-}
-from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
-  authDomain: "die-georgis.firebaseapp.com",
-  projectId: "die-georgis",
-  storageBucket: "die-georgis.firebasestorage.app",
-  messagingSenderId: "548614823934",
-  appId: "1:548614823934:web:3373a1862a42d92350aaaf"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const shoppingRef = collection(db,"shopping");
-
-console.log("Firebase verbunden ✅");
-
-window.addItem = async function(){
-
-    const input =
-        document.getElementById("itemInput");
-
-    const artikel =
-        input.value.trim();
-
-    if(!artikel)
-        return;
-
-    await addDoc(
-        shoppingRef,
-        {
-            name: artikel
-        }
-    );
-
-    input.value = "";
-
-};
-
-window.removeItem =
-async function(id){
-
-    await deleteDoc(
-        doc(
-            db,
-            "shopping",
-            id
-        )
-    );
-
-};
-
-onSnapshot(shoppingRef,(snapshot)=>{
-
-    const list =
-        document.getElementById("shoppingList");
-
-    list.innerHTML = "";
-
-    snapshot.forEach((item)=>{
-
-        const data =
-            item.data();
-
-        const li =
-            document.createElement("li");
-
-        li.innerHTML =
-        `
-        ${data.name}
-        <button
-        style="float:right"
-        onclick="removeItem('${item.id}')">
-        ✔
-        </button>
-        `;
-
-        list.appendChild(li);
-
+  </nav>
+
+  <!-- Einkaufsliste -->
+  <section id="einkauf" class="tab active">
+    <h2>🛒 Einkaufsliste</h2>
+
+    <div class="shopping-row">
+      <input type="text" id="itemInput" placeholder="Artikel eingeben">
+      <button class="primary-button" type="button" id="addItemButton">
+        Hinzufügen
+      </button>
+    </div>
+
+    <ul id="shoppingList"></ul>
+  </section>
+
+  <!-- Zählerstände -->
+  <section id="zaehler" class="tab">
+    <h2>⚡ Zählerstände</h2>
+
+    <nav class="subtabs" aria-label="Zählerstände-Navigation">
+      <button class="subtab-button is-active" type="button" data-meter-tab="eingabe">
+        Daten eingeben
+      </button>
+      <button class="subtab-button" type="button" data-meter-tab="tabelle">
+        Datentabelle
+      </button>
+      <button class="subtab-button" type="button" data-meter-tab="diagramme">
+        Diagramme
+      </button>
+    </nav>
+
+    <!-- Unterreiter 1: Eingabe -->
+    <div id="eingabe" class="meter-tab active-meter">
+      <h3>Neuen Zählerstand eintragen</h3>
+
+      <div class="form-grid">
+        <label>
+          Datum
+          <input type="date" id="datum">
+        </label>
+
+        <label>
+          Strom (kWh)
+          <input type="number" id="strom" min="0" step="0.01" placeholder="Strom">
+        </label>
+
+        <label>
+          Warmwasser (m³)
+          <input type="number" id="warmwasser" min="0" step="0.001" placeholder="Warmwasser">
+        </label>
+
+        <label>
+          Kaltwasser (m³)
+          <input type="number" id="kaltwasser" min="0" step="0.001" placeholder="Kaltwasser">
+        </label>
+      </div>
+
+      <button class="primary-button" type="button" id="saveReadingButton">
+        Speichern
+      </button>
+      <p id="formMessage" class="form-message" aria-live="polite"></p>
+    </div>
+
+    <!-- Unterreiter 2: Tabelle -->
+    <div id="tabelle" class="meter-tab">
+      <h3>Gespeicherte Zählerstände</h3>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Datum</th>
+              <th>Strom</th>
+              <th>Warmwasser</th>
+              <th>Kaltwasser</th>
+              <th>Aktion</th>
+            </tr>
+          </thead>
+          <tbody id="meterTable"></tbody>
+        </table>
+      </div>
+
+      <p id="emptyTableMessage" class="empty-message">
+        Noch keine Zählerstände gespeichert.
+      </p>
+    </div>
+
+    <!-- Unterreiter 3: Diagramme -->
+    <div id="diagramme" class="meter-tab">
+      <h3>Verlauf der Zählerstände</h3>
+
+      <div class="chart-card">
+        <h4>Strom</h4>
+        <canvas id="stromChart"></canvas>
+      </div>
+
+      <div class="chart-card">
+        <h4>Wasser</h4>
+        <canvas id="wasserChart"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- Zukunft -->
+  <section id="zukunft" class="tab">
+    <h2>🚧 Bereich in Planung</h2>
+    <p>Hier können später weitere Funktionen ergänzt werden.</p>
+  </section>
+
+  <script>
+    /* Hauptreiter */
+    const tabButtons = document.querySelectorAll("[data-tab]");
+
+    function showTab(tabId) {
+      document.querySelectorAll(".tab").forEach((tab) => {
+        tab.classList.remove("active");
+      });
+
+      tabButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.tab === tabId);
+      });
+
+      document.getElementById(tabId).classList.add("active");
+
+      if (tabId === "zaehler" && document.getElementById("diagramme").classList.contains("active-meter")) {
+        requestAnimationFrame(renderCharts);
+      }
+    }
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => showTab(button.dataset.tab));
     });
 
-});
-    
-</script>
+    /* Unterreiter für Zählerstände */
+    const meterTabButtons = document.querySelectorAll("[data-meter-tab]");
+
+    function showMeterTab(tabId) {
+      document.querySelectorAll(".meter-tab").forEach((tab) => {
+        tab.classList.remove("active-meter");
+      });
+
+      meterTabButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.meterTab === tabId);
+      });
+
+      document.getElementById(tabId).classList.add("active-meter");
+
+      if (tabId === "diagramme") {
+        requestAnimationFrame(renderCharts);
+      }
+    }
+
+    meterTabButtons.forEach((button) => {
+      button.addEventListener("click", () => showMeterTab(button.dataset.meterTab));
+    });
+
+    /* Zählerstände */
+    let readings = JSON.parse(localStorage.getItem("readings")) || [];
+
+    function getSortedReadings() {
+      return [...readings].sort((a, b) => a.date.localeCompare(b.date));
+    }
+
+    function formatValue(value) {
+      const number = Number(value);
+      return Number.isFinite(number)
+        ? new Intl.NumberFormat("de-DE", { maximumFractionDigits: 3 }).format(number)
+        : "–";
+    }
+
+    function renderReadings() {
+      const table = document.getElementById("meterTable");
+      const emptyMessage = document.getElementById("emptyTableMessage");
+      table.innerHTML = "";
+
+      getSortedReadings().forEach((reading) => {
+        const originalIndex = readings.indexOf(reading);
+        const row = document.createElement("tr");
+
+        [reading.date, formatValue(reading.strom), formatValue(reading.warm), formatValue(reading.kalt)]
+          .forEach((value) => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+
+        const actionCell = document.createElement("td");
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "delete-button";
+        deleteButton.textContent = "Löschen";
+        deleteButton.addEventListener("click", () => deleteReading(originalIndex));
+        actionCell.appendChild(deleteButton);
+        row.appendChild(actionCell);
+
+        table.appendChild(row);
+      });
+
+      emptyMessage.hidden = readings.length > 0;
+    }
+
+    function saveReading() {
+      const message = document.getElementById("formMessage");
+      const date = document.getElementById("datum").value;
+      const strom = document.getElementById("strom").value;
+      const warm = document.getElementById("warmwasser").value;
+      const kalt = document.getElementById("kaltwasser").value;
+
+      if (!date || strom === "" || warm === "" || kalt === "") {
+        message.textContent = "Bitte fülle alle Felder aus.";
+        message.className = "form-message error";
+        return;
+      }
+
+      const entry = {
+        date,
+        strom: Number(strom),
+        warm: Number(warm),
+        kalt: Number(kalt)
+      };
+
+      readings.push(entry);
+      localStorage.setItem("readings", JSON.stringify(readings));
+
+      renderReadings();
+      renderCharts();
+
+      document.getElementById("strom").value = "";
+      document.getElementById("warmwasser").value = "";
+      document.getElementById("kaltwasser").value = "";
+
+      message.textContent = "Zählerstand wurde gespeichert.";
+      message.className = "form-message success";
+    }
+
+    function deleteReading(index) {
+      readings.splice(index, 1);
+      localStorage.setItem("readings", JSON.stringify(readings));
+      renderReadings();
+      renderCharts();
+    }
+
+    document.getElementById("saveReadingButton").addEventListener("click", saveReading);
+    document.getElementById("datum").valueAsDate = new Date();
+
+    /* Einfache Diagramme ohne zusätzliche Bibliothek */
+    function drawLineChart(canvasId, series, colors) {
+      const canvas = document.getElementById(canvasId);
+      const rect = canvas.getBoundingClientRect();
+      const width = Math.max(rect.width, 300);
+      const height = 300;
+      const ratio = window.devicePixelRatio || 1;
+
+      canvas.width = width * ratio;
+      canvas.height = height * ratio;
+
+      const ctx = canvas.getContext("2d");
+      ctx.scale(ratio, ratio);
+      ctx.clearRect(0, 0, width, height);
+
+      const padding = { top: 20, right: 20, bottom: 55, left: 55 };
+      const plotWidth = width - padding.left - padding.right;
+      const plotHeight = height - padding.top - padding.bottom;
+      const sorted = getSortedReadings();
+
+      if (sorted.length === 0) {
+        ctx.fillStyle = "#64748b";
+        ctx.font = "15px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText("Noch keine Daten vorhanden", width / 2, height / 2);
+        return;
+      }
+
+      const allValues = series.flatMap((item) => sorted.map((reading) => Number(reading[item.key])));
+      const minValue = Math.min(...allValues);
+      const maxValue = Math.max(...allValues);
+      const range = maxValue - minValue || 1;
+
+      ctx.strokeStyle = "#cbd5e1";
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padding.left, padding.top);
+      ctx.lineTo(padding.left, padding.top + plotHeight);
+      ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight);
+      ctx.stroke();
+
+      for (let i = 0; i <= 4; i++) {
+        const y = padding.top + (plotHeight / 4) * i;
+        const value = maxValue - (range / 4) * i;
+
+        ctx.strokeStyle = "#e5e7eb";
+        ctx.beginPath();
+        ctx.moveTo(padding.left, y);
+        ctx.lineTo(padding.left + plotWidth, y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#64748b";
+        ctx.font = "11px Arial";
+        ctx.textAlign = "right";
+        ctx.fillText(formatValue(value), padding.left - 8, y + 4);
+      }
+
+      series.forEach((item, seriesIndex) => {
+        ctx.strokeStyle = colors[seriesIndex];
+        ctx.fillStyle = colors[seriesIndex];
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+
+        sorted.forEach((reading, index) => {
+          const x = sorted.length === 1
+            ? padding.left + plotWidth / 2
+            : padding.left + (index / (sorted.length - 1)) * plotWidth;
+          const y = padding.top + ((maxValue - Number(reading[item.key])) / range) * plotHeight;
+
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+
+        ctx.stroke();
+
+        sorted.forEach((reading, index) => {
+          const x = sorted.length === 1
+            ? padding.left + plotWidth / 2
+            : padding.left + (index / (sorted.length - 1)) * plotWidth;
+          const y = padding.top + ((maxValue - Number(reading[item.key])) / range) * plotHeight;
+
+          ctx.beginPath();
+          ctx.arc(x, y, 4, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      });
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "11px Arial";
+      ctx.textAlign = "center";
+
+      sorted.forEach((reading, index) => {
+        if (sorted.length > 8 && index % Math.ceil(sorted.length / 8) !== 0 && index !== sorted.length - 1) return;
+
+        const x = sorted.length === 1
+          ? padding.left + plotWidth / 2
+          : padding.left + (index / (sorted.length - 1)) * plotWidth;
+        ctx.fillText(reading.date, x, padding.top + plotHeight + 20);
+      });
+
+      let legendX = padding.left;
+      series.forEach((item, index) => {
+        ctx.fillStyle = colors[index];
+        ctx.fillRect(legendX, height - 18, 12, 12);
+        ctx.fillStyle = "#1f2937";
+        ctx.textAlign = "left";
+        ctx.fillText(item.label, legendX + 17, height - 8);
+        legendX += ctx.measureText(item.label).width + 45;
+      });
+    }
+
+    function renderCharts() {
+      drawLineChart("stromChart", [{ key: "strom", label: "Strom" }], ["#f59e0b"]);
+      drawLineChart(
+        "wasserChart",
+        [
+          { key: "warm", label: "Warmwasser" },
+          { key: "kalt", label: "Kaltwasser" }
+        ],
+        ["#ef4444", "#2563eb"]
+      );
+    }
+
+    window.addEventListener("resize", () => {
+      if (document.getElementById("diagramme").classList.contains("active-meter")) {
+        renderCharts();
+      }
+    });
+
+    renderReadings();
+  </script>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      deleteDoc,
+      doc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+      authDomain: "die-georgis.firebaseapp.com",
+      projectId: "die-georgis",
+      storageBucket: "die-georgis.firebasestorage.app",
+      messagingSenderId: "548614823934",
+      appId: "1:548614823934:web:3373a1862a42d92350aaaf"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const shoppingRef = collection(db, "shopping");
+
+    async function addItem() {
+      const input = document.getElementById("itemInput");
+      const artikel = input.value.trim();
+
+      if (!artikel) return;
+
+      await addDoc(shoppingRef, { name: artikel });
+      input.value = "";
+    }
+
+    async function removeItem(id) {
+      await deleteDoc(doc(db, "shopping", id));
+    }
+
+    document.getElementById("addItemButton").addEventListener("click", addItem);
+    document.getElementById("itemInput").addEventListener("keydown", (event) => {
+      if (event.key === "Enter") addItem();
+    });
+
+    onSnapshot(shoppingRef, (snapshot) => {
+      const list = document.getElementById("shoppingList");
+      list.innerHTML = "";
+
+      snapshot.forEach((item) => {
+        const data = item.data();
+        const li = document.createElement("li");
+        li.style.display = "flex";
+        li.style.justifyContent = "space-between";
+        li.style.alignItems = "center";
+
+        const text = document.createElement("span");
+        text.textContent = data.name;
+
+        const button = document.createElement("button");
+        button.type = "button";
+        button.textContent = "✔";
+        button.setAttribute("aria-label", `${data.name} entfernen`);
+        button.addEventListener("click", () => removeItem(item.id));
+
+        li.append(text, button);
+        list.appendChild(li);
+      });
+    });
+  </script>
 </body>
 </html>
