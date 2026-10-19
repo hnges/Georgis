@@ -6,370 +6,147 @@
   <title>Georgis</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 1000px;
-      margin: auto;
-      background: #f4f4f4;
-      padding: 20px;
-      color: #1f2937;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .tabs,
-    .subtabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    button {
-      padding: 10px 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 0.95rem;
-    }
-
-    .tab-button {
-      padding: 12px 20px;
-      background: #2d6cdf;
-      color: white;
-    }
-
-    .tab-button:hover,
-    .tab-button.is-active {
-      background: #1f4fa8;
-    }
-
-    .subtab-button {
-      background: #e5e7eb;
-      color: #1f2937;
-    }
-
-    .subtab-button:hover,
-    .subtab-button.is-active {
-      background: #374151;
-      color: white;
-    }
-
-    .tab,
-    .meter-tab {
-      display: none;
-    }
-
-    .tab.active,
-    .meter-tab.active-meter {
-      display: block;
-    }
-
-    .tab {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-weight: bold;
-    }
-
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
-      font: inherit;
-    }
-
-    .primary-button {
-      background: #2d6cdf;
-      color: white;
-    }
-
-    .primary-button:hover {
-      background: #1f4fa8;
-    }
-
-    .delete-button {
-      background: #dc2626;
-      color: white;
-      padding: 6px 9px;
-    }
-
-    .shopping-row {
-      display: flex;
-      gap: 10px;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    li {
-      background: #e8e8e8;
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 5px;
-    }
-
-    .table-wrapper {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-
-    table,
-    th,
-    td {
-      border: 1px solid #ccc;
-    }
-
-    th,
-    td {
-      padding: 10px;
-      text-align: center;
-    }
-
-    th {
-      background: #eff6ff;
-    }
-
-    .empty-message,
-    .form-message {
-      color: #64748b;
-    }
-
-    .form-message.success {
-      color: #15803d;
-    }
-
-    .form-message.error {
-      color: #b91c1c;
-    }
-
-    .chart-card {
-      margin-top: 18px;
-      padding: 15px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-    }
-
-    canvas {
-      display: block;
-      width: 100%;
-      height: 300px;
-    }
-
+    * { box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; max-width: 1100px; margin: auto; background: #f4f4f4; padding: 20px; color: #1f2937; }
+    h1 { text-align: center; }
+    .tabs, .subtabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+    button { padding: 10px 14px; border: none; border-radius: 8px; cursor: pointer; font-size: .95rem; }
+    .tab-button { padding: 12px 20px; background: #2d6cdf; color: white; }
+    .tab-button:hover, .tab-button.is-active { background: #1f4fa8; }
+    .subtab-button { background: #e5e7eb; color: #1f2937; }
+    .subtab-button:hover, .subtab-button.is-active { background: #374151; color: white; }
+    .tab, .meter-tab { display: none; }
+    .tab.active, .meter-tab.active-meter { display: block; }
+    .tab { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 15px; }
+    label { display: flex; flex-direction: column; gap: 6px; font-weight: bold; }
+    input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 7px; font: inherit; }
+    .primary-button { background: #2d6cdf; color: white; }
+    .primary-button:hover { background: #1f4fa8; }
+    .excel-button { background: #15803d; color: white; margin-bottom: 10px; }
+    .excel-button:hover { background: #166534; }
+    .delete-button { background: #dc2626; color: white; padding: 6px 9px; }
+    .shopping-row { display: flex; gap: 10px; }
+    ul { list-style: none; padding: 0; }
+    li { background: #e8e8e8; margin: 5px 0; padding: 10px; border-radius: 5px; }
+    .table-wrapper { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    table, th, td { border: 1px solid #ccc; }
+    th, td { padding: 9px; text-align: center; white-space: nowrap; }
+    th { background: #eff6ff; }
+    .consumption { background: #f0fdf4; }
+    .empty-message, .form-message, .hint { color: #64748b; }
+    .form-message.success { color: #15803d; }
+    .form-message.error { color: #b91c1c; }
+    .chart-card { margin-top: 18px; padding: 15px; border: 1px solid #e5e7eb; border-radius: 10px; }
+    canvas { display: block; width: 100%; height: 300px; }
     @media (max-width: 600px) {
-      body {
-        padding: 10px;
-      }
-
-      .tabs,
-      .subtabs,
-      .shopping-row {
-        flex-direction: column;
-      }
+      body { padding: 10px; }
+      .tabs, .subtabs, .shopping-row { flex-direction: column; }
     }
   </style>
-</head>
 
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+</head>
 <body>
   <h1>🏠 Georgis</h1>
 
   <nav class="tabs" aria-label="Hauptnavigation">
-    <button class="tab-button is-active" type="button" data-tab="einkauf">
-      Einkaufsliste
-    </button>
-    <button class="tab-button" type="button" data-tab="zaehler">
-      Zählerstände
-    </button>
-    <button class="tab-button" type="button" data-tab="zukunft">
-      Zukunft
-    </button>
+    <button class="tab-button is-active" type="button" data-tab="einkauf">Einkaufsliste</button>
+    <button class="tab-button" type="button" data-tab="zaehler">Zählerstände</button>
+    <button class="tab-button" type="button" data-tab="zukunft">Zukunft</button>
   </nav>
 
-  <!-- Einkaufsliste -->
   <section id="einkauf" class="tab active">
     <h2>🛒 Einkaufsliste</h2>
-
     <div class="shopping-row">
       <input type="text" id="itemInput" placeholder="Artikel eingeben">
-      <button class="primary-button" type="button" id="addItemButton">
-        Hinzufügen
-      </button>
+      <button class="primary-button" type="button" id="addItemButton">Hinzufügen</button>
     </div>
-
     <ul id="shoppingList"></ul>
   </section>
 
-  <!-- Zählerstände -->
   <section id="zaehler" class="tab">
     <h2>⚡ Zählerstände</h2>
 
     <nav class="subtabs" aria-label="Zählerstände-Navigation">
-      <button class="subtab-button is-active" type="button" data-meter-tab="eingabe">
-        Daten eingeben
-      </button>
-      <button class="subtab-button" type="button" data-meter-tab="tabelle">
-        Datentabelle
-      </button>
-      <button class="subtab-button" type="button" data-meter-tab="diagramme">
-        Diagramme
-      </button>
+      <button class="subtab-button is-active" type="button" data-meter-tab="eingabe">Daten eingeben</button>
+      <button class="subtab-button" type="button" data-meter-tab="tabelle">Datentabelle</button>
+      <button class="subtab-button" type="button" data-meter-tab="diagramme">Diagramme</button>
     </nav>
 
-    <!-- Unterreiter 1: Eingabe -->
     <div id="eingabe" class="meter-tab active-meter">
-      <h3>Neuen Zählerstand eintragen</h3>
+      <h3>Monatlichen Zählerstand eintragen</h3>
+      <p class="hint">Zählerstände können ausschließlich für den 1. eines Monats gespeichert werden. Ein vorhandener Monat wird beim erneuten Speichern aktualisiert.</p>
 
       <div class="form-grid">
-        <label>
-          Datum
-          <input type="date" id="datum">
-        </label>
-
-        <label>
-          Strom (kWh)
-          <input type="number" id="strom" min="0" step="0.01" placeholder="Strom">
-        </label>
-
-        <label>
-          Warmwasser (m³)
-          <input type="number" id="warmwasser" min="0" step="0.001" placeholder="Warmwasser">
-        </label>
-
-        <label>
-          Kaltwasser (m³)
-          <input type="number" id="kaltwasser" min="0" step="0.001" placeholder="Kaltwasser">
-        </label>
+        <label>Datum<input type="date" id="datum"></label>
+        <label>Strom (kWh)<input type="number" id="strom" min="0" step="0.01" placeholder="Strom"></label>
+        <label>Warmwasser (m³)<input type="number" id="warmwasser" min="0" step="0.001" placeholder="Warmwasser"></label>
+        <label>Kaltwasser (m³)<input type="number" id="kaltwasser" min="0" step="0.001" placeholder="Kaltwasser"></label>
       </div>
 
-      <button class="primary-button" type="button" id="saveReadingButton">
-        Speichern
-      </button>
+      <button class="primary-button" type="button" id="saveReadingButton">In Firestore speichern</button>
       <p id="formMessage" class="form-message" aria-live="polite"></p>
     </div>
 
-    <!-- Unterreiter 2: Tabelle -->
     <div id="tabelle" class="meter-tab">
-      <h3>Gespeicherte Zählerstände</h3>
+      <h3>Gespeicherte Zählerstände und Monatsverbrauch</h3>
+      <button class="excel-button" type="button" id="excelButton">Als Excel-Datei herunterladen</button>
 
       <div class="table-wrapper">
         <table>
           <thead>
             <tr>
               <th>Datum</th>
-              <th>Strom</th>
-              <th>Warmwasser</th>
-              <th>Kaltwasser</th>
+              <th>Zählerstand Strom</th>
+              <th class="consumption">Verbrauch Strom</th>
+              <th>Zählerstand Warmwasser</th>
+              <th class="consumption">Verbrauch Warmwasser</th>
+              <th>Zählerstand Kaltwasser</th>
+              <th class="consumption">Verbrauch Kaltwasser</th>
               <th>Aktion</th>
             </tr>
           </thead>
           <tbody id="meterTable"></tbody>
         </table>
       </div>
-
-      <p id="emptyTableMessage" class="empty-message">
-        Noch keine Zählerstände gespeichert.
-      </p>
+      <p id="emptyTableMessage" class="empty-message">Noch keine Zählerstände gespeichert.</p>
     </div>
 
-    <!-- Unterreiter 3: Diagramme -->
     <div id="diagramme" class="meter-tab">
       <h3>Verlauf der Zählerstände</h3>
-
-      <div class="chart-card">
-        <h4>Strom</h4>
-        <canvas id="stromChart"></canvas>
-      </div>
-
-      <div class="chart-card">
-        <h4>Wasser</h4>
-        <canvas id="wasserChart"></canvas>
-      </div>
+      <div class="chart-card"><h4>Strom</h4><canvas id="stromChart"></canvas></div>
+      <div class="chart-card"><h4>Wasser</h4><canvas id="wasserChart"></canvas></div>
     </div>
   </section>
 
-  <!-- Zukunft -->
   <section id="zukunft" class="tab">
     <h2>🚧 Bereich in Planung</h2>
     <p>Hier können später weitere Funktionen ergänzt werden.</p>
   </section>
 
   <script>
-    /* Hauptreiter */
     const tabButtons = document.querySelectorAll("[data-tab]");
+    const meterTabButtons = document.querySelectorAll("[data-meter-tab]");
+    let readings = [];
 
     function showTab(tabId) {
-      document.querySelectorAll(".tab").forEach((tab) => {
-        tab.classList.remove("active");
-      });
-
-      tabButtons.forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.tab === tabId);
-      });
-
+      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
+      tabButtons.forEach(button => button.classList.toggle("is-active", button.dataset.tab === tabId));
       document.getElementById(tabId).classList.add("active");
-
-      if (tabId === "zaehler" && document.getElementById("diagramme").classList.contains("active-meter")) {
-        requestAnimationFrame(renderCharts);
-      }
+      if (tabId === "zaehler" && document.getElementById("diagramme").classList.contains("active-meter")) requestAnimationFrame(renderCharts);
     }
-
-    tabButtons.forEach((button) => {
-      button.addEventListener("click", () => showTab(button.dataset.tab));
-    });
-
-    /* Unterreiter für Zählerstände */
-    const meterTabButtons = document.querySelectorAll("[data-meter-tab]");
 
     function showMeterTab(tabId) {
-      document.querySelectorAll(".meter-tab").forEach((tab) => {
-        tab.classList.remove("active-meter");
-      });
-
-      meterTabButtons.forEach((button) => {
-        button.classList.toggle("is-active", button.dataset.meterTab === tabId);
-      });
-
+      document.querySelectorAll(".meter-tab").forEach(tab => tab.classList.remove("active-meter"));
+      meterTabButtons.forEach(button => button.classList.toggle("is-active", button.dataset.meterTab === tabId));
       document.getElementById(tabId).classList.add("active-meter");
-
-      if (tabId === "diagramme") {
-        requestAnimationFrame(renderCharts);
-      }
+      if (tabId === "diagramme") requestAnimationFrame(renderCharts);
     }
 
-    meterTabButtons.forEach((button) => {
-      button.addEventListener("click", () => showMeterTab(button.dataset.meterTab));
-    });
-
-    /* Zählerstände */
-    let readings = JSON.parse(localStorage.getItem("readings")) || [];
+    tabButtons.forEach(button => button.addEventListener("click", () => showTab(button.dataset.tab)));
+    meterTabButtons.forEach(button => button.addEventListener("click", () => showMeterTab(button.dataset.meterTab)));
 
     function getSortedReadings() {
       return [...readings].sort((a, b) => a.date.localeCompare(b.date));
@@ -377,227 +154,154 @@
 
     function formatValue(value) {
       const number = Number(value);
-      return Number.isFinite(number)
-        ? new Intl.NumberFormat("de-DE", { maximumFractionDigits: 3 }).format(number)
-        : "–";
+      return Number.isFinite(number) ? new Intl.NumberFormat("de-DE", { maximumFractionDigits: 3 }).format(number) : "–";
+    }
+
+    function calculateConsumption(current, previous, key) {
+      if (!previous) return null;
+      return Number(current[key]) - Number(previous[key]);
+    }
+
+    function getTableRows() {
+      const sorted = getSortedReadings();
+      return sorted.map((reading, index) => {
+        const previous = index > 0 ? sorted[index - 1] : null;
+        return {
+          ...reading,
+          stromVerbrauch: calculateConsumption(reading, previous, "strom"),
+          warmVerbrauch: calculateConsumption(reading, previous, "warm"),
+          kaltVerbrauch: calculateConsumption(reading, previous, "kalt")
+        };
+      });
     }
 
     function renderReadings() {
       const table = document.getElementById("meterTable");
-      const emptyMessage = document.getElementById("emptyTableMessage");
       table.innerHTML = "";
 
-      getSortedReadings().forEach((reading) => {
-        const originalIndex = readings.indexOf(reading);
+      getTableRows().forEach(reading => {
         const row = document.createElement("tr");
+        const values = [
+          reading.date,
+          formatValue(reading.strom),
+          reading.stromVerbrauch === null ? "–" : formatValue(reading.stromVerbrauch),
+          formatValue(reading.warm),
+          reading.warmVerbrauch === null ? "–" : formatValue(reading.warmVerbrauch),
+          formatValue(reading.kalt),
+          reading.kaltVerbrauch === null ? "–" : formatValue(reading.kaltVerbrauch)
+        ];
 
-        [reading.date, formatValue(reading.strom), formatValue(reading.warm), formatValue(reading.kalt)]
-          .forEach((value) => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.appendChild(cell);
-          });
+        values.forEach((value, index) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          if ([2, 4, 6].includes(index)) cell.className = "consumption";
+          row.appendChild(cell);
+        });
 
         const actionCell = document.createElement("td");
         const deleteButton = document.createElement("button");
         deleteButton.type = "button";
         deleteButton.className = "delete-button";
         deleteButton.textContent = "Löschen";
-        deleteButton.addEventListener("click", () => deleteReading(originalIndex));
+        deleteButton.addEventListener("click", () => window.deleteReading(reading.id));
         actionCell.appendChild(deleteButton);
         row.appendChild(actionCell);
-
         table.appendChild(row);
       });
 
-      emptyMessage.hidden = readings.length > 0;
+      document.getElementById("emptyTableMessage").hidden = readings.length > 0;
     }
 
-    function saveReading() {
-      const message = document.getElementById("formMessage");
-      const date = document.getElementById("datum").value;
-      const strom = document.getElementById("strom").value;
-      const warm = document.getElementById("warmwasser").value;
-      const kalt = document.getElementById("kaltwasser").value;
-
-      if (!date || strom === "" || warm === "" || kalt === "") {
-        message.textContent = "Bitte fülle alle Felder aus.";
-        message.className = "form-message error";
+    function exportToExcel() {
+      if (!readings.length) {
+        alert("Es sind noch keine Daten zum Exportieren vorhanden.");
         return;
       }
 
-      const entry = {
-        date,
-        strom: Number(strom),
-        warm: Number(warm),
-        kalt: Number(kalt)
-      };
+      if (typeof XLSX === "undefined") {
+        alert("Die Excel-Bibliothek konnte nicht geladen werden.");
+        return;
+      }
 
-      readings.push(entry);
-      localStorage.setItem("readings", JSON.stringify(readings));
+      const excelData = getTableRows().map(reading => ({
+        "Datum": reading.date,
+        "Zählerstand Strom (kWh)": Number(reading.strom),
+        "Verbrauch Strom (kWh)": reading.stromVerbrauch,
+        "Zählerstand Warmwasser (m³)": Number(reading.warm),
+        "Verbrauch Warmwasser (m³)": reading.warmVerbrauch,
+        "Zählerstand Kaltwasser (m³)": Number(reading.kalt),
+        "Verbrauch Kaltwasser (m³)": reading.kaltVerbrauch
+      }));
 
-      renderReadings();
-      renderCharts();
-
-      document.getElementById("strom").value = "";
-      document.getElementById("warmwasser").value = "";
-      document.getElementById("kaltwasser").value = "";
-
-      message.textContent = "Zählerstand wurde gespeichert.";
-      message.className = "form-message success";
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      worksheet["!cols"] = [
+        { wch: 14 }, { wch: 24 }, { wch: 24 }, { wch: 30 },
+        { wch: 28 }, { wch: 30 }, { wch: 28 }
+      ];
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Zählerstände");
+      XLSX.writeFile(workbook, "Georgis_Zaehlerstaende.xlsx");
     }
 
-    function deleteReading(index) {
-      readings.splice(index, 1);
-      localStorage.setItem("readings", JSON.stringify(readings));
-      renderReadings();
-      renderCharts();
-    }
+    document.getElementById("excelButton").addEventListener("click", exportToExcel);
 
-    document.getElementById("saveReadingButton").addEventListener("click", saveReading);
-    document.getElementById("datum").valueAsDate = new Date();
-
-    /* Einfache Diagramme ohne zusätzliche Bibliothek */
     function drawLineChart(canvasId, series, colors) {
       const canvas = document.getElementById(canvasId);
-      const rect = canvas.getBoundingClientRect();
-      const width = Math.max(rect.width, 300);
+      const width = Math.max(canvas.getBoundingClientRect().width, 300);
       const height = 300;
       const ratio = window.devicePixelRatio || 1;
-
       canvas.width = width * ratio;
       canvas.height = height * ratio;
-
       const ctx = canvas.getContext("2d");
       ctx.scale(ratio, ratio);
       ctx.clearRect(0, 0, width, height);
-
       const padding = { top: 20, right: 20, bottom: 55, left: 55 };
       const plotWidth = width - padding.left - padding.right;
       const plotHeight = height - padding.top - padding.bottom;
       const sorted = getSortedReadings();
 
-      if (sorted.length === 0) {
-        ctx.fillStyle = "#64748b";
-        ctx.font = "15px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("Noch keine Daten vorhanden", width / 2, height / 2);
-        return;
+      if (!sorted.length) {
+        ctx.fillStyle = "#64748b"; ctx.font = "15px Arial"; ctx.textAlign = "center";
+        ctx.fillText("Noch keine Daten vorhanden", width / 2, height / 2); return;
       }
 
-      const allValues = series.flatMap((item) => sorted.map((reading) => Number(reading[item.key])));
+      const allValues = series.flatMap(item => sorted.map(reading => Number(reading[item.key])));
       const minValue = Math.min(...allValues);
       const maxValue = Math.max(...allValues);
       const range = maxValue - minValue || 1;
 
-      ctx.strokeStyle = "#cbd5e1";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(padding.left, padding.top);
-      ctx.lineTo(padding.left, padding.top + plotHeight);
-      ctx.lineTo(padding.left + plotWidth, padding.top + plotHeight);
-      ctx.stroke();
-
       for (let i = 0; i <= 4; i++) {
         const y = padding.top + (plotHeight / 4) * i;
         const value = maxValue - (range / 4) * i;
-
-        ctx.strokeStyle = "#e5e7eb";
-        ctx.beginPath();
-        ctx.moveTo(padding.left, y);
-        ctx.lineTo(padding.left + plotWidth, y);
-        ctx.stroke();
-
-        ctx.fillStyle = "#64748b";
-        ctx.font = "11px Arial";
-        ctx.textAlign = "right";
-        ctx.fillText(formatValue(value), padding.left - 8, y + 4);
+        ctx.strokeStyle = "#e5e7eb"; ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + plotWidth, y); ctx.stroke();
+        ctx.fillStyle = "#64748b"; ctx.font = "11px Arial"; ctx.textAlign = "right"; ctx.fillText(formatValue(value), padding.left - 8, y + 4);
       }
 
       series.forEach((item, seriesIndex) => {
-        ctx.strokeStyle = colors[seriesIndex];
-        ctx.fillStyle = colors[seriesIndex];
-        ctx.lineWidth = 2.5;
-        ctx.beginPath();
-
+        ctx.strokeStyle = colors[seriesIndex]; ctx.fillStyle = colors[seriesIndex]; ctx.lineWidth = 2.5; ctx.beginPath();
         sorted.forEach((reading, index) => {
-          const x = sorted.length === 1
-            ? padding.left + plotWidth / 2
-            : padding.left + (index / (sorted.length - 1)) * plotWidth;
+          const x = sorted.length === 1 ? padding.left + plotWidth / 2 : padding.left + (index / (sorted.length - 1)) * plotWidth;
           const y = padding.top + ((maxValue - Number(reading[item.key])) / range) * plotHeight;
-
-          if (index === 0) ctx.moveTo(x, y);
-          else ctx.lineTo(x, y);
+          index === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
         });
-
         ctx.stroke();
-
-        sorted.forEach((reading, index) => {
-          const x = sorted.length === 1
-            ? padding.left + plotWidth / 2
-            : padding.left + (index / (sorted.length - 1)) * plotWidth;
-          const y = padding.top + ((maxValue - Number(reading[item.key])) / range) * plotHeight;
-
-          ctx.beginPath();
-          ctx.arc(x, y, 4, 0, Math.PI * 2);
-          ctx.fill();
-        });
-      });
-
-      ctx.fillStyle = "#64748b";
-      ctx.font = "11px Arial";
-      ctx.textAlign = "center";
-
-      sorted.forEach((reading, index) => {
-        if (sorted.length > 8 && index % Math.ceil(sorted.length / 8) !== 0 && index !== sorted.length - 1) return;
-
-        const x = sorted.length === 1
-          ? padding.left + plotWidth / 2
-          : padding.left + (index / (sorted.length - 1)) * plotWidth;
-        ctx.fillText(reading.date, x, padding.top + plotHeight + 20);
-      });
-
-      let legendX = padding.left;
-      series.forEach((item, index) => {
-        ctx.fillStyle = colors[index];
-        ctx.fillRect(legendX, height - 18, 12, 12);
-        ctx.fillStyle = "#1f2937";
-        ctx.textAlign = "left";
-        ctx.fillText(item.label, legendX + 17, height - 8);
-        legendX += ctx.measureText(item.label).width + 45;
       });
     }
 
     function renderCharts() {
       drawLineChart("stromChart", [{ key: "strom", label: "Strom" }], ["#f59e0b"]);
-      drawLineChart(
-        "wasserChart",
-        [
-          { key: "warm", label: "Warmwasser" },
-          { key: "kalt", label: "Kaltwasser" }
-        ],
-        ["#ef4444", "#2563eb"]
-      );
+      drawLineChart("wasserChart", [{ key: "warm", label: "Warmwasser" }, { key: "kalt", label: "Kaltwasser" }], ["#ef4444", "#2563eb"]);
     }
 
     window.addEventListener("resize", () => {
-      if (document.getElementById("diagramme").classList.contains("active-meter")) {
-        renderCharts();
-      }
+      if (document.getElementById("diagramme").classList.contains("active-meter")) renderCharts();
     });
-
-    renderReadings();
   </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
     import {
-      getFirestore,
-      collection,
-      addDoc,
-      deleteDoc,
-      doc,
-      onSnapshot
+      getFirestore, collection, addDoc, setDoc, deleteDoc, doc, onSnapshot, serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
     const firebaseConfig = {
@@ -612,49 +316,90 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const shoppingRef = collection(db, "shopping");
+    const readingsRef = collection(db, "meterReadings");
 
     async function addItem() {
       const input = document.getElementById("itemInput");
       const artikel = input.value.trim();
-
       if (!artikel) return;
-
       await addDoc(shoppingRef, { name: artikel });
       input.value = "";
     }
 
-    async function removeItem(id) {
-      await deleteDoc(doc(db, "shopping", id));
-    }
-
     document.getElementById("addItemButton").addEventListener("click", addItem);
-    document.getElementById("itemInput").addEventListener("keydown", (event) => {
-      if (event.key === "Enter") addItem();
-    });
+    document.getElementById("itemInput").addEventListener("keydown", event => { if (event.key === "Enter") addItem(); });
 
-    onSnapshot(shoppingRef, (snapshot) => {
+    onSnapshot(shoppingRef, snapshot => {
       const list = document.getElementById("shoppingList");
       list.innerHTML = "";
-
-      snapshot.forEach((item) => {
-        const data = item.data();
+      snapshot.forEach(item => {
         const li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.justifyContent = "space-between";
-        li.style.alignItems = "center";
-
-        const text = document.createElement("span");
-        text.textContent = data.name;
-
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = "✔";
-        button.setAttribute("aria-label", `${data.name} entfernen`);
-        button.addEventListener("click", () => removeItem(item.id));
-
-        li.append(text, button);
-        list.appendChild(li);
+        li.style.display = "flex"; li.style.justifyContent = "space-between"; li.style.alignItems = "center";
+        const text = document.createElement("span"); text.textContent = item.data().name;
+        const button = document.createElement("button"); button.type = "button"; button.textContent = "✔";
+        button.addEventListener("click", () => deleteDoc(doc(db, "shopping", item.id)));
+        li.append(text, button); list.appendChild(li);
       });
+    });
+
+    function setFirstDayOfCurrentMonth() {
+      const now = new Date();
+      const localDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-01`;
+      document.getElementById("datum").value = localDate;
+    }
+
+    async function saveReading() {
+      const message = document.getElementById("formMessage");
+      const date = document.getElementById("datum").value;
+      const strom = document.getElementById("strom").value;
+      const warm = document.getElementById("warmwasser").value;
+      const kalt = document.getElementById("kaltwasser").value;
+
+      if (!date || strom === "" || warm === "" || kalt === "") {
+        message.textContent = "Bitte fülle alle Felder aus."; message.className = "form-message error"; return;
+      }
+      if (!date.endsWith("-01")) {
+        message.textContent = "Bitte wähle ausschließlich den 1. eines Monats."; message.className = "form-message error"; return;
+      }
+      if ([strom, warm, kalt].some(value => Number(value) < 0)) {
+        message.textContent = "Zählerstände dürfen nicht negativ sein."; message.className = "form-message error"; return;
+      }
+
+      try {
+        await setDoc(doc(db, "meterReadings", date), {
+          date,
+          strom: Number(strom),
+          warm: Number(warm),
+          kalt: Number(kalt),
+          updatedAt: serverTimestamp()
+        });
+        message.textContent = "Zählerstand wurde in Firestore gespeichert."; message.className = "form-message success";
+        document.getElementById("strom").value = "";
+        document.getElementById("warmwasser").value = "";
+        document.getElementById("kaltwasser").value = "";
+      } catch (error) {
+        console.error(error);
+        message.textContent = "Speichern fehlgeschlagen. Bitte prüfe die Firestore-Regeln."; message.className = "form-message error";
+      }
+    }
+
+    window.deleteReading = async function(id) {
+      if (!confirm("Diesen Zählerstand wirklich löschen?")) return;
+      await deleteDoc(doc(db, "meterReadings", id));
+    };
+
+    document.getElementById("saveReadingButton").addEventListener("click", saveReading);
+    setFirstDayOfCurrentMonth();
+
+    onSnapshot(readingsRef, snapshot => {
+      readings = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+      renderReadings();
+      renderCharts();
+    }, error => {
+      console.error(error);
+      const message = document.getElementById("formMessage");
+      message.textContent = "Firestore-Daten konnten nicht geladen werden. Bitte prüfe die Zugriffsregeln.";
+      message.className = "form-message error";
     });
   </script>
 </body>
