@@ -171,6 +171,18 @@
       background: #eff6ff;
     }
 
+    .verbrauch-strom {
+      background: #fff9c4;
+    }
+
+    .verbrauch-kaltwasser {
+      background: #dbeafe;
+    }
+
+    .verbrauch-warmwasser {
+      background: #fee2e2;
+    }
+
     .empty-message,
     .form-message {
       color: #64748b;
@@ -488,13 +500,22 @@
 
               <tr>
                 <th>Zählerstand</th>
-                <th>Verbrauch</th>
+
+                <th class="verbrauch-strom">
+                  Verbrauch
+                </th>
 
                 <th>Zählerstand</th>
-                <th>Verbrauch</th>
+
+                <th class="verbrauch-kaltwasser">
+                  Verbrauch
+                </th>
 
                 <th>Zählerstand</th>
-                <th>Verbrauch</th>
+
+                <th class="verbrauch-warmwasser">
+                  Verbrauch
+                </th>
               </tr>
             </thead>
 
@@ -832,101 +853,125 @@
       table.innerHTML = "";
 
 
-      getTableRows().forEach(
-        (rowData) => {
+      [...getTableRows()]
+        .reverse()
+        .forEach(
+          (rowData) => {
 
-          const reading =
-            rowData.reading;
+            const reading =
+              rowData.reading;
 
-          const row =
-            document.createElement("tr");
-
-
-          const values = [
-            formatDate(reading.date),
-
-            formatValue(
-              reading.strom
-            ),
-
-            formatValue(
-              rowData.stromVerbrauch
-            ),
-
-            formatValue(
-              reading.kalt
-            ),
-
-            formatValue(
-              rowData.kaltVerbrauch
-            ),
-
-            formatValue(
-              reading.warm
-            ),
-
-            formatValue(
-              rowData.warmVerbrauch
-            )
-          ];
+            const row =
+              document.createElement("tr");
 
 
-          values.forEach((value) => {
+            const values = [
+              formatDate(reading.date),
 
-            const cell =
-              document.createElement("td");
+              formatValue(
+                reading.strom
+              ),
 
-            cell.textContent = value;
+              formatValue(
+                rowData.stromVerbrauch
+              ),
 
-            row.appendChild(cell);
-          });
+              formatValue(
+                reading.kalt
+              ),
+
+              formatValue(
+                rowData.kaltVerbrauch
+              ),
+
+              formatValue(
+                reading.warm
+              ),
+
+              formatValue(
+                rowData.warmVerbrauch
+              )
+            ];
 
 
-          const actionCell =
-            document.createElement("td");
+            values.forEach(
+              (value, index) => {
 
-          const deleteButton =
-            document.createElement(
-              "button"
+                const cell =
+                  document.createElement("td");
+
+                cell.textContent = value;
+
+
+                if (index === 2) {
+                  cell.classList.add(
+                    "verbrauch-strom"
+                  );
+                }
+
+                if (index === 4) {
+                  cell.classList.add(
+                    "verbrauch-kaltwasser"
+                  );
+                }
+
+                if (index === 6) {
+                  cell.classList.add(
+                    "verbrauch-warmwasser"
+                  );
+                }
+
+
+                row.appendChild(cell);
+              }
             );
 
 
-          deleteButton.type = "button";
+            const actionCell =
+              document.createElement("td");
 
-          deleteButton.className =
-            "delete-button";
-
-          deleteButton.textContent =
-            "Löschen";
-
-
-          deleteButton.addEventListener(
-            "click",
-            () => {
-
-              const originalIndex =
-                readings.indexOf(
-                  reading
-                );
-
-              deleteReading(
-                originalIndex
+            const deleteButton =
+              document.createElement(
+                "button"
               );
-            }
-          );
 
 
-          actionCell.appendChild(
-            deleteButton
-          );
+            deleteButton.type = "button";
 
-          row.appendChild(
-            actionCell
-          );
+            deleteButton.className =
+              "delete-button";
 
-          table.appendChild(row);
-        }
-      );
+            deleteButton.textContent =
+              "Löschen";
+
+
+            deleteButton.addEventListener(
+              "click",
+              () => {
+
+                const originalIndex =
+                  readings.indexOf(
+                    reading
+                  );
+
+                deleteReading(
+                  originalIndex
+                );
+              }
+            );
+
+
+            actionCell.appendChild(
+              deleteButton
+            );
+
+            row.appendChild(
+              actionCell
+            );
+
+            table.appendChild(row);
+          }
+        );
 
 
       emptyMessage.hidden =
@@ -1597,7 +1642,7 @@
         [
           {
             name: "Strom",
-            color: "#2d6cdf",
+            color: "#facc15",
 
             values:
               rowsWithConsumption.map(
@@ -1628,7 +1673,7 @@
 
           {
             name: "Warmwasser",
-            color: "#374151",
+            color: "#dc2626",
 
             values:
               rowsWithConsumption.map(
