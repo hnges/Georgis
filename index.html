@@ -1,547 +1,1635 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Georgis</title>
 
-  <style>
-    * { box-sizing: border-box; }
+    <meta charset="UTF-8">
 
-    body {
-      max-width: 1100px;
-      margin: auto;
-      padding: 20px;
-      background: #f4f4f4;
-      color: #1f2937;
-      font-family: Arial, sans-serif;
-    }
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    h1 { text-align: center; }
+    <title>Georgis</title>
 
-    .tabs, .subtabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
+    <style>
 
-    button {
-      padding: 10px 14px;
-      border: 0;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: .95rem;
-    }
+        * {
+            box-sizing: border-box;
+        }
 
-    .tab-button {
-      padding: 12px 20px;
-      background: #2d6cdf;
-      color: white;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: auto;
+            background: #f4f4f4;
+            padding: 20px;
+            color: #222;
+        }
 
-    .tab-button:hover, .tab-button.is-active {
-      background: #1f4fa8;
-    }
+        h1 {
+            text-align: center;
+        }
 
-    .subtab-button {
-      background: #e5e7eb;
-      color: #1f2937;
-    }
+        button {
+            padding: 9px 14px;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 15px;
+        }
 
-    .subtab-button:hover, .subtab-button.is-active {
-      background: #374151;
-      color: white;
-    }
+        input {
+            padding: 10px;
+            margin: 5px;
+            border: 1px solid #b8b8b8;
+            border-radius: 6px;
+            font-size: 16px;
+        }
 
-    .tab, .meter-tab { display: none; }
-    .tab.active, .meter-tab.active-meter { display: block; }
 
-    .tab {
-      padding: 20px;
-      border-radius: 10px;
-      background: white;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .06);
-    }
+        /* Anmeldung */
 
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      margin-bottom: 15px;
-    }
+        #loginBereich {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-    label {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      font-weight: bold;
-    }
+        .login-box {
+            width: 100%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 14px;
+            background: white;
+            box-shadow: 0 5px 22px rgba(0, 0, 0, 0.14);
+        }
 
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 7px;
-      font: inherit;
-    }
+        .login-box h2 {
+            text-align: center;
+        }
 
-    .primary-button { background: #2d6cdf; color: white; }
-    .primary-button:hover { background: #1f4fa8; }
-    .excel-button { margin-bottom: 12px; background: #15803d; color: white; }
-    .excel-button:hover { background: #166534; }
-    .delete-button { padding: 6px 9px; background: #dc2626; color: white; }
+        .login-box label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
 
-    .shopping-row { display: flex; gap: 10px; }
-    ul { padding: 0; list-style: none; }
-    li { margin: 5px 0; padding: 10px; border-radius: 5px; background: #e8e8e8; }
+        .login-box input {
+            display: block;
+            width: 100%;
+            margin: 0 0 10px 0;
+        }
 
-    .table-wrapper { overflow-x: auto; }
+        .login-box button {
+            width: 100%;
+            margin-top: 12px;
+            padding: 12px;
+            background: #2d6cdf;
+            color: white;
+            font-weight: bold;
+        }
 
-    table {
-      width: 100%;
-      margin-top: 10px;
-      border-collapse: collapse;
-    }
+        .login-box button:hover {
+            background: #1f4fa8;
+        }
 
-    th, td {
-      min-width: 120px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      text-align: center;
-      white-space: nowrap;
-    }
+        #loginMeldung {
+            min-height: 24px;
+            margin-top: 15px;
+            color: #b00020;
+            text-align: center;
+        }
 
-    thead tr:first-child th {
-      background: #dbeafe;
-      color: #1e3a8a;
-      font-size: 1.05rem;
-    }
 
-    thead tr:nth-child(2) th {
-      background: #eff6ff;
-    }
+        /* Hauptnavigation */
 
-    th[rowspan="2"] { vertical-align: bottom; }
-    td.consumption, th.consumption { background: #f0fdf4; }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
 
-    .hint, .empty-message, .form-message { color: #64748b; }
-    .form-message.success { color: #15803d; }
-    .form-message.error { color: #b91c1c; }
+        .tab-button {
+            padding: 12px 20px;
+            border: none;
+            background: #2d6cdf;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+        }
 
-    .chart-card {
-      margin-top: 18px;
-      padding: 15px;
-      border: 1px solid #e5e7eb;
-      border-radius: 10px;
-    }
+        .tab-button:hover {
+            background: #1f4fa8;
+        }
 
-    canvas { display: block; width: 100%; height: 320px; }
+        .tab {
+            display: none;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
 
-    @media (max-width: 600px) {
-      body { padding: 10px; }
-      .tabs, .subtabs, .shopping-row { flex-direction: column; }
-    }
-  </style>
+        .tab.active {
+            display: block;
+        }
 
-  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+
+        /* Einkaufsliste */
+
+        .shopping-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .shopping-form input {
+            flex-grow: 1;
+            margin: 0;
+        }
+
+        .shopping-form button {
+            background: #2d6cdf;
+            color: white;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            background: #e8e8e8;
+            margin: 7px 0;
+            padding: 12px;
+            border-radius: 7px;
+        }
+
+        li button {
+            background: #24823c;
+            color: white;
+        }
+
+        #shoppingStatus {
+            min-height: 22px;
+            color: #555;
+        }
+
+
+        /* Zählerstände-Unterreiter */
+
+        .meter-navigation {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .meter-button {
+            padding: 10px 16px;
+            border: 2px solid #2d6cdf;
+            border-radius: 8px;
+            background: white;
+            color: #2d6cdf;
+            cursor: pointer;
+        }
+
+        .meter-button:hover {
+            background: #eaf1ff;
+        }
+
+        .meter-button.meter-button-active {
+            background: #2d6cdf;
+            color: white;
+        }
+
+        .meter-content {
+            display: none;
+            margin-top: 15px;
+            padding: 20px;
+            border: 1px solid #d8d8d8;
+            border-radius: 10px;
+            background: #f8f8f8;
+        }
+
+        .meter-content.meter-content-active {
+            display: block;
+        }
+
+
+        /* Zählerformular */
+
+        .meter-form {
+            max-width: 500px;
+        }
+
+        .meter-form label {
+            display: block;
+            margin-top: 14px;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .meter-form input {
+            display: block;
+            width: 100%;
+            margin: 0 0 10px 0;
+        }
+
+        .meter-form button {
+            margin-top: 10px;
+            background: #2d6cdf;
+            color: white;
+        }
+
+        #saveMessage {
+            min-height: 24px;
+            font-weight: bold;
+        }
+
+
+        /* Datentabelle */
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ccc;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        th {
+            background: #e8effb;
+        }
+
+
+        /* Benutzerbereich */
+
+        .benutzerzeile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        #angemeldeterBenutzer {
+            overflow-wrap: anywhere;
+        }
+
+        .logout-button {
+            background: #b42318;
+            color: white;
+        }
+
+        .logout-button:hover {
+            background: #8f1c13;
+        }
+
+
+        /* Mobilgeräte */
+
+        @media (max-width: 650px) {
+
+            body {
+                padding: 12px;
+            }
+
+            .tabs {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+
+            .shopping-form {
+                flex-direction: column;
+            }
+
+            .shopping-form button {
+                width: 100%;
+            }
+
+            .meter-navigation {
+                flex-direction: column;
+            }
+
+            .meter-button {
+                width: 100%;
+            }
+
+            .benutzerzeile {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .logout-button {
+                width: 100%;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
-  <h1>🏠 Georgis</h1>
 
-  <nav class="tabs" aria-label="Hauptnavigation">
-    <button class="tab-button is-active" type="button" data-tab="einkauf">Einkaufsliste</button>
-    <button class="tab-button" type="button" data-tab="zaehler">Zählerstände</button>
-    <button class="tab-button" type="button" data-tab="zukunft">Zukunft</button>
-  </nav>
 
-  <section id="einkauf" class="tab active">
-    <h2>🛒 Einkaufsliste</h2>
-    <div class="shopping-row">
-      <input type="text" id="itemInput" placeholder="Artikel eingeben">
-      <button class="primary-button" id="addItemButton" type="button">Hinzufügen</button>
-    </div>
-    <ul id="shoppingList"></ul>
-  </section>
+    <!-- Anmeldung -->
 
-  <section id="zaehler" class="tab">
-    <h2>⚡ Zählerstände</h2>
+    <div id="loginBereich">
 
-    <nav class="subtabs" aria-label="Zählerstände-Navigation">
-      <button class="subtab-button is-active" type="button" data-meter-tab="eingabe">Daten eingeben</button>
-      <button class="subtab-button" type="button" data-meter-tab="tabelle">Datentabelle</button>
-      <button class="subtab-button" type="button" data-meter-tab="diagramme">Diagramme</button>
-    </nav>
+        <div class="login-box">
 
-    <div id="eingabe" class="meter-tab active-meter">
-      <h3>Monatlichen Zählerstand eintragen</h3>
-      <p class="hint">Wähle nur den Monat. Als Datum wird automatisch immer der 1. dieses Monats gespeichert.</p>
+            <h1>🏠 Georgis</h1>
 
-      <div class="form-grid">
-        <label>Monat<input type="month" id="monat" required></label>
-        <label>Strom (kWh)<input type="number" id="strom" min="0" step="0.01" placeholder="Strom"></label>
-        <label>Kaltwasser (m³)<input type="number" id="kaltwasser" min="0" step="0.001" placeholder="Kaltwasser"></label>
-        <label>Warmwasser (m³)<input type="number" id="warmwasser" min="0" step="0.001" placeholder="Warmwasser"></label>
-      </div>
+            <h2>Anmelden</h2>
 
-      <button class="primary-button" id="saveReadingButton" type="button">In Firestore speichern</button>
-      <p id="formMessage" class="form-message" aria-live="polite"></p>
-    </div>
+            <label for="loginEmail">
+                E-Mail-Adresse
+            </label>
 
-    <div id="tabelle" class="meter-tab">
-      <h3>Gespeicherte Zählerstände und Monatsverbrauch</h3>
-      <button class="excel-button" id="excelButton" type="button">Als Excel-Datei herunterladen</button>
+            <input
+                type="email"
+                id="loginEmail"
+                placeholder="E-Mail-Adresse"
+                autocomplete="email"
+            >
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-            <tr>
-              <th rowspan="2">Datum</th>
-              <th colspan="2">Strom (kWh)</th>
-              <th colspan="2">Kaltwasser (m³)</th>
-              <th colspan="2">Warmwasser (m³)</th>
-              <th rowspan="2">Aktion</th>
-            </tr>
-            <tr>
-              <th>Zählerstand</th>
-              <th class="consumption">Verbrauch</th>
-              <th>Zählerstand</th>
-              <th class="consumption">Verbrauch</th>
-              <th>Zählerstand</th>
-              <th class="consumption">Verbrauch</th>
-            </tr>
-          </thead>
-          <tbody id="meterTable"></tbody>
-        </table>
-      </div>
-      <p id="emptyTableMessage" class="empty-message">Noch keine Zählerstände gespeichert.</p>
+            <label for="loginPasswort">
+                Passwort
+            </label>
+
+            <input
+                type="password"
+                id="loginPasswort"
+                placeholder="Passwort"
+                autocomplete="current-password"
+            >
+
+            <button
+                type="button"
+                id="loginButton"
+                onclick="anmelden()"
+            >
+                Anmelden
+            </button>
+
+            <p id="loginMeldung"></p>
+
+        </div>
+
     </div>
 
-    <div id="diagramme" class="meter-tab">
-      <h3>Monatlicher Verbrauch</h3>
-      <p class="hint">Die Diagramme zeigen die Differenz zum jeweils vorherigen Zählerstand.</p>
-      <div class="chart-card"><h4>Stromverbrauch (kWh)</h4><canvas id="stromChart"></canvas></div>
-      <div class="chart-card"><h4>Wasserverbrauch (m³)</h4><canvas id="wasserChart"></canvas></div>
+
+    <!-- Geschützter Bereich -->
+
+    <div id="appBereich" style="display: none;">
+
+        <h1>🏠 Georgis</h1>
+
+
+        <!-- Hauptreiter -->
+
+        <div class="tabs">
+
+            <button
+                type="button"
+                class="tab-button"
+                onclick="showTab('einkauf')"
+            >
+                Einkaufsliste
+            </button>
+
+            <button
+                type="button"
+                class="tab-button"
+                onclick="showTab('zaehler')"
+            >
+                Zählerstände
+            </button>
+
+            <button
+                type="button"
+                class="tab-button"
+                onclick="showTab('zukunft')"
+            >
+                Zukunft
+            </button>
+
+        </div>
+
+
+        <!-- Einkaufsliste -->
+
+        <div id="einkauf" class="tab active">
+
+            <h2>🛒 Einkaufsliste</h2>
+
+            <div class="shopping-form">
+
+                <input
+                    type="text"
+                    id="itemInput"
+                    placeholder="Artikel eingeben"
+                    autocomplete="off"
+                >
+
+                <button
+                    type="button"
+                    onclick="addItem()"
+                >
+                    Hinzufügen
+                </button>
+
+            </div>
+
+            <p id="shoppingStatus"></p>
+
+            <ul id="shoppingList"></ul>
+
+        </div>
+
+
+        <!-- Zählerstände -->
+
+        <div id="zaehler" class="tab">
+
+            <h2>⚡ Zählerstände</h2>
+
+            <p>
+                Wähle einen Bereich aus:
+            </p>
+
+
+            <!-- Navigation der Unterreiter -->
+
+            <div class="meter-navigation">
+
+                <button
+                    type="button"
+                    class="meter-button"
+                    onclick="showMeterTab('meterEingabe', this)"
+                >
+                    Daten eingeben
+                </button>
+
+                <button
+                    type="button"
+                    class="meter-button"
+                    onclick="showMeterTab('meterTabelle', this)"
+                >
+                    Datentabelle
+                </button>
+
+                <button
+                    type="button"
+                    class="meter-button"
+                    onclick="showMeterTab('meterDiagramme', this)"
+                >
+                    Diagramme
+                </button>
+
+            </div>
+
+
+            <!-- Unterreiter: Daten eingeben -->
+
+            <div
+                id="meterEingabe"
+                class="meter-content"
+            >
+
+                <h3>Daten eingeben</h3>
+
+                <div class="meter-form">
+
+                    <label for="datum">
+                        Datum
+                    </label>
+
+                    <input
+                        type="date"
+                        id="datum"
+                    >
+
+                    <label for="strom">
+                        Strom
+                    </label>
+
+                    <input
+                        type="number"
+                        id="strom"
+                        placeholder="Stromzählerstand"
+                        min="0"
+                        step="0.01"
+                    >
+
+                    <label for="warmwasser">
+                        Warmwasser
+                    </label>
+
+                    <input
+                        type="number"
+                        id="warmwasser"
+                        placeholder="Warmwasserzählerstand"
+                        min="0"
+                        step="0.01"
+                    >
+
+                    <label for="kaltwasser">
+                        Kaltwasser
+                    </label>
+
+                    <input
+                        type="number"
+                        id="kaltwasser"
+                        placeholder="Kaltwasserzählerstand"
+                        min="0"
+                        step="0.01"
+                    >
+
+                    <button
+                        type="button"
+                        onclick="saveReading()"
+                    >
+                        Speichern
+                    </button>
+
+                    <p id="saveMessage"></p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Unterreiter: Datentabelle -->
+
+            <div
+                id="meterTabelle"
+                class="meter-content"
+            >
+
+                <h3>Datentabelle</h3>
+
+                <div class="table-container">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Datum</th>
+                                <th>Strom</th>
+                                <th>Warmwasser</th>
+                                <th>Kaltwasser</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="meterTable"></tbody>
+
+                    </table>
+
+                </div>
+
+                <button
+                    type="button"
+                    onclick="downloadCSV()"
+                >
+                    📥 Datentabelle herunterladen
+                </button>
+
+            </div>
+
+
+            <!-- Unterreiter: Diagramme -->
+
+            <div
+                id="meterDiagramme"
+                class="meter-content"
+            >
+
+                <h3>Diagramme</h3>
+
+                <p>
+                    Hier werden später die Diagramme für Strom,
+                    Warmwasser und Kaltwasser angezeigt.
+                </p>
+
+                <canvas id="meterChart"></canvas>
+
+            </div>
+
+        </div>
+
+
+        <!-- Zukunft -->
+
+        <div id="zukunft" class="tab">
+
+            <h2>🚧 Bereich in Planung</h2>
+
+            <p>
+                Hier können später weitere Funktionen ergänzt werden.
+            </p>
+
+        </div>
+
+
+        <!-- Angemeldeter Benutzer -->
+
+        <div class="benutzerzeile">
+
+            <span id="angemeldeterBenutzer"></span>
+
+            <button
+                type="button"
+                class="logout-button"
+                onclick="abmelden()"
+            >
+                Abmelden
+            </button>
+
+        </div>
+
     </div>
-  </section>
 
-  <section id="zukunft" class="tab">
-    <h2>🚧 Bereich in Planung</h2>
-    <p>Hier können später weitere Funktionen ergänzt werden.</p>
-  </section>
 
-  <script>
-    const tabButtons = document.querySelectorAll("[data-tab]");
-    const meterTabButtons = document.querySelectorAll("[data-meter-tab]");
-    let readings = [];
+    <!-- Allgemeines JavaScript -->
 
-    function showTab(tabId) {
-      document.querySelectorAll(".tab").forEach(tab => tab.classList.remove("active"));
-      tabButtons.forEach(button => button.classList.toggle("is-active", button.dataset.tab === tabId));
-      document.getElementById(tabId).classList.add("active");
-      if (tabId === "zaehler" && document.getElementById("diagramme").classList.contains("active-meter")) requestAnimationFrame(renderCharts);
-    }
+    <script>
 
-    function showMeterTab(tabId) {
-      document.querySelectorAll(".meter-tab").forEach(tab => tab.classList.remove("active-meter"));
-      meterTabButtons.forEach(button => button.classList.toggle("is-active", button.dataset.meterTab === tabId));
-      document.getElementById(tabId).classList.add("active-meter");
-      if (tabId === "diagramme") requestAnimationFrame(renderCharts);
-    }
+        /*
+        Hauptreiter anzeigen
+        */
 
-    tabButtons.forEach(button => button.addEventListener("click", () => showTab(button.dataset.tab)));
-    meterTabButtons.forEach(button => button.addEventListener("click", () => showMeterTab(button.dataset.meterTab)));
+        function showTab(tabId) {
 
-    function getSortedReadings() {
-      return [...readings].sort((a, b) => a.date.localeCompare(b.date));
-    }
+            document
+                .querySelectorAll(".tab")
+                .forEach(tab => {
+                    tab.classList.remove("active");
+                });
 
-    function formatNumber(value) {
-      const number = Number(value);
-      return Number.isFinite(number)
-        ? new Intl.NumberFormat("de-DE", { maximumFractionDigits: 3 }).format(number)
-        : "–";
-    }
+            document
+                .getElementById(tabId)
+                .classList.add("active");
+        }
 
-    function formatDate(date) {
-      if (!date) return "–";
-      const [year, month, day] = date.split("-");
-      return `${day}.${month}.${year}`;
-    }
 
-    function consumption(current, previous, key) {
-      if (!previous) return null;
-      return Number(current[key]) - Number(previous[key]);
-    }
+        /*
+        Zähler-Unterreiter anzeigen
+        */
 
-    function getTableRows() {
-      const sorted = getSortedReadings();
-      return sorted.map((reading, index) => {
-        const previous = index ? sorted[index - 1] : null;
-        return {
-          ...reading,
-          stromVerbrauch: consumption(reading, previous, "strom"),
-          kaltVerbrauch: consumption(reading, previous, "kalt"),
-          warmVerbrauch: consumption(reading, previous, "warm")
+        function showMeterTab(
+            contentId,
+            clickedButton
+        ) {
+
+            const contents =
+                document.querySelectorAll(
+                    ".meter-content"
+                );
+
+            const buttons =
+                document.querySelectorAll(
+                    ".meter-button"
+                );
+
+            const selectedContent =
+                document.getElementById(
+                    contentId
+                );
+
+            const isAlreadyOpen =
+                selectedContent
+                    .classList
+                    .contains(
+                        "meter-content-active"
+                    );
+
+            contents.forEach(content => {
+
+                content.classList.remove(
+                    "meter-content-active"
+                );
+            });
+
+            buttons.forEach(button => {
+
+                button.classList.remove(
+                    "meter-button-active"
+                );
+            });
+
+            if (!isAlreadyOpen) {
+
+                selectedContent.classList.add(
+                    "meter-content-active"
+                );
+
+                clickedButton.classList.add(
+                    "meter-button-active"
+                );
+            }
+        }
+
+
+        /*
+        Zählerstände werden vorerst lokal gespeichert.
+        Die Umstellung auf Firebase erfolgt danach.
+        */
+
+        let readings =
+            JSON.parse(
+                localStorage.getItem(
+                    "readings"
+                )
+            ) || [];
+
+
+        function renderReadings() {
+
+            const table =
+                document.getElementById(
+                    "meterTable"
+                );
+
+            table.innerHTML = "";
+
+            const sortierteDaten =
+                [...readings].sort(
+                    (a, b) =>
+                        a.date.localeCompare(
+                            b.date
+                        )
+                );
+
+            sortierteDaten.forEach(
+                reading => {
+
+                    const row =
+                        document.createElement(
+                            "tr"
+                        );
+
+                    const dateCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    const stromCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    const warmCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    const kaltCell =
+                        document.createElement(
+                            "td"
+                        );
+
+                    dateCell.textContent =
+                        formatDate(
+                            reading.date
+                        );
+
+                    stromCell.textContent =
+                        reading.strom;
+
+                    warmCell.textContent =
+                        reading.warm;
+
+                    kaltCell.textContent =
+                        reading.kalt;
+
+                    row.appendChild(dateCell);
+                    row.appendChild(stromCell);
+                    row.appendChild(warmCell);
+                    row.appendChild(kaltCell);
+
+                    table.appendChild(row);
+                }
+            );
+        }
+
+
+        function saveReading() {
+
+            const date =
+                document
+                    .getElementById("datum")
+                    .value;
+
+            const strom =
+                document
+                    .getElementById("strom")
+                    .value;
+
+            const warm =
+                document
+                    .getElementById(
+                        "warmwasser"
+                    )
+                    .value;
+
+            const kalt =
+                document
+                    .getElementById(
+                        "kaltwasser"
+                    )
+                    .value;
+
+            const saveMessage =
+                document.getElementById(
+                    "saveMessage"
+                );
+
+            saveMessage.textContent = "";
+
+
+            if (
+                !date ||
+                strom === "" ||
+                warm === "" ||
+                kalt === ""
+            ) {
+
+                saveMessage.style.color =
+                    "#b00020";
+
+                saveMessage.textContent =
+                    "Bitte alle Felder ausfüllen.";
+
+                return;
+            }
+
+
+            const entry = {
+
+                date: date,
+
+                strom: Number(strom),
+
+                warm: Number(warm),
+
+                kalt: Number(kalt)
+            };
+
+
+            readings.push(entry);
+
+
+            localStorage.setItem(
+                "readings",
+                JSON.stringify(readings)
+            );
+
+
+            renderReadings();
+
+
+            document
+                .getElementById("strom")
+                .value = "";
+
+            document
+                .getElementById(
+                    "warmwasser"
+                )
+                .value = "";
+
+            document
+                .getElementById(
+                    "kaltwasser"
+                )
+                .value = "";
+
+
+            saveMessage.style.color =
+                "#24823c";
+
+            saveMessage.textContent =
+                "Zählerstand wurde gespeichert.";
+        }
+
+
+        /*
+        CSV-Datei für Excel herunterladen
+        */
+
+        function downloadCSV() {
+
+            if (readings.length === 0) {
+
+                alert(
+                    "Es sind noch keine Zählerstände gespeichert."
+                );
+
+                return;
+            }
+
+
+            let csvContent =
+                "Datum;Strom;Warmwasser;Kaltwasser\n";
+
+
+            const sortierteDaten =
+                [...readings].sort(
+                    (a, b) =>
+                        a.date.localeCompare(
+                            b.date
+                        )
+                );
+
+
+            sortierteDaten.forEach(
+                reading => {
+
+                    csvContent +=
+                        `${reading.date};` +
+                        `${reading.strom};` +
+                        `${reading.warm};` +
+                        `${reading.kalt}\n`;
+                }
+            );
+
+
+            const blob =
+                new Blob(
+                    [
+                        "\uFEFF" +
+                        csvContent
+                    ],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const downloadUrl =
+                URL.createObjectURL(blob);
+
+
+            const link =
+                document.createElement("a");
+
+
+            link.href =
+                downloadUrl;
+
+            link.download =
+                "zaehlerstaende.csv";
+
+
+            document.body.appendChild(link);
+
+            link.click();
+
+            document.body.removeChild(link);
+
+
+            URL.revokeObjectURL(
+                downloadUrl
+            );
+        }
+
+
+        function formatDate(dateString) {
+
+            if (!dateString) {
+                return "";
+            }
+
+            const parts =
+                dateString.split("-");
+
+            if (parts.length !== 3) {
+                return dateString;
+            }
+
+            return (
+                parts[2] +
+                "." +
+                parts[1] +
+                "." +
+                parts[0]
+            );
+        }
+
+
+        /*
+        Heutiges Datum vorausfüllen
+        */
+
+        function setToday() {
+
+            const dateInput =
+                document.getElementById(
+                    "datum"
+                );
+
+            if (!dateInput.value) {
+
+                const today =
+                    new Date();
+
+                const localDate =
+                    new Date(
+                        today.getTime() -
+                        today.getTimezoneOffset() *
+                        60000
+                    )
+                    .toISOString()
+                    .split("T")[0];
+
+                dateInput.value =
+                    localDate;
+            }
+        }
+
+
+        renderReadings();
+
+        setToday();
+
+    </script>
+
+
+    <!-- Firebase und Anmeldung -->
+
+    <script type="module">
+
+        import {
+            initializeApp
+        }
+        from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+
+
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            deleteDoc,
+            doc,
+            onSnapshot
+        }
+        from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+            signOut,
+            onAuthStateChanged
+        }
+        from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+
+
+        const firebaseConfig = {
+
+            apiKey:
+                "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+
+            authDomain:
+                "die-georgis.firebaseapp.com",
+
+            projectId:
+                "die-georgis",
+
+            storageBucket:
+                "die-georgis.firebasestorage.app",
+
+            messagingSenderId:
+                "548614823934",
+
+            appId:
+                "1:548614823934:web:3373a1862a42d92350aaaf"
         };
-      });
-    }
 
-    function renderReadings() {
-      const table = document.getElementById("meterTable");
-      table.innerHTML = "";
 
-      getTableRows().forEach(reading => {
-        const row = document.createElement("tr");
-        const values = [
-          formatDate(reading.date),
-          formatNumber(reading.strom),
-          reading.stromVerbrauch === null ? "–" : formatNumber(reading.stromVerbrauch),
-          formatNumber(reading.kalt),
-          reading.kaltVerbrauch === null ? "–" : formatNumber(reading.kaltVerbrauch),
-          formatNumber(reading.warm),
-          reading.warmVerbrauch === null ? "–" : formatNumber(reading.warmVerbrauch)
-        ];
+        const app =
+            initializeApp(
+                firebaseConfig
+            );
 
-        values.forEach((value, index) => {
-          const cell = document.createElement("td");
-          cell.textContent = value;
-          if ([2, 4, 6].includes(index)) cell.className = "consumption";
-          row.appendChild(cell);
-        });
 
-        const actionCell = document.createElement("td");
-        const deleteButton = document.createElement("button");
-        deleteButton.type = "button";
-        deleteButton.className = "delete-button";
-        deleteButton.textContent = "Löschen";
-        deleteButton.addEventListener("click", () => window.deleteReading(reading.id));
-        actionCell.appendChild(deleteButton);
-        row.appendChild(actionCell);
-        table.appendChild(row);
-      });
+        const db =
+            getFirestore(app);
 
-      document.getElementById("emptyTableMessage").hidden = readings.length > 0;
-    }
 
-    function exportToExcel() {
-      if (!readings.length) return alert("Es sind noch keine Daten zum Exportieren vorhanden.");
-      if (typeof XLSX === "undefined") return alert("Die Excel-Bibliothek konnte nicht geladen werden.");
+        const auth =
+            getAuth(app);
 
-      const rows = getTableRows().map(reading => ({
-        Datum: formatDate(reading.date),
-        "Strom Zählerstand (kWh)": Number(reading.strom),
-        "Strom Verbrauch (kWh)": reading.stromVerbrauch,
-        "Kaltwasser Zählerstand (m³)": Number(reading.kalt),
-        "Kaltwasser Verbrauch (m³)": reading.kaltVerbrauch,
-        "Warmwasser Zählerstand (m³)": Number(reading.warm),
-        "Warmwasser Verbrauch (m³)": reading.warmVerbrauch
-      }));
 
-      const sheet = XLSX.utils.json_to_sheet(rows);
-      sheet["!cols"] = [{wch:14},{wch:25},{wch:23},{wch:30},{wch:28},{wch:30},{wch:28}];
-      const workbook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(workbook, sheet, "Zählerstände");
-      XLSX.writeFile(workbook, "Georgis_Zaehlerstaende.xlsx");
-    }
+        const shoppingRef =
+            collection(
+                db,
+                "shopping"
+            );
 
-    document.getElementById("excelButton").addEventListener("click", exportToExcel);
 
-    function drawConsumptionChart(canvasId, series, colors) {
-      const canvas = document.getElementById(canvasId);
-      const width = Math.max(canvas.getBoundingClientRect().width, 300);
-      const height = 320;
-      const ratio = window.devicePixelRatio || 1;
-      canvas.width = width * ratio;
-      canvas.height = height * ratio;
+        let einkaufsListenerBeenden =
+            null;
 
-      const ctx = canvas.getContext("2d");
-      ctx.scale(ratio, ratio);
-      ctx.clearRect(0, 0, width, height);
 
-      const rows = getTableRows().slice(1);
-      if (!rows.length) {
-        ctx.fillStyle = "#64748b";
-        ctx.font = "15px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText("Für den Verbrauch werden mindestens zwei Monate benötigt", width / 2, height / 2);
-        return;
-      }
+        /*
+        Anmeldung
+        */
 
-      const padding = { top: 25, right: 25, bottom: 65, left: 60 };
-      const plotWidth = width - padding.left - padding.right;
-      const plotHeight = height - padding.top - padding.bottom;
-      const values = series.flatMap(item => rows.map(row => Math.max(0, Number(row[item.key]))));
-      const maxValue = Math.max(...values, 1);
+        window.anmelden =
+            async function () {
 
-      for (let i = 0; i <= 4; i++) {
-        const y = padding.top + plotHeight * i / 4;
-        const value = maxValue * (1 - i / 4);
-        ctx.strokeStyle = "#e5e7eb";
-        ctx.beginPath(); ctx.moveTo(padding.left, y); ctx.lineTo(padding.left + plotWidth, y); ctx.stroke();
-        ctx.fillStyle = "#64748b";
-        ctx.font = "11px Arial";
-        ctx.textAlign = "right";
-        ctx.fillText(formatNumber(value), padding.left - 8, y + 4);
-      }
+                const email =
+                    document
+                        .getElementById(
+                            "loginEmail"
+                        )
+                        .value
+                        .trim();
 
-      const groupWidth = plotWidth / rows.length;
-      const barWidth = Math.min(45, groupWidth / (series.length + 1));
+                const passwort =
+                    document
+                        .getElementById(
+                            "loginPasswort"
+                        )
+                        .value;
 
-      rows.forEach((row, rowIndex) => {
-        const center = padding.left + groupWidth * rowIndex + groupWidth / 2;
-        series.forEach((item, seriesIndex) => {
-          const value = Math.max(0, Number(row[item.key]));
-          const barHeight = value / maxValue * plotHeight;
-          const x = center + (seriesIndex - (series.length - 1) / 2) * barWidth - barWidth * .4;
-          ctx.fillStyle = colors[seriesIndex];
-          ctx.fillRect(x, padding.top + plotHeight - barHeight, barWidth * .8, barHeight);
-        });
-        ctx.fillStyle = "#64748b";
-        ctx.font = "11px Arial";
-        ctx.textAlign = "center";
-        ctx.fillText(row.date.slice(0, 7), center, padding.top + plotHeight + 20);
-      });
+                const meldung =
+                    document.getElementById(
+                        "loginMeldung"
+                    );
 
-      let legendX = padding.left;
-      series.forEach((item, index) => {
-        ctx.fillStyle = colors[index];
-        ctx.fillRect(legendX, height - 18, 12, 12);
-        ctx.fillStyle = "#1f2937";
-        ctx.textAlign = "left";
-        ctx.fillText(item.label, legendX + 17, height - 8);
-        legendX += ctx.measureText(item.label).width + 48;
-      });
-    }
+                const loginButton =
+                    document.getElementById(
+                        "loginButton"
+                    );
 
-    function renderCharts() {
-      drawConsumptionChart("stromChart", [{ key: "stromVerbrauch", label: "Strom" }], ["#f59e0b"]);
-      drawConsumptionChart(
-        "wasserChart",
-        [{ key: "kaltVerbrauch", label: "Kaltwasser" }, { key: "warmVerbrauch", label: "Warmwasser" }],
-        ["#2563eb", "#ef4444"]
-      );
-    }
 
-    window.addEventListener("resize", () => {
-      if (document.getElementById("diagramme").classList.contains("active-meter")) renderCharts();
-    });
-  </script>
+                meldung.textContent = "";
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, setDoc, deleteDoc, doc, onSnapshot, serverTimestamp
-    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
-      authDomain: "die-georgis.firebaseapp.com",
-      projectId: "die-georgis",
-      storageBucket: "die-georgis.firebasestorage.app",
-      messagingSenderId: "548614823934",
-      appId: "1:548614823934:web:3373a1862a42d92350aaaf"
-    };
+                if (
+                    !email ||
+                    !passwort
+                ) {
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const shoppingRef = collection(db, "shopping");
-    const readingsRef = collection(db, "meterReadings");
+                    meldung.textContent =
+                        "Bitte E-Mail-Adresse und Passwort eingeben.";
 
-    async function addItem() {
-      const input = document.getElementById("itemInput");
-      const name = input.value.trim();
-      if (!name) return;
-      await addDoc(shoppingRef, { name });
-      input.value = "";
-    }
+                    return;
+                }
 
-    document.getElementById("addItemButton").addEventListener("click", addItem);
-    document.getElementById("itemInput").addEventListener("keydown", event => {
-      if (event.key === "Enter") addItem();
-    });
 
-    onSnapshot(shoppingRef, snapshot => {
-      const list = document.getElementById("shoppingList");
-      list.innerHTML = "";
-      snapshot.forEach(item => {
-        const li = document.createElement("li");
-        li.style.display = "flex";
-        li.style.justifyContent = "space-between";
-        li.style.alignItems = "center";
-        const text = document.createElement("span");
-        text.textContent = item.data().name;
-        const button = document.createElement("button");
-        button.type = "button";
-        button.textContent = "✔";
-        button.addEventListener("click", () => deleteDoc(doc(db, "shopping", item.id)));
-        li.append(text, button);
-        list.appendChild(li);
-      });
-    });
+                loginButton.disabled =
+                    true;
 
-    const now = new Date();
-    document.getElementById("monat").value = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+                loginButton.textContent =
+                    "Anmeldung läuft...";
 
-    async function saveReading() {
-      const message = document.getElementById("formMessage");
-      const month = document.getElementById("monat").value;
-      const strom = document.getElementById("strom").value;
-      const kalt = document.getElementById("kaltwasser").value;
-      const warm = document.getElementById("warmwasser").value;
 
-      if (!month || strom === "" || kalt === "" || warm === "") {
-        message.textContent = "Bitte fülle alle Felder aus.";
-        message.className = "form-message error";
-        return;
-      }
+                try {
 
-      if ([strom, kalt, warm].some(value => Number(value) < 0)) {
-        message.textContent = "Zählerstände dürfen nicht negativ sein.";
-        message.className = "form-message error";
-        return;
-      }
+                    await signInWithEmailAndPassword(
+                        auth,
+                        email,
+                        passwort
+                    );
 
-      const date = `${month}-01`;
 
-      try {
-        await setDoc(doc(db, "meterReadings", date), {
-          date,
-          strom: Number(strom),
-          kalt: Number(kalt),
-          warm: Number(warm),
-          updatedAt: serverTimestamp()
-        });
-        message.textContent = `Zählerstand für den 01.${month.slice(5, 7)}.${month.slice(0, 4)} wurde gespeichert.`;
-        message.className = "form-message success";
-        document.getElementById("strom").value = "";
-        document.getElementById("kaltwasser").value = "";
-        document.getElementById("warmwasser").value = "";
-      } catch (error) {
-        console.error(error);
-        message.textContent = "Speichern fehlgeschlagen. Bitte prüfe die Firestore-Regeln.";
-        message.className = "form-message error";
-      }
-    }
+                    document
+                        .getElementById(
+                            "loginPasswort"
+                        )
+                        .value = "";
 
-    window.deleteReading = async id => {
-      if (confirm("Diesen Zählerstand wirklich löschen?")) {
-        await deleteDoc(doc(db, "meterReadings", id));
-      }
-    };
+                } catch (error) {
 
-    document.getElementById("saveReadingButton").addEventListener("click", saveReading);
+                    console.error(
+                        "Anmeldung fehlgeschlagen:",
+                        error
+                    );
 
-    onSnapshot(readingsRef, snapshot => {
-      readings = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-      renderReadings();
-      renderCharts();
-    }, error => {
-      console.error(error);
-      const message = document.getElementById("formMessage");
-      message.textContent = "Firestore-Daten konnten nicht geladen werden. Bitte prüfe die Zugriffsregeln.";
-      message.className = "form-message error";
-    });
-  </script>
+
+                    meldung.textContent =
+                        "Anmeldung fehlgeschlagen. Bitte E-Mail-Adresse und Passwort prüfen.";
+
+                } finally {
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.textContent =
+                        "Anmelden";
+                }
+            };
+
+
+        /*
+        Abmeldung
+        */
+
+        window.abmelden =
+            async function () {
+
+                try {
+
+                    await signOut(auth);
+
+                } catch (error) {
+
+                    console.error(
+                        "Abmeldung fehlgeschlagen:",
+                        error
+                    );
+                }
+            };
+
+
+        /*
+        Anmeldestatus überwachen
+        */
+
+        onAuthStateChanged(
+            auth,
+            user => {
+
+                const loginBereich =
+                    document.getElementById(
+                        "loginBereich"
+                    );
+
+                const appBereich =
+                    document.getElementById(
+                        "appBereich"
+                    );
+
+                const benutzerAnzeige =
+                    document.getElementById(
+                        "angemeldeterBenutzer"
+                    );
+
+                const loginMeldung =
+                    document.getElementById(
+                        "loginMeldung"
+                    );
+
+
+                if (user) {
+
+                    loginBereich.style.display =
+                        "none";
+
+                    appBereich.style.display =
+                        "block";
+
+                    loginMeldung.textContent =
+                        "";
+
+                    benutzerAnzeige.textContent =
+                        "Angemeldet als: " +
+                        user.email;
+
+
+                    starteEinkaufsliste();
+
+
+                    console.log(
+                        "Angemeldet:",
+                        user.email
+                    );
+
+                    console.log(
+                        "Firebase UID:",
+                        user.uid
+                    );
+
+                } else {
+
+                    loginBereich.style.display =
+                        "flex";
+
+                    appBereich.style.display =
+                        "none";
+
+                    benutzerAnzeige.textContent =
+                        "";
+
+
+                    if (
+                        einkaufsListenerBeenden
+                    ) {
+
+                        einkaufsListenerBeenden();
+
+                        einkaufsListenerBeenden =
+                            null;
+                    }
+
+
+                    document
+                        .getElementById(
+                            "shoppingList"
+                        )
+                        .innerHTML = "";
+
+
+                    console.log(
+                        "Niemand ist angemeldet."
+                    );
+                }
+            }
+        );
+
+
+        /*
+        Einkaufsartikel hinzufügen
+        */
+
+        window.addItem =
+            async function () {
+
+                if (!auth.currentUser) {
+                    return;
+                }
+
+
+                const input =
+                    document.getElementById(
+                        "itemInput"
+                    );
+
+                const status =
+                    document.getElementById(
+                        "shoppingStatus"
+                    );
+
+                const artikel =
+                    input.value.trim();
+
+
+                status.textContent = "";
+
+
+                if (!artikel) {
+                    return;
+                }
+
+
+                try {
+
+                    await addDoc(
+                        shoppingRef,
+                        {
+                            name: artikel
+                        }
+                    );
+
+
+                    input.value = "";
+
+                    status.style.color =
+                        "#24823c";
+
+                    status.textContent =
+                        "Artikel wurde hinzugefügt.";
+
+                } catch (error) {
+
+                    console.error(
+                        "Artikel konnte nicht gespeichert werden:",
+                        error
+                    );
+
+
+                    status.style.color =
+                        "#b00020";
+
+                    status.textContent =
+                        "Artikel konnte nicht gespeichert werden.";
+                }
+            };
+
+
+        /*
+        Einkaufsartikel löschen
+        */
+
+        window.removeItem =
+            async function (id) {
+
+                if (!auth.currentUser) {
+                    return;
+                }
+
+
+                try {
+
+                    await deleteDoc(
+                        doc(
+                            db,
+                            "shopping",
+                            id
+                        )
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "Artikel konnte nicht gelöscht werden:",
+                        error
+                    );
+                }
+            };
+
+
+        /*
+        Einkaufsliste in Echtzeit laden
+        */
+
+        function starteEinkaufsliste() {
+
+            if (
+                einkaufsListenerBeenden
+            ) {
+
+                einkaufsListenerBeenden();
+            }
+
+
+            einkaufsListenerBeenden =
+                onSnapshot(
+
+                    shoppingRef,
+
+                    snapshot => {
+
+                        const list =
+                            document.getElementById(
+                                "shoppingList"
+                            );
+
+                        list.innerHTML = "";
+
+
+                        snapshot.forEach(
+                            itemDokument => {
+
+                                const data =
+                                    itemDokument.data();
+
+                                const li =
+                                    document.createElement(
+                                        "li"
+                                    );
+
+                                const text =
+                                    document.createElement(
+                                        "span"
+                                    );
+
+                                text.textContent =
+                                    data.name || "";
+
+                                const button =
+                                    document.createElement(
+                                        "button"
+                                    );
+
+                                button.type =
+                                    "button";
+
+                                button.textContent =
+                                    "✔";
+
+                                button.title =
+                                    "Artikel erledigen";
+
+                                button.addEventListener(
+                                    "click",
+                                    () => {
+
+                                        window.removeItem(
+                                            itemDokument.id
+                                        );
+                                    }
+                                );
+
+
+                                li.appendChild(
+                                    text
+                                );
+
+                                li.appendChild(
+                                    button
+                                );
+
+                                list.appendChild(
+                                    li
+                                );
+                            }
+                        );
+                    },
+
+                    error => {
+
+                        console.error(
+                            "Einkaufsliste konnte nicht geladen werden:",
+                            error
+                        );
+
+                        document
+                            .getElementById(
+                                "shoppingStatus"
+                            )
+                            .textContent =
+                                "Einkaufsliste konnte nicht geladen werden.";
+                    }
+                );
+        }
+
+
+        /*
+        Anmeldung mit Enter
+        */
+
+        document
+            .getElementById(
+                "loginPasswort"
+            )
+            .addEventListener(
+                "keydown",
+                event => {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        window.anmelden();
+                    }
+                }
+            );
+
+
+        /*
+        Einkaufsartikel mit Enter hinzufügen
+        */
+
+        document
+            .getElementById(
+                "itemInput"
+            )
+            .addEventListener(
+                "keydown",
+                event => {
+
+                    if (
+                        event.key ===
+                        "Enter"
+                    ) {
+
+                        window.addItem();
+                    }
+                }
+            );
+
+    </script>
+
 </body>
+
 </html>
