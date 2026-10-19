@@ -318,7 +318,10 @@ from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
 import {
   getFirestore,
   collection,
-  addDoc
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
@@ -333,22 +336,76 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const shoppingRef = collection(db,"shopping");
 
 console.log("Firebase verbunden ✅");
 
-window.testFirebase = async function(){
+window.addItem = async function(){
 
-  await addDoc(
-    collection(db,"shopping"),
-    {
-      name: "Milch Test"
-    }
-  );
+    const input =
+        document.getElementById("itemInput");
 
-  console.log("In Firestore gespeichert ✅");
+    const artikel =
+        input.value.trim();
 
-}
+    if(!artikel)
+        return;
 
+    await addDoc(
+        shoppingRef,
+        {
+            name: artikel
+        }
+    );
+
+    input.value = "";
+
+};
+
+window.removeItem =
+async function(id){
+
+    await deleteDoc(
+        doc(
+            db,
+            "shopping",
+            id
+        )
+    );
+
+};
+
+onSnapshot(shoppingRef,(snapshot)=>{
+
+    const list =
+        document.getElementById("shoppingList");
+
+    list.innerHTML = "";
+
+    snapshot.forEach((item)=>{
+
+        const data =
+            item.data();
+
+        const li =
+            document.createElement("li");
+
+        li.innerHTML =
+        `
+        ${data.name}
+        <button
+        style="float:right"
+        onclick="removeItem('${item.id}')">
+        ✔ Erledigt
+        </button>
+        `;
+
+        list.appendChild(li);
+
+    });
+
+});
+    
 </script>
 </body>
 </html>
