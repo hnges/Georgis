@@ -1,11 +1,313 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Georgis</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Georgis</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: auto;
+    background: #f4f4f4;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    padding: 12px 20px;
+    border: none;
+    background: #2d6cdf;
+    color: white;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.tab-button:hover {
+    background: #1f4fa8;
+}
+
+.tab {
+    display: none;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.active {
+    display: block;
+}
+
+input {
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 8px 12px;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    background: #e8e8e8;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+</style>
 </head>
+
 <body>
-    <h1>Willkommen bei Georgis</h1>
-    <p>Meine erste Website auf GitHub.</p>
+
+<h1>🏠 Georgis</h1>
+
+<div class="tabs">
+    <button class="tab-button" onclick="showTab('einkauf')">
+        Einkaufsliste
+    </button>
+
+    <button class="tab-button" onclick="showTab('zaehler')">
+        Zählerstände
+    </button>
+
+    <button class="tab-button" onclick="showTab('zukunft')">
+        Zukunft
+    </button>
+</div>
+
+<!-- Einkaufsliste -->
+
+<div id="einkauf" class="tab active">
+
+<h2>🛒 Einkaufsliste</h2>
+
+<input type="text" id="itemInput" placeholder="Artikel eingeben">
+
+<button onclick="addItem()">
+Hinzufügen
+</button>
+
+<ul id="shoppingList"></ul>
+
+</div>
+
+<!-- Zaehler -->
+
+<div id="zaehler" class="tab">
+
+<h2>⚡ Zählerstände</h2>
+
+<input type="date" id="datum">
+
+<input type="number" id="strom"
+placeholder="Strom">
+
+<input type="number" id="warmwasser"
+placeholder="Warmwasser">
+
+<input type="number" id="kaltwasser"
+placeholder="Kaltwasser">
+
+<button onclick="saveReading()">
+Speichern
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Datum</th>
+<th>Strom</th>
+<th>Warmwasser</th>
+<th>Kaltwasser</th>
+</tr>
+</thead>
+
+<tbody id="meterTable">
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Zukunft -->
+
+<div id="zukunft" class="tab">
+
+<h2>🚧 Bereich in Planung</h2>
+
+<p>
+Hier können später weitere Funktionen ergänzt werden.
+</p>
+
+</div>
+
+<script>
+
+/* Tabs */
+
+function showTab(tabId){
+
+document.querySelectorAll(".tab")
+.forEach(tab => tab.classList.remove("active"));
+
+document.getElementById(tabId)
+.classList.add("active");
+
+}
+
+/* Einkaufsliste */
+
+let shopping =
+JSON.parse(localStorage.getItem("shopping")) || [];
+
+function renderShopping(){
+
+const list =
+document.getElementById("shoppingList");
+
+list.innerHTML = "";
+
+shopping.forEach((item,index)=>{
+
+const li =
+document.createElement("li");
+
+li.innerHTML =
+`${item}
+<button style="float:right"
+onclick="removeItem(${index})">
+✔ Erledigt
+</button>`;
+
+list.appendChild(li);
+
+});
+
+}
+
+function addItem(){
+
+const input =
+document.getElementById("itemInput");
+
+if(input.value.trim() === "")
+return;
+
+shopping.push(input.value);
+
+localStorage.setItem(
+"shopping",
+JSON.stringify(shopping)
+);
+
+input.value = "";
+
+renderShopping();
+
+}
+
+function removeItem(index){
+
+shopping.splice(index,1);
+
+localStorage.setItem(
+"shopping",
+JSON.stringify(shopping)
+);
+
+renderShopping();
+
+}
+
+/* Zählerstände */
+
+let readings =
+JSON.parse(localStorage.getItem("readings")) || [];
+
+function renderReadings(){
+
+const table =
+document.getElementById("meterTable");
+
+table.innerHTML = "";
+
+readings.forEach(r => {
+
+table.innerHTML += `
+<tr>
+<td>${r.date}</td>
+<td>${r.strom}</td>
+<td>${r.warm}</td>
+<td>${r.kalt}</td>
+</tr>
+`;
+
+});
+
+}
+
+function saveReading(){
+
+const entry = {
+
+date:
+document.getElementById("datum").value,
+
+strom:
+document.getElementById("strom").value,
+
+warm:
+document.getElementById("warmwasser").value,
+
+kalt:
+document.getElementById("kaltwasser").value
+
+};
+
+readings.push(entry);
+
+localStorage.setItem(
+"readings",
+JSON.stringify(readings)
+);
+
+renderReadings();
+
+}
+
+renderShopping();
+renderReadings();
+
+</script>
+
 </body>
 </html>
