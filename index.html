@@ -894,216 +894,539 @@
       .valueAsDate = new Date();
 
 
-    /* Einfache Diagramme */
+        /* Diagramme vorläufig vereinfacht */
 
-    function drawLineChart(
-      canvasId,
-      series,
-      colors
-    ) {
+    function renderCharts() {
+      const stromCanvas =
+        document.getElementById("stromChart");
 
-      const canvas =
-        document.getElementById(
-          canvasId
+      const wasserCanvas =
+        document.getElementById("wasserChart");
+
+      [stromCanvas, wasserCanvas].forEach((canvas) => {
+        const context = canvas.getContext("2d");
+
+        canvas.width =
+          Math.max(canvas.clientWidth, 300);
+
+        canvas.height = 300;
+
+        context.clearRect(
+          0,
+          0,
+          canvas.width,
+          canvas.height
         );
 
-      const rect =
-        canvas.getBoundingClientRect();
+        context.fillStyle = "#64748b";
+        context.font = "15px Arial";
+        context.textAlign = "center";
 
-      const width =
-        Math.max(rect.width, 300);
+        context.fillText(
+          readings.length === 0
+            ? "Noch keine Daten vorhanden"
+            : "Diagramm wird später ergänzt",
+          canvas.width / 2,
+          canvas.height / 2
+        );
+      });
+    }
 
-      const height = 300;
+    window.addEventListener(
+      "resize",
+      () => {
+        if (
+          document
+            .getElementById("diagramme")
+            .classList
+            .contains("active-meter")
+        ) {
+          renderCharts();
+        }
+      }
+    );
 
-      const ratio =
-        window.devicePixelRatio || 1;
+    renderReadings();
+
+  </script>
 
 
-      canvas.width = width * ratio;
+  <!-- Firebase, Anmeldung und Einkaufsliste -->
 
-      canvas.height = height * ratio;
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      deleteDoc,
+      doc,
+      onSnapshot
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 
 
-      const ctx =
-        canvas.getContext("2d");
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+      authDomain: "die-georgis.firebaseapp.com",
+      projectId: "die-georgis",
+      storageBucket: "die-georgis.firebasestorage.app",
+      messagingSenderId: "548614823934",
+      appId: "1:548614823934:web:3373a1862a42d92350aaaf"
+    };
 
 
-      ctx.scale(ratio, ratio);
+    const app =
+      initializeApp(firebaseConfig);
 
-      ctx.clearRect(
-        0,
-        0,
-        width,
-        height
+    const db =
+      getFirestore(app);
+
+    const auth =
+      getAuth(app);
+
+    const shoppingRef =
+      collection(db, "shopping");
+
+
+    const loginBereich =
+      document.getElementById(
+        "loginBereich"
+      );
+
+    const websiteBereich =
+      document.getElementById(
+        "websiteBereich"
+      );
+
+    const loginEmail =
+      document.getElementById(
+        "loginEmail"
+      );
+
+    const loginPasswort =
+      document.getElementById(
+        "loginPasswort"
+      );
+
+    const loginButton =
+      document.getElementById(
+        "loginButton"
+      );
+
+    const loginMessage =
+      document.getElementById(
+        "loginMessage"
+      );
+
+    const logoutButton =
+      document.getElementById(
+        "logoutButton"
+      );
+
+    const angemeldeterBenutzer =
+      document.getElementById(
+        "angemeldeterBenutzer"
+      );
+
+    const itemInput =
+      document.getElementById(
+        "itemInput"
+      );
+
+    const addItemButton =
+      document.getElementById(
+        "addItemButton"
+      );
+
+    const shoppingList =
+      document.getElementById(
+        "shoppingList"
+      );
+
+    const shoppingMessage =
+      document.getElementById(
+        "shoppingMessage"
       );
 
 
-      const padding = {
-        top: 20,
-        right: 20,
-        bottom: 55,
-        left: 55
-      };
+    let shoppingUnsubscribe = null;
 
 
-      const plotWidth =
-        width -
-        padding.left -
-        padding.right;
+    async function anmelden() {
 
-      const plotHeight =
-        height -
-        padding.top -
-        padding.bottom;
+      const email =
+        loginEmail.value.trim();
 
-      const sorted =
-        getSortedReadings();
+      const passwort =
+        loginPasswort.value;
 
 
-      if (sorted.length === 0) {
+      loginMessage.textContent = "";
+      loginMessage.className =
+        "form-message";
 
-        ctx.fillStyle = "#64748b";
 
-        ctx.font = "15px Arial";
+      if (!email || !passwort) {
 
-        ctx.textAlign = "center";
+        loginMessage.textContent =
+          "Bitte E-Mail-Adresse und Passwort eingeben.";
 
-        ctx.fillText(
-          "Noch keine Daten vorhanden",
-          width / 2,
-          height / 2
-        );
+        loginMessage.className =
+          "form-message error";
 
         return;
       }
 
 
-      const allValues =
-        series.flatMap(
-          (item) =>
-            sorted.map(
-              (reading) =>
-                Number(
-                  reading[item.key]
-                )
-            )
+      loginButton.disabled = true;
+
+      loginButton.textContent =
+        "Anmeldung läuft...";
+
+
+      try {
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          passwort
         );
 
+        loginPasswort.value = "";
 
-      const minValue =
-        Math.min(...allValues);
+      } catch (error) {
 
-      const maxValue =
-        Math.max(...allValues);
-
-      const range =
-        maxValue - minValue || 1;
-
-
-      ctx.strokeStyle = "#cbd5e1";
-
-      ctx.lineWidth = 1;
-
-      ctx.beginPath();
-
-      ctx.moveTo(
-        padding.left,
-        padding.top
-      );
-
-      ctx.lineTo(
-        padding.left,
-        padding.top + plotHeight
-      );
-
-      ctx.lineTo(
-        padding.left + plotWidth,
-        padding.top + plotHeight
-      );
-
-      ctx.stroke();
-
-
-      for (let i = 0; i <= 4; i++) {
-
-        const y =
-          padding.top +
-          (plotHeight / 4) * i;
-
-        const value =
-          maxValue -
-          (range / 4) * i;
-
-
-        ctx.strokeStyle =
-          "#e5e7eb";
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-          padding.left,
-          y
+        console.error(
+          "Firebase-Anmeldefehler:",
+          error.code,
+          error.message
         );
 
-        ctx.lineTo(
-          padding.left + plotWidth,
-          y
+        loginMessage.textContent =
+          "Anmeldung fehlgeschlagen: " +
+          getLoginErrorMessage(
+            error.code
+          );
+
+        loginMessage.className =
+          "form-message error";
+
+      } finally {
+
+        loginButton.disabled = false;
+
+        loginButton.textContent =
+          "Anmelden";
+      }
+    }
+
+
+    function getLoginErrorMessage(
+      errorCode
+    ) {
+
+      switch (errorCode) {
+
+        case "auth/invalid-credential":
+          return "E-Mail-Adresse oder Passwort ist falsch.";
+
+        case "auth/invalid-email":
+          return "Die E-Mail-Adresse ist ungültig.";
+
+        case "auth/user-disabled":
+          return "Dieses Benutzerkonto ist deaktiviert.";
+
+        case "auth/operation-not-allowed":
+          return "E-Mail/Passwort ist in Firebase nicht aktiviert.";
+
+        case "auth/too-many-requests":
+          return "Zu viele Versuche. Bitte später erneut versuchen.";
+
+        case "auth/network-request-failed":
+          return "Netzwerkfehler. Bitte Internetverbindung prüfen.";
+
+        default:
+          return errorCode;
+      }
+    }
+
+
+    async function abmelden() {
+
+      try {
+
+        await signOut(auth);
+
+      } catch (error) {
+
+        console.error(
+          "Abmeldung fehlgeschlagen:",
+          error
         );
+      }
+    }
 
-        ctx.stroke();
 
+    async function addItem() {
 
-        ctx.fillStyle =
-          "#64748b";
-
-        ctx.font =
-          "11px Arial";
-
-        ctx.textAlign =
-          "right";
-
-        ctx.fillText(
-          formatValue(value),
-          padding.left - 8,
-          y + 4
-        );
+      if (!auth.currentUser) {
+        return;
       }
 
 
-      series.forEach(
-        (item, seriesIndex) => {
-
-          ctx.strokeStyle =
-            colors[seriesIndex];
-
-          ctx.fillStyle =
-            colors[seriesIndex];
-
-          ctx.lineWidth = 2.5;
-
-          ctx.beginPath();
+      const artikel =
+        itemInput.value.trim();
 
 
-          sorted.forEach(
-            (reading, index) => {
+      if (!artikel) {
+        return;
+      }
 
-              const x =
-                sorted.length === 1
-                  ? padding.left +
-                    plotWidth / 2
-                  : padding.left +
-                    (
-                      index /
-                      (
-                        sorted.length -
-                        1
-                      )
-                    ) *
-                    plotWidth;
 
-              const y =
-                padding.top +
-                (
-                  (
-                    maxValue -
-                    
+      try {
+
+        await addDoc(
+          shoppingRef,
+          {
+            name: artikel
+          }
+        );
+
+        itemInput.value = "";
+
+      } catch (error) {
+
+        console.error(
+          "Artikel konnte nicht gespeichert werden:",
+          error
+        );
+
+        shoppingMessage.textContent =
+          "Artikel konnte nicht gespeichert werden.";
+
+        shoppingMessage.className =
+          "form-message error";
+      }
+    }
+
+
+    async function removeItem(id) {
+
+      if (!auth.currentUser) {
+        return;
+      }
+
+      try {
+
+        await deleteDoc(
+          doc(db, "shopping", id)
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Artikel konnte nicht gelöscht werden:",
+          error
+        );
+      }
+    }
+
+
+    function startShoppingListener() {
+
+      if (shoppingUnsubscribe) {
+        shoppingUnsubscribe();
+      }
+
+
+      shoppingUnsubscribe =
+        onSnapshot(
+          shoppingRef,
+
+          (snapshot) => {
+
+            shoppingList.innerHTML = "";
+
+            snapshot.forEach(
+              (itemDocument) => {
+
+                const data =
+                  itemDocument.data();
+
+                const li =
+                  document.createElement(
+                    "li"
+                  );
+
+                li.style.display =
+                  "flex";
+
+                li.style.justifyContent =
+                  "space-between";
+
+                li.style.alignItems =
+                  "center";
+
+
+                const text =
+                  document.createElement(
+                    "span"
+                  );
+
+                text.textContent =
+                  data.name || "";
+
+
+                const button =
+                  document.createElement(
+                    "button"
+                  );
+
+                button.type = "button";
+                button.textContent = "✔";
+
+                button.addEventListener(
+                  "click",
+                  () => {
+                    removeItem(
+                      itemDocument.id
+                    );
+                  }
+                );
+
+
+                li.append(text, button);
+
+                shoppingList.appendChild(
+                  li
+                );
+              }
+            );
+          },
+
+          (error) => {
+
+            console.error(
+              "Einkaufsliste konnte nicht geladen werden:",
+              error
+            );
+
+            shoppingMessage.textContent =
+              "Einkaufsliste konnte nicht geladen werden.";
+
+            shoppingMessage.className =
+              "form-message error";
+          }
+        );
+    }
+
+
+    onAuthStateChanged(
+      auth,
+      (user) => {
+
+        if (user) {
+
+          loginBereich.hidden = true;
+
+          websiteBereich.hidden = false;
+
+          loginMessage.textContent = "";
+
+          angemeldeterBenutzer.textContent =
+            "Angemeldet als: " +
+            user.email;
+
+          startShoppingListener();
+
+          console.log(
+            "Erfolgreich angemeldet:",
+            user.email
+          );
+
+        } else {
+
+          websiteBereich.hidden = true;
+
+          loginBereich.hidden = false;
+
+          angemeldeterBenutzer.textContent =
+            "";
+
+          if (shoppingUnsubscribe) {
+
+            shoppingUnsubscribe();
+
+            shoppingUnsubscribe = null;
+          }
+
+          shoppingList.innerHTML = "";
+
+          console.log(
+            "Niemand ist angemeldet."
+          );
+        }
+      }
+    );
+
+
+    loginButton.addEventListener(
+      "click",
+      anmelden
+    );
+
+
+    logoutButton.addEventListener(
+      "click",
+      abmelden
+    );
+
+
+    addItemButton.addEventListener(
+      "click",
+      addItem
+    );
+
+
+    loginPasswort.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+          anmelden();
+        }
+      }
+    );
+
+
+    itemInput.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+          addItem();
+        }
+      }
+    );
+
+
+    console.log(
+      "Firebase-Anmeldesystem geladen."
+    );
+
+  </script>
+
+</body>
+
+</html>
