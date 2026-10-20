@@ -2,10 +2,12 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
+
   <title>Georgis</title>
 
   <style>
@@ -44,6 +46,11 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.95rem;
+    }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.65;
     }
 
     .tab-button {
@@ -242,10 +249,12 @@
     }
   </style>
 
+  <!-- Bibliothek für den Excel-Export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
+  <!-- Anmeldung -->
   <section
     id="loginBereich"
     class="tab active"
@@ -256,6 +265,7 @@
     <div class="form-grid">
       <label>
         E-Mail-Adresse
+
         <input
           type="email"
           id="loginEmail"
@@ -266,6 +276,7 @@
 
       <label>
         Passwort
+
         <input
           type="password"
           id="loginPasswort"
@@ -290,6 +301,7 @@
     ></p>
   </section>
 
+  <!-- Website nach Anmeldung -->
   <div id="websiteBereich" hidden>
     <h1>🏠 Georgis</h1>
 
@@ -322,6 +334,7 @@
       </button>
     </nav>
 
+    <!-- Einkaufsliste -->
     <section
       id="einkauf"
       class="tab active"
@@ -353,6 +366,7 @@
       <ul id="shoppingList"></ul>
     </section>
 
+    <!-- Essensplanung -->
     <section
       id="essensplanung"
       class="tab"
@@ -380,6 +394,7 @@
         </button>
       </nav>
 
+      <!-- Wochenplanung -->
       <div
         id="wochenplanung"
         class="meal-tab active-meal"
@@ -399,9 +414,43 @@
                 <th>Abendessen</th>
               </tr>
             </thead>
+
             <tbody id="mealPlanBody"></tbody>
           </table>
         </div>
+
+        <!-- Zusätzliche Essen -->
+        <h3 style="margin-top: 25px;">
+          Weitere Essen
+        </h3>
+
+        <p class="empty-message">
+          Hier kannst du weitere Essen als Liste speichern.
+        </p>
+
+        <div class="shopping-row">
+          <input
+            type="text"
+            id="additionalMealInput"
+            placeholder="Weiteres Essen eingeben"
+          >
+
+          <button
+            class="primary-button"
+            type="button"
+            id="addAdditionalMealButton"
+          >
+            Hinzufügen
+          </button>
+        </div>
+
+        <p
+          id="additionalMealMessage"
+          class="form-message"
+          aria-live="polite"
+        ></p>
+
+        <ul id="additionalMealList"></ul>
 
         <div class="meal-plan-actions">
           <button
@@ -420,6 +469,7 @@
         ></p>
       </div>
 
+      <!-- Rezeptideen -->
       <div
         id="rezeptideen"
         class="meal-tab"
@@ -429,6 +479,7 @@
         <div class="form-grid">
           <label>
             Gericht
+
             <input
               type="text"
               id="recipeName"
@@ -438,6 +489,7 @@
 
           <label>
             URL
+
             <input
               type="url"
               id="recipeUrl"
@@ -464,6 +516,7 @@
       </div>
     </section>
 
+    <!-- Zählerstände -->
     <section
       id="zaehler"
       class="tab"
@@ -499,6 +552,7 @@
         </button>
       </nav>
 
+      <!-- Eingabe -->
       <div
         id="eingabe"
         class="meter-tab active-meter"
@@ -508,6 +562,7 @@
         <div class="form-grid">
           <label>
             Datum
+
             <input
               type="date"
               id="datum"
@@ -516,6 +571,7 @@
 
           <label>
             Strom (kWh)
+
             <input
               type="number"
               id="strom"
@@ -527,6 +583,7 @@
 
           <label>
             Warmwasser (m³)
+
             <input
               type="number"
               id="warmwasser"
@@ -538,6 +595,7 @@
 
           <label>
             Kaltwasser (m³)
+
             <input
               type="number"
               id="kaltwasser"
@@ -563,6 +621,7 @@
         ></p>
       </div>
 
+      <!-- Datentabelle -->
       <div
         id="tabelle"
         class="meter-tab"
@@ -590,14 +649,19 @@
 
               <tr>
                 <th>Zählerstand</th>
+
                 <th class="verbrauch-strom">
                   Verbrauch
                 </th>
+
                 <th>Zählerstand</th>
+
                 <th class="verbrauch-kaltwasser">
                   Verbrauch
                 </th>
+
                 <th>Zählerstand</th>
+
                 <th class="verbrauch-warmwasser">
                   Verbrauch
                 </th>
@@ -616,6 +680,7 @@
         </p>
       </div>
 
+      <!-- Diagramme -->
       <div
         id="diagramme"
         class="meter-tab"
@@ -634,6 +699,7 @@
       </div>
     </section>
 
+    <!-- Abmeldung -->
     <div
       style="
         margin-top: 20px;
@@ -656,8 +722,9 @@
     </div>
   </div>
 
+  <!-- Bedienung der Website -->
   <script>
-    /* Hauptreiter */
+    /* Hauptnavigation */
     const tabButtons =
       document.querySelectorAll(
         "[data-tab]"
@@ -722,7 +789,7 @@
       }
     );
 
-    /* Unterreiter Zählerstände */
+    /* Zähler-Unterreiter */
     const meterTabButtons =
       document.querySelectorAll(
         "[data-meter-tab]"
@@ -774,7 +841,7 @@
       }
     );
 
-    /* Unterreiter Essensplanung */
+    /* Essensplan-Unterreiter */
     const mealTabButtons =
       document.querySelectorAll(
         "[data-meal-tab]"
@@ -832,11 +899,11 @@
     ];
 
     let mealPlan = {};
-    let mealPlanCloudReady =
-      false;
-    let mealPlanMessageTimeout =
-      null;
-    let mealPlanSaveTimeout =
+    let additionalMeals = [];
+    let mealPlanCloudReady = false;
+    let mealPlanMessageTimeout = null;
+    let mealPlanSaveTimeout = null;
+    let additionalMealMessageTimeout =
       null;
 
     function showMealPlanMessage(
@@ -868,10 +935,49 @@
             () => {
               message.textContent =
                 "";
+
               message.className =
                 "form-message";
             },
             1800
+          );
+      }
+    }
+
+    function showAdditionalMealMessage(
+      text,
+      type
+    ) {
+      const message =
+        document.getElementById(
+          "additionalMealMessage"
+        );
+
+      message.textContent = text;
+      message.className =
+        type
+          ? "form-message " + type
+          : "form-message";
+
+      if (
+        additionalMealMessageTimeout
+      ) {
+        clearTimeout(
+          additionalMealMessageTimeout
+        );
+      }
+
+      if (text) {
+        additionalMealMessageTimeout =
+          setTimeout(
+            () => {
+              message.textContent =
+                "";
+
+              message.className =
+                "form-message";
+            },
+            2500
           );
       }
     }
@@ -881,6 +987,7 @@
     ) {
       const day =
         input.dataset.day;
+
       const meal =
         input.dataset.meal;
 
@@ -912,6 +1019,7 @@
                 "Die Cloud-Verbindung wird noch hergestellt.",
                 "error"
               );
+
               return;
             }
 
@@ -954,22 +1062,27 @@
           document.createElement(
             "tr"
           );
+
         const dayCell =
           document.createElement(
             "th"
           );
+
         const lunchCell =
           document.createElement(
             "td"
           );
+
         const dinnerCell =
           document.createElement(
             "td"
           );
+
         const lunchInput =
           document.createElement(
             "input"
           );
+
         const dinnerInput =
           document.createElement(
             "input"
@@ -978,24 +1091,32 @@
         dayCell.textContent = day;
 
         lunchInput.type = "text";
+
         lunchInput.placeholder =
           "Mittagessen eintragen";
+
         lunchInput.value =
           mealPlan[day]?.lunch ||
           "";
+
         lunchInput.dataset.day =
           day;
+
         lunchInput.dataset.meal =
           "lunch";
 
         dinnerInput.type = "text";
+
         dinnerInput.placeholder =
           "Abendessen eintragen";
+
         dinnerInput.value =
           mealPlan[day]?.dinner ||
           "";
+
         dinnerInput.dataset.day =
           day;
+
         dinnerInput.dataset.meal =
           "dinner";
 
@@ -1020,6 +1141,7 @@
         lunchCell.appendChild(
           lunchInput
         );
+
         dinnerCell.appendChild(
           dinnerInput
         );
@@ -1034,8 +1156,82 @@
       });
     }
 
+    function renderAdditionalMeals() {
+      const list =
+        document.getElementById(
+          "additionalMealList"
+        );
+
+      list.innerHTML = "";
+
+      additionalMeals.forEach(
+        (meal, index) => {
+          const listItem =
+            document.createElement(
+              "li"
+            );
+
+          const text =
+            document.createElement(
+              "span"
+            );
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+          listItem.style.display =
+            "flex";
+
+          listItem.style
+            .justifyContent =
+              "space-between";
+
+          listItem.style
+            .alignItems =
+              "center";
+
+          listItem.style.gap =
+            "10px";
+
+          text.textContent = meal;
+
+          deleteButton.type =
+            "button";
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "Löschen";
+
+          deleteButton.addEventListener(
+            "click",
+            () => {
+              deleteAdditionalMeal(
+                index
+              );
+            }
+          );
+
+          listItem.append(
+            text,
+            deleteButton
+          );
+
+          list.appendChild(
+            listItem
+          );
+        }
+      );
+    }
+
     window.updateMealPlanFromCloud =
-      function (cloudMealPlan) {
+      function (
+        cloudMealPlan,
+        cloudAdditionalMeals
+      ) {
         mealPlan =
           cloudMealPlan &&
           typeof cloudMealPlan ===
@@ -1046,13 +1242,26 @@
             ? cloudMealPlan
             : {};
 
+        additionalMeals =
+          Array.isArray(
+            cloudAdditionalMeals
+          )
+            ? cloudAdditionalMeals
+                .filter(
+                  (meal) => {
+                    return (
+                      typeof meal ===
+                        "string" &&
+                      meal.trim() !==
+                        ""
+                    );
+                  }
+                )
+            : [];
+
         mealPlanCloudReady =
           true;
 
-        /*
-          Während einer Eingabe wird die
-          Tabelle nicht neu aufgebaut.
-        */
         const activeElement =
           document.activeElement;
 
@@ -1064,6 +1273,8 @@
         ) {
           renderMealPlan();
         }
+
+        renderAdditionalMeals();
       };
 
     window.setMealPlanCloudState =
@@ -1072,10 +1283,159 @@
           Boolean(isReady);
       };
 
+    async function addAdditionalMeal() {
+      const input =
+        document.getElementById(
+          "additionalMealInput"
+        );
+
+      const meal =
+        input.value.trim();
+
+      if (!meal) {
+        showAdditionalMealMessage(
+          "Bitte gib ein Essen ein.",
+          "error"
+        );
+
+        return;
+      }
+
+      if (
+        typeof window
+          .saveAdditionalMealsToCloud !==
+          "function" ||
+        !mealPlanCloudReady
+      ) {
+        showAdditionalMealMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+
+        return;
+      }
+
+      const alreadyExists =
+        additionalMeals.some(
+          (existingMeal) => {
+            return (
+              existingMeal
+                .toLocaleLowerCase(
+                  "de-DE"
+                ) ===
+              meal.toLocaleLowerCase(
+                "de-DE"
+              )
+            );
+          }
+        );
+
+      if (alreadyExists) {
+        showAdditionalMealMessage(
+          "Dieses Essen ist bereits in der Liste vorhanden.",
+          "error"
+        );
+
+        return;
+      }
+
+      const updatedMeals = [
+        ...additionalMeals,
+        meal
+      ];
+
+      try {
+        await window
+          .saveAdditionalMealsToCloud(
+            updatedMeals
+          );
+
+        additionalMeals =
+          updatedMeals;
+
+        input.value = "";
+
+        renderAdditionalMeals();
+
+        showAdditionalMealMessage(
+          "Das Essen wurde gespeichert.",
+          "success"
+        );
+      } catch (error) {
+        console.error(
+          "Weiteres Essen konnte nicht gespeichert werden:",
+          error
+        );
+
+        showAdditionalMealMessage(
+          "Das Essen konnte nicht gespeichert werden.",
+          "error"
+        );
+      }
+    }
+
+    async function deleteAdditionalMeal(
+      index
+    ) {
+      if (
+        typeof window
+          .saveAdditionalMealsToCloud !==
+          "function" ||
+        !mealPlanCloudReady
+      ) {
+        showAdditionalMealMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+
+        return;
+      }
+
+      const updatedMeals =
+        additionalMeals.filter(
+          (
+            meal,
+            mealIndex
+          ) => {
+            return (
+              mealIndex !==
+              index
+            );
+          }
+        );
+
+      try {
+        await window
+          .saveAdditionalMealsToCloud(
+            updatedMeals
+          );
+
+        additionalMeals =
+          updatedMeals;
+
+        renderAdditionalMeals();
+
+        showAdditionalMealMessage(
+          "Das Essen wurde gelöscht.",
+          "success"
+        );
+      } catch (error) {
+        console.error(
+          "Weiteres Essen konnte nicht gelöscht werden:",
+          error
+        );
+
+        showAdditionalMealMessage(
+          "Das Essen konnte nicht gelöscht werden.",
+          "error"
+        );
+      }
+    }
+
     async function clearMealPlan() {
       const shouldClear =
         window.confirm(
-          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
+          "Möchtest du wirklich alle Einträge des Wochenplans löschen? Die Liste mit weiteren Essen bleibt erhalten."
         );
 
       if (!shouldClear) {
@@ -1092,6 +1452,7 @@
           "Die Cloud-Verbindung wird noch hergestellt.",
           "error"
         );
+
         return;
       }
 
@@ -1139,14 +1500,38 @@
         clearMealPlan
       );
 
+    document
+      .getElementById(
+        "addAdditionalMealButton"
+      )
+      .addEventListener(
+        "click",
+        addAdditionalMeal
+      );
+
+    document
+      .getElementById(
+        "additionalMealInput"
+      )
+      .addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Enter"
+          ) {
+            addAdditionalMeal();
+          }
+        }
+      );
+
     renderMealPlan();
+    renderAdditionalMeals();
 
     /* Rezeptideen */
     let recipes = [];
-    let recipesCloudReady =
-      false;
-    let recipeMessageTimeout =
-      null;
+    let recipesCloudReady = false;
+    let recipeMessageTimeout = null;
 
     function showRecipeMessage(
       text,
@@ -1158,6 +1543,7 @@
         );
 
       message.textContent = text;
+
       message.className =
         type
           ? "form-message " + type
@@ -1177,6 +1563,7 @@
             () => {
               message.textContent =
                 "";
+
               message.className =
                 "form-message";
             },
@@ -1199,14 +1586,17 @@
             document.createElement(
               "li"
             );
+
           const content =
             document.createElement(
               "div"
             );
+
           const name =
             document.createElement(
               "strong"
             );
+
           const deleteButton =
             document.createElement(
               "button"
@@ -1214,12 +1604,15 @@
 
           listItem.style.display =
             "flex";
+
           listItem.style
             .justifyContent =
               "space-between";
+
           listItem.style
             .alignItems =
               "center";
+
           listItem.style.gap =
             "10px";
 
@@ -1235,6 +1628,7 @@
               document.createElement(
                 "br"
               );
+
             const link =
               document.createElement(
                 "a"
@@ -1242,18 +1636,23 @@
 
             link.href =
               recipe.url;
+
             link.target =
               "_blank";
+
             link.rel =
               "noopener noreferrer";
+
             link.className =
               "recipe-link";
+
             link.textContent =
               recipe.url;
 
             content.appendChild(
               lineBreak
             );
+
             content.appendChild(
               link
             );
@@ -1261,8 +1660,10 @@
 
           deleteButton.type =
             "button";
+
           deleteButton.className =
             "delete-button";
+
           deleteButton.textContent =
             "Löschen";
 
@@ -1313,6 +1714,7 @@
         document.getElementById(
           "recipeName"
         );
+
       const urlInput =
         document.getElementById(
           "recipeUrl"
@@ -1320,6 +1722,7 @@
 
       const name =
         nameInput.value.trim();
+
       const url =
         urlInput.value.trim();
 
@@ -1333,6 +1736,7 @@
           "Bitte gib den Namen des Gerichts ein.",
           "error"
         );
+
         return;
       }
 
@@ -1356,6 +1760,7 @@
             "Bitte gib eine gültige URL ein.",
             "error"
           );
+
           return;
         }
       }
@@ -1370,6 +1775,7 @@
           "Die Cloud-Verbindung wird noch hergestellt.",
           "error"
         );
+
         return;
       }
 
@@ -1425,6 +1831,7 @@
           "Die Cloud-Verbindung wird noch hergestellt.",
           "error"
         );
+
         return;
       }
 
@@ -1522,10 +1929,11 @@
 
     function getSortedReadings() {
       return [...readings].sort(
-        (a, b) =>
-          a.date.localeCompare(
+        (a, b) => {
+          return a.date.localeCompare(
             b.date
-          )
+          );
+        }
       );
     }
 
@@ -1603,18 +2011,21 @@
 
           return {
             reading,
+
             stromVerbrauch:
               calculateConsumption(
                 reading,
                 previousReading,
                 "strom"
               ),
+
             kaltVerbrauch:
               calculateConsumption(
                 reading,
                 previousReading,
                 "kalt"
               ),
+
             warmVerbrauch:
               calculateConsumption(
                 reading,
@@ -1631,6 +2042,7 @@
         document.getElementById(
           "meterTable"
         );
+
       const emptyMessage =
         document.getElementById(
           "emptyTableMessage"
@@ -1640,113 +2052,129 @@
 
       [...getTableRows()]
         .reverse()
-        .forEach((rowData) => {
-          const reading =
-            rowData.reading;
-          const row =
-            document.createElement(
-              "tr"
-            );
+        .forEach(
+          (rowData) => {
+            const reading =
+              rowData.reading;
 
-          const values = [
-            formatDate(
-              reading.date
-            ),
-            formatValue(
-              reading.strom
-            ),
-            formatValue(
-              rowData
-                .stromVerbrauch
-            ),
-            formatValue(
-              reading.kalt
-            ),
-            formatValue(
-              rowData
-                .kaltVerbrauch
-            ),
-            formatValue(
-              reading.warm
-            ),
-            formatValue(
-              rowData
-                .warmVerbrauch
-            )
-          ];
-
-          values.forEach(
-            (value, index) => {
-              const cell =
-                document.createElement(
-                  "td"
-                );
-
-              cell.textContent =
-                value;
-
-              if (index === 2) {
-                cell.classList.add(
-                  "verbrauch-strom"
-                );
-              }
-
-              if (index === 4) {
-                cell.classList.add(
-                  "verbrauch-kaltwasser"
-                );
-              }
-
-              if (index === 6) {
-                cell.classList.add(
-                  "verbrauch-warmwasser"
-                );
-              }
-
-              row.appendChild(
-                cell
+            const row =
+              document.createElement(
+                "tr"
               );
-            }
-          );
 
-          const actionCell =
-            document.createElement(
-              "td"
-            );
-          const deleteButton =
-            document.createElement(
-              "button"
-            );
+            const values = [
+              formatDate(
+                reading.date
+              ),
 
-          deleteButton.type =
-            "button";
-          deleteButton.className =
-            "delete-button";
-          deleteButton.textContent =
-            "Löschen";
+              formatValue(
+                reading.strom
+              ),
 
-          deleteButton.addEventListener(
-            "click",
-            () => {
-              const originalIndex =
-                readings.indexOf(
-                  reading
+              formatValue(
+                rowData
+                  .stromVerbrauch
+              ),
+
+              formatValue(
+                reading.kalt
+              ),
+
+              formatValue(
+                rowData
+                  .kaltVerbrauch
+              ),
+
+              formatValue(
+                reading.warm
+              ),
+
+              formatValue(
+                rowData
+                  .warmVerbrauch
+              )
+            ];
+
+            values.forEach(
+              (value, index) => {
+                const cell =
+                  document
+                    .createElement(
+                      "td"
+                    );
+
+                cell.textContent =
+                  value;
+
+                if (index === 2) {
+                  cell.classList.add(
+                    "verbrauch-strom"
+                  );
+                }
+
+                if (index === 4) {
+                  cell.classList.add(
+                    "verbrauch-kaltwasser"
+                  );
+                }
+
+                if (index === 6) {
+                  cell.classList.add(
+                    "verbrauch-warmwasser"
+                  );
+                }
+
+                row.appendChild(
+                  cell
                 );
+              }
+            );
 
-              deleteReading(
-                originalIndex
+            const actionCell =
+              document.createElement(
+                "td"
               );
-            }
-          );
 
-          actionCell.appendChild(
+            const deleteButton =
+              document.createElement(
+                "button"
+              );
+
+            deleteButton.type =
+              "button";
+
+            deleteButton.className =
+              "delete-button";
+
+            deleteButton.textContent =
+              "Löschen";
+
             deleteButton
-          );
-          row.appendChild(
-            actionCell
-          );
-          table.appendChild(row);
-        });
+              .addEventListener(
+                "click",
+                () => {
+                  const originalIndex =
+                    readings.indexOf(
+                      reading
+                    );
+
+                  deleteReading(
+                    originalIndex
+                  );
+                }
+              );
+
+            actionCell.appendChild(
+              deleteButton
+            );
+
+            row.appendChild(
+              actionCell
+            );
+
+            table.appendChild(row);
+          }
+        );
 
       emptyMessage.hidden =
         readings.length > 0;
@@ -1757,24 +2185,29 @@
         document.getElementById(
           "formMessage"
         );
+
       const date =
         document.getElementById(
           "datum"
         ).value;
+
       const strom =
         document.getElementById(
           "strom"
         ).value;
+
       const warm =
         document.getElementById(
           "warmwasser"
         ).value;
+
       const kalt =
         document.getElementById(
           "kaltwasser"
         ).value;
 
       message.textContent = "";
+
       message.className =
         "form-message";
 
@@ -1786,8 +2219,10 @@
       ) {
         message.textContent =
           "Bitte fülle alle Felder aus.";
+
         message.className =
           "form-message error";
+
         return;
       }
 
@@ -1803,22 +2238,30 @@
       ) {
         message.textContent =
           "Zählerstände können nur für den 1. eines Monats gespeichert werden.";
+
         message.className =
           "form-message error";
+
         return;
       }
 
       const dateAlreadyExists =
         readings.some(
-          (reading) =>
-            reading.date === date
+          (reading) => {
+            return (
+              reading.date ===
+              date
+            );
+          }
         );
 
       if (dateAlreadyExists) {
         message.textContent =
           "Für diesen Monat ist bereits ein Zählerstand gespeichert.";
+
         message.className =
           "form-message error";
+
         return;
       }
 
@@ -1833,8 +2276,12 @@
         [...getSortedReadings()]
           .reverse()
           .find(
-            (reading) =>
-              reading.date < date
+            (reading) => {
+              return (
+                reading.date <
+                date
+              );
+            }
           );
 
       if (
@@ -1850,8 +2297,10 @@
       ) {
         message.textContent =
           "Ein Zählerstand darf nicht kleiner als der vorherige Zählerstand sein.";
+
         message.className =
           "form-message error";
+
         return;
       }
 
@@ -1885,6 +2334,7 @@
 
       message.textContent =
         "Zählerstand wurde gespeichert.";
+
       message.className =
         "form-message success";
     }
@@ -1904,6 +2354,7 @@
       renderCharts();
     }
 
+    /* Excel-Export */
     function exportExcel() {
       if (
         readings.length === 0
@@ -1911,6 +2362,7 @@
         alert(
           "Es sind noch keine Zählerstände vorhanden."
         );
+
         return;
       }
 
@@ -1921,6 +2373,7 @@
         alert(
           "Die Excel-Bibliothek konnte nicht geladen werden."
         );
+
         return;
       }
 
@@ -1933,21 +2386,27 @@
                   rowData
                     .reading.date
                 ),
+
               "Strom Zählerstand (kWh)":
                 rowData
                   .reading.strom,
+
               "Strom Verbrauch (kWh)":
                 rowData
                   .stromVerbrauch,
+
               "Kaltwasser Zählerstand (m³)":
                 rowData
                   .reading.kalt,
+
               "Kaltwasser Verbrauch (m³)":
                 rowData
                   .kaltVerbrauch,
+
               "Warmwasser Zählerstand (m³)":
                 rowData
                   .reading.warm,
+
               "Warmwasser Verbrauch (m³)":
                 rowData
                   .warmVerbrauch
@@ -1988,6 +2447,7 @@
       );
     }
 
+    /* Diagramme */
     function drawLineChart(
       canvas,
       chartSeries,
@@ -1997,18 +2457,22 @@
         canvas.getContext(
           "2d"
         );
+
       const pixelRatio =
         window.devicePixelRatio ||
         1;
+
       const width =
         Math.max(
           canvas.clientWidth,
           300
         );
+
       const height = 300;
 
       canvas.width =
         width * pixelRatio;
+
       canvas.height =
         height * pixelRatio;
 
@@ -2031,14 +2495,16 @@
       const allValues =
         chartSeries
           .flatMap(
-            (series) =>
-              series.values
+            (series) => {
+              return series.values;
+            }
           )
           .filter(
-            (value) =>
-              Number.isFinite(
+            (value) => {
+              return Number.isFinite(
                 value
-              )
+              );
+            }
           );
 
       if (
@@ -2047,8 +2513,10 @@
       ) {
         context.fillStyle =
           "#64748b";
+
         context.font =
           "15px Arial";
+
         context.textAlign =
           "center";
 
@@ -2073,19 +2541,23 @@
           ...allValues,
           1
         );
+
       const minimum =
         Math.min(
           0,
           ...allValues
         );
+
       const graphWidth =
         width -
         padding.left -
         padding.right;
+
       const graphHeight =
         height -
         padding.top -
         padding.bottom;
+
       const pointCount =
         Math.max(
           labels.length,
@@ -2126,8 +2598,10 @@
 
       context.strokeStyle =
         "#cbd5e1";
+
       context.fillStyle =
         "#64748b";
+
       context.font =
         "12px Arial";
 
@@ -2141,6 +2615,7 @@
           graphHeight *
             index /
             4;
+
         const value =
           maximum -
           (
@@ -2151,18 +2626,23 @@
           4;
 
         context.beginPath();
+
         context.moveTo(
           padding.left,
           y
         );
+
         context.lineTo(
           width -
             padding.right,
           y
         );
+
         context.stroke();
+
         context.textAlign =
           "right";
+
         context.fillText(
           formatValue(value),
           padding.left - 8,
@@ -2172,6 +2652,7 @@
 
       context.fillStyle =
         "#64748b";
+
       context.textAlign =
         "center";
 
@@ -2189,9 +2670,12 @@
         (series) => {
           context.strokeStyle =
             series.color;
+
           context.fillStyle =
             series.color;
+
           context.lineWidth = 2;
+
           context.beginPath();
 
           let firstPoint =
@@ -2209,6 +2693,7 @@
 
               const x =
                 getX(index);
+
               const y =
                 getY(value);
 
@@ -2217,6 +2702,7 @@
                   x,
                   y
                 );
+
                 firstPoint =
                   false;
               } else {
@@ -2241,6 +2727,7 @@
               }
 
               context.beginPath();
+
               context.arc(
                 getX(index),
                 getY(value),
@@ -2248,6 +2735,7 @@
                 0,
                 Math.PI * 2
               );
+
               context.fill();
             }
           );
@@ -2262,14 +2750,17 @@
 
           context.fillStyle =
             series.color;
+
           context.fillRect(
             legendX,
             8,
             12,
             3
           );
+
           context.textAlign =
             "left";
+
           context.fillText(
             series.name,
             legendX + 17,
@@ -2314,12 +2805,14 @@
           {
             name: "Strom",
             color: "#facc15",
+
             values:
               rowsWithConsumption
                 .map(
-                  (rowData) =>
-                    rowData
-                      .stromVerbrauch
+                  (rowData) => {
+                    return rowData
+                      .stromVerbrauch;
+                  }
                 )
           }
         ],
@@ -2334,27 +2827,34 @@
           {
             name:
               "Kaltwasser",
+
             color:
               "#2d6cdf",
+
             values:
               rowsWithConsumption
                 .map(
-                  (rowData) =>
-                    rowData
-                      .kaltVerbrauch
+                  (rowData) => {
+                    return rowData
+                      .kaltVerbrauch;
+                  }
                 )
           },
+
           {
             name:
               "Warmwasser",
+
             color:
               "#dc2626",
+
             values:
               rowsWithConsumption
                 .map(
-                  (rowData) =>
-                    rowData
-                      .warmVerbrauch
+                  (rowData) => {
+                    return rowData
+                      .warmVerbrauch;
+                  }
                 )
           }
         ],
@@ -2422,6 +2922,7 @@
     renderReadings();
   </script>
 
+  <!-- Firebase -->
   <script type="module">
     import {
       initializeApp
@@ -2447,14 +2948,19 @@
     const firebaseConfig = {
       apiKey:
         "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
+
       authDomain:
         "die-georgis.firebaseapp.com",
+
       projectId:
         "die-georgis",
+
       storageBucket:
         "die-georgis.firebasestorage.app",
+
       messagingSenderId:
         "548614823934",
+
       appId:
         "1:548614823934:web:3373a1862a42d92350aaaf"
     };
@@ -2463,8 +2969,10 @@
       initializeApp(
         firebaseConfig
       );
+
     const db =
       getFirestore(app);
+
     const auth =
       getAuth(app);
 
@@ -2478,46 +2986,57 @@
       document.getElementById(
         "loginBereich"
       );
+
     const websiteBereich =
       document.getElementById(
         "websiteBereich"
       );
+
     const loginEmail =
       document.getElementById(
         "loginEmail"
       );
+
     const loginPasswort =
       document.getElementById(
         "loginPasswort"
       );
+
     const loginButton =
       document.getElementById(
         "loginButton"
       );
+
     const loginMessage =
       document.getElementById(
         "loginMessage"
       );
+
     const logoutButton =
       document.getElementById(
         "logoutButton"
       );
+
     const angemeldeterBenutzer =
       document.getElementById(
         "angemeldeterBenutzer"
       );
+
     const itemInput =
       document.getElementById(
         "itemInput"
       );
+
     const addItemButton =
       document.getElementById(
         "addItemButton"
       );
+
     const shoppingList =
       document.getElementById(
         "shoppingList"
       );
+
     const shoppingMessage =
       document.getElementById(
         "shoppingMessage"
@@ -2525,12 +3044,16 @@
 
     let shoppingUnsubscribe =
       null;
+
     let mealPlanUnsubscribe =
       null;
+
     let currentMealPlanRef =
       null;
+
     let recipesUnsubscribe =
       null;
+
     let currentRecipesRef =
       null;
 
@@ -2582,11 +3105,13 @@
     async function anmelden() {
       const email =
         loginEmail.value.trim();
+
       const passwort =
         loginPasswort.value;
 
       loginMessage.textContent =
         "";
+
       loginMessage.className =
         "form-message";
 
@@ -2596,13 +3121,16 @@
       ) {
         loginMessage.textContent =
           "Bitte E-Mail-Adresse und Passwort eingeben.";
+
         loginMessage.className =
           "form-message error";
+
         return;
       }
 
       loginButton.disabled =
         true;
+
       loginButton.textContent =
         "Anmeldung läuft...";
 
@@ -2633,6 +3161,7 @@
       } finally {
         loginButton.disabled =
           false;
+
         loginButton.textContent =
           "Anmelden";
       }
@@ -2678,6 +3207,7 @@
 
         shoppingMessage.textContent =
           "Artikel konnte nicht gespeichert werden.";
+
         shoppingMessage.className =
           "form-message error";
       }
@@ -2725,16 +3255,19 @@
                 const data =
                   itemDocument
                     .data();
+
                 const listItem =
                   document
                     .createElement(
                       "li"
                     );
+
                 const text =
                   document
                     .createElement(
                       "span"
                     );
+
                 const button =
                   document
                     .createElement(
@@ -2744,9 +3277,11 @@
                 listItem.style
                   .display =
                     "flex";
+
                 listItem.style
                   .justifyContent =
                     "space-between";
+
                 listItem.style
                   .alignItems =
                     "center";
@@ -2756,17 +3291,19 @@
 
                 button.type =
                   "button";
+
                 button.textContent =
                   "✔";
 
-                button.addEventListener(
-                  "click",
-                  () => {
-                    removeItem(
-                      itemDocument.id
-                    );
-                  }
-                );
+                button
+                  .addEventListener(
+                    "click",
+                    () => {
+                      removeItem(
+                        itemDocument.id
+                      );
+                    }
+                  );
 
                 listItem.append(
                   text,
@@ -2788,12 +3325,14 @@
 
             shoppingMessage.textContent =
               "Einkaufsliste konnte nicht geladen werden.";
+
             shoppingMessage.className =
               "form-message error";
           }
         );
     }
 
+    /* Wochenplan und weitere Essen */
     function startMealPlanListener(
       user
     ) {
@@ -2801,6 +3340,7 @@
         mealPlanUnsubscribe
       ) {
         mealPlanUnsubscribe();
+
         mealPlanUnsubscribe =
           null;
       }
@@ -2835,12 +3375,18 @@
 
               window
                 .updateMealPlanFromCloud?.(
-                  data.plan || {}
+                  data.plan || {},
+                  Array.isArray(
+                    data.additionalMeals
+                  )
+                    ? data.additionalMeals
+                    : []
                 );
             } else {
               window
                 .updateMealPlanFromCloud?.(
-                  {}
+                  {},
+                  []
                 );
             }
           },
@@ -2862,6 +3408,7 @@
 
             message.textContent =
               "Die Essensplanung konnte nicht aus der Cloud geladen werden.";
+
             message.className =
               "form-message error";
           }
@@ -2883,10 +3430,39 @@
           currentMealPlanRef,
           {
             plan
+          },
+          {
+            merge: true
           }
         );
       };
 
+    window.saveAdditionalMealsToCloud =
+      async function (
+        updatedMeals
+      ) {
+        if (
+          !auth.currentUser ||
+          !currentMealPlanRef
+        ) {
+          throw new Error(
+            "Kein Benutzer angemeldet."
+          );
+        }
+
+        await setDoc(
+          currentMealPlanRef,
+          {
+            additionalMeals:
+              updatedMeals
+          },
+          {
+            merge: true
+          }
+        );
+      };
+
+    /* Rezeptideen */
     function startRecipesListener(
       user
     ) {
@@ -2894,6 +3470,7 @@
         recipesUnsubscribe
       ) {
         recipesUnsubscribe();
+
         recipesUnsubscribe =
           null;
       }
@@ -3016,6 +3593,7 @@
 
                   message.textContent =
                     "Die bisherigen Rezeptideen konnten nicht in die Cloud übertragen werden.";
+
                   message.className =
                     "form-message error";
                 }
@@ -3053,6 +3631,7 @@
 
             message.textContent =
               "Die Rezeptideen konnten nicht aus der Cloud geladen werden.";
+
             message.className =
               "form-message error";
           }
@@ -3081,14 +3660,17 @@
         );
       };
 
+    /* Anmeldung überwachen */
     onAuthStateChanged(
       auth,
       (user) => {
         if (user) {
           loginBereich.hidden =
             true;
+
           websiteBereich.hidden =
             false;
+
           loginMessage.textContent =
             "";
 
@@ -3109,8 +3691,10 @@
         } else {
           websiteBereich.hidden =
             true;
+
           loginBereich.hidden =
             false;
+
           angemeldeterBenutzer
             .textContent =
               "";
@@ -3119,6 +3703,7 @@
             shoppingUnsubscribe
           ) {
             shoppingUnsubscribe();
+
             shoppingUnsubscribe =
               null;
           }
@@ -3127,6 +3712,7 @@
             mealPlanUnsubscribe
           ) {
             mealPlanUnsubscribe();
+
             mealPlanUnsubscribe =
               null;
           }
@@ -3135,12 +3721,14 @@
             recipesUnsubscribe
           ) {
             recipesUnsubscribe();
+
             recipesUnsubscribe =
               null;
           }
 
           currentMealPlanRef =
             null;
+
           currentRecipesRef =
             null;
 
@@ -3151,7 +3739,8 @@
 
           window
             .updateMealPlanFromCloud?.(
-              {}
+              {},
+              []
             );
 
           window
