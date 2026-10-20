@@ -1,14 +1,11 @@
 <!DOCTYPE html>
 <html lang="de">
-
 <head>
   <meta charset="UTF-8">
-
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
-
   <title>Georgis</title>
 
   <style>
@@ -47,11 +44,6 @@
       border-radius: 8px;
       cursor: pointer;
       font-size: 0.95rem;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
     }
 
     .tab-button {
@@ -250,23 +242,22 @@
     }
   </style>
 
+  <!-- Bibliothek für den Excel-Export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
-
+  <!-- Anmeldung -->
   <section
     id="loginBereich"
     class="tab active"
   >
     <h1>🏠 Georgis</h1>
-
     <h2>🔐 Anmeldung</h2>
 
     <div class="form-grid">
       <label>
         E-Mail-Adresse
-
         <input
           type="email"
           id="loginEmail"
@@ -277,7 +268,6 @@
 
       <label>
         Passwort
-
         <input
           type="password"
           id="loginPasswort"
@@ -302,9 +292,8 @@
     ></p>
   </section>
 
-
+  <!-- Website wird erst nach der Anmeldung angezeigt -->
   <div id="websiteBereich" hidden>
-
     <h1>🏠 Georgis</h1>
 
     <nav
@@ -336,7 +325,7 @@
       </button>
     </nav>
 
-
+    <!-- Einkaufsliste -->
     <section
       id="einkauf"
       class="tab active"
@@ -368,7 +357,7 @@
       <ul id="shoppingList"></ul>
     </section>
 
-
+    <!-- Essensplanung -->
     <section
       id="essensplanung"
       class="tab"
@@ -396,7 +385,7 @@
         </button>
       </nav>
 
-
+      <!-- Unterreiter: Essensplanung der Woche -->
       <div
         id="wochenplanung"
         class="meal-tab active-meal"
@@ -404,7 +393,7 @@
         <h3>Essensplanung der Woche</h3>
 
         <p class="empty-message">
-          Änderungen werden automatisch und geräteübergreifend gespeichert.
+          Änderungen werden automatisch gespeichert.
         </p>
 
         <div class="table-wrapper">
@@ -416,7 +405,6 @@
                 <th>Abendessen</th>
               </tr>
             </thead>
-
             <tbody id="mealPlanBody"></tbody>
           </table>
         </div>
@@ -438,7 +426,7 @@
         ></p>
       </div>
 
-
+      <!-- Unterreiter: Rezeptideen -->
       <div
         id="rezeptideen"
         class="meal-tab"
@@ -448,7 +436,6 @@
         <div class="form-grid">
           <label>
             Gericht
-
             <input
               type="text"
               id="recipeName"
@@ -458,7 +445,6 @@
 
           <label>
             URL
-
             <input
               type="url"
               id="recipeUrl"
@@ -485,7 +471,7 @@
       </div>
     </section>
 
-
+    <!-- Zählerstände -->
     <section
       id="zaehler"
       class="tab"
@@ -521,7 +507,7 @@
         </button>
       </nav>
 
-
+      <!-- Unterreiter: Eingabe -->
       <div
         id="eingabe"
         class="meter-tab active-meter"
@@ -531,7 +517,6 @@
         <div class="form-grid">
           <label>
             Datum
-
             <input
               type="date"
               id="datum"
@@ -540,7 +525,6 @@
 
           <label>
             Strom (kWh)
-
             <input
               type="number"
               id="strom"
@@ -552,7 +536,6 @@
 
           <label>
             Warmwasser (m³)
-
             <input
               type="number"
               id="warmwasser"
@@ -564,7 +547,6 @@
 
           <label>
             Kaltwasser (m³)
-
             <input
               type="number"
               id="kaltwasser"
@@ -590,7 +572,7 @@
         ></p>
       </div>
 
-
+      <!-- Unterreiter: Datentabelle -->
       <div
         id="tabelle"
         class="meter-tab"
@@ -610,37 +592,24 @@
             <thead>
               <tr>
                 <th rowspan="2">Datum</th>
-
-                <th colspan="2">
-                  Strom (kWh)
-                </th>
-
-                <th colspan="2">
-                  Kaltwasser (m³)
-                </th>
-
-                <th colspan="2">
-                  Warmwasser (m³)
-                </th>
-
+                <th colspan="2">Strom (kWh)</th>
+                <th colspan="2">Kaltwasser (m³)</th>
+                <th colspan="2">Warmwasser (m³)</th>
                 <th rowspan="2">Aktion</th>
               </tr>
 
               <tr>
                 <th>Zählerstand</th>
-
                 <th class="verbrauch-strom">
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
-
                 <th class="verbrauch-kaltwasser">
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
-
                 <th class="verbrauch-warmwasser">
                   Verbrauch
                 </th>
@@ -659,7 +628,7 @@
         </p>
       </div>
 
-
+      <!-- Unterreiter: Diagramme -->
       <div
         id="diagramme"
         class="meter-tab"
@@ -668,19 +637,17 @@
 
         <div class="chart-card">
           <h4>Stromverbrauch</h4>
-
           <canvas id="stromChart"></canvas>
         </div>
 
         <div class="chart-card">
           <h4>Wasserverbrauch</h4>
-
           <canvas id="wasserChart"></canvas>
         </div>
       </div>
     </section>
 
-
+    <!-- Abmeldung -->
     <div
       style="
         margin-top: 20px;
@@ -701,53 +668,55 @@
         Abmelden
       </button>
     </div>
-
   </div>
 
-
+  <!-- Navigation, Essensplanung, Zählerstände und Diagramme -->
   <script>
-
-    /* Hauptnavigation */
-
+    /* Hauptreiter */
     const tabButtons =
       document.querySelectorAll(
         "[data-tab]"
       );
 
-
     function showTab(tabId) {
-
       document
         .querySelectorAll(".tab")
         .forEach((tab) => {
-
-          if (tab.id !== "loginBereich") {
-            tab.classList.remove("active");
+          if (
+            tab.id !==
+            "loginBereich"
+          ) {
+            tab.classList.remove(
+              "active"
+            );
           }
         });
 
-
-      tabButtons.forEach((button) => {
-
-        button.classList.toggle(
-          "is-active",
-          button.dataset.tab === tabId
-        );
-      });
-
+      tabButtons.forEach(
+        (button) => {
+          button.classList.toggle(
+            "is-active",
+            button.dataset.tab ===
+              tabId
+          );
+        }
+      );
 
       document
         .getElementById(tabId)
         .classList
         .add("active");
 
-
       if (
         tabId === "zaehler" &&
         document
-          .getElementById("diagramme")
+          .getElementById(
+            "diagramme"
+          )
           .classList
-          .contains("active-meter")
+          .contains(
+            "active-meter"
+          )
       ) {
         requestAnimationFrame(
           renderCharts
@@ -755,109 +724,98 @@
       }
     }
 
-
-    tabButtons.forEach((button) => {
-
-      button.addEventListener(
-        "click",
-        () => showTab(
-          button.dataset.tab
-        )
-      );
-    });
-
+    tabButtons.forEach(
+      (button) => {
+        button.addEventListener(
+          "click",
+          () => {
+            showTab(
+              button.dataset.tab
+            );
+          }
+        );
+      }
+    );
 
     /* Unterreiter Zählerstände */
-
     const meterTabButtons =
       document.querySelectorAll(
         "[data-meter-tab]"
       );
 
-
     function showMeterTab(tabId) {
-
       document
-        .querySelectorAll(".meter-tab")
+        .querySelectorAll(
+          ".meter-tab"
+        )
         .forEach((tab) => {
-
           tab.classList.remove(
             "active-meter"
           );
         });
 
-
       meterTabButtons.forEach(
         (button) => {
-
           button.classList.toggle(
             "is-active",
-            button.dataset.meterTab ===
-              tabId
+            button.dataset
+              .meterTab === tabId
           );
         }
       );
-
 
       document
         .getElementById(tabId)
         .classList
         .add("active-meter");
 
-
       if (tabId === "diagramme") {
-
         requestAnimationFrame(
           renderCharts
         );
       }
     }
 
-
     meterTabButtons.forEach(
       (button) => {
-
         button.addEventListener(
           "click",
-          () => showMeterTab(
-            button.dataset.meterTab
-          )
+          () => {
+            showMeterTab(
+              button.dataset
+                .meterTab
+            );
+          }
         );
       }
     );
 
-
     /* Unterreiter Essensplanung */
-
     const mealTabButtons =
       document.querySelectorAll(
         "[data-meal-tab]"
       );
 
-
     function showMealTab(tabId) {
-
       document
-        .querySelectorAll(".meal-tab")
+        .querySelectorAll(
+          ".meal-tab"
+        )
         .forEach((tab) => {
-
           tab.classList.remove(
             "active-meal"
           );
         });
 
-
       mealTabButtons.forEach(
         (button) => {
-
           button.classList.toggle(
             "is-active",
-            button.dataset.mealTab ===
-              tabId
+            button.dataset
+              .mealTab === tabId
           );
         }
       );
-
 
       document
         .getElementById(tabId)
@@ -865,22 +823,662 @@
         .add("active-meal");
     }
 
-
     mealTabButtons.forEach(
       (button) => {
-
         button.addEventListener(
           "click",
-          () => showMealTab(
-            button.dataset.mealTab
-          )
+          () => {
+            showMealTab(
+              button.dataset
+                .mealTab
+            );
+          }
         );
       }
     );
 
+    /* Essensplanung der Woche */
+    const weekdays = [
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+      "Sonntag"
+    ];
 
-    /* Zählerstände bleiben lokal gespeichert */
+    /*
+      Der Essensplan wird nicht mehr aus
+      localStorage geladen, sondern aus
+      Firestore.
+    */
+    let mealPlan = {};
+    let mealPlanCloudReady =
+      false;
 
+    let mealPlanMessageTimeout =
+      null;
+
+    function showMealPlanMessage(
+      text,
+      type
+    ) {
+      const message =
+        document.getElementById(
+          "mealPlanMessage"
+        );
+
+      message.textContent = text;
+      message.className =
+        "form-message " + type;
+
+      if (
+        mealPlanMessageTimeout
+      ) {
+        clearTimeout(
+          mealPlanMessageTimeout
+        );
+      }
+
+      mealPlanMessageTimeout =
+        setTimeout(
+          () => {
+            message.textContent =
+              "";
+            message.className =
+              "form-message";
+          },
+          1800
+        );
+    }
+
+    async function saveMealPlanInput(
+      input
+    ) {
+      const day =
+        input.dataset.day;
+
+      const meal =
+        input.dataset.meal;
+
+      if (!mealPlan[day]) {
+        mealPlan[day] = {};
+      }
+
+      mealPlan[day][meal] =
+        input.value;
+
+      if (
+        typeof window
+          .saveMealPlanToCloud !==
+          "function" ||
+        !mealPlanCloudReady
+      ) {
+        showMealPlanMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+        return;
+      }
+
+      try {
+        await window
+          .saveMealPlanToCloud(
+            mealPlan
+          );
+
+        showMealPlanMessage(
+          "Änderung automatisch in der Cloud gespeichert.",
+          "success"
+        );
+      } catch (error) {
+        console.error(
+          "Essensplanung konnte nicht gespeichert werden:",
+          error
+        );
+
+        showMealPlanMessage(
+          "Die Änderung konnte nicht in der Cloud gespeichert werden.",
+          "error"
+        );
+      }
+    }
+
+    function renderMealPlan() {
+      const tableBody =
+        document.getElementById(
+          "mealPlanBody"
+        );
+
+      /*
+        Aktuell fokussiertes Feld merken.
+        Dadurch wird der Cursor bei einem
+        Firestore-Update wiederhergestellt.
+      */
+      const activeElement =
+        document.activeElement;
+
+      const activeDay =
+        activeElement?.dataset?.day ||
+        null;
+
+      const activeMeal =
+        activeElement?.dataset?.meal ||
+        null;
+
+      const cursorPosition =
+        typeof activeElement
+          ?.selectionStart ===
+          "number"
+          ? activeElement
+              .selectionStart
+          : null;
+
+      tableBody.innerHTML = "";
+
+      weekdays.forEach((day) => {
+        const row =
+          document.createElement(
+            "tr"
+          );
+
+        const dayCell =
+          document.createElement(
+            "th"
+          );
+
+        const lunchCell =
+          document.createElement(
+            "td"
+          );
+
+        const dinnerCell =
+          document.createElement(
+            "td"
+          );
+
+        const lunchInput =
+          document.createElement(
+            "input"
+          );
+
+        const dinnerInput =
+          document.createElement(
+            "input"
+          );
+
+        dayCell.textContent = day;
+
+        lunchInput.type = "text";
+        lunchInput.placeholder =
+          "Mittagessen eintragen";
+        lunchInput.value =
+          mealPlan[day]?.lunch ||
+          "";
+        lunchInput.dataset.day =
+          day;
+        lunchInput.dataset.meal =
+          "lunch";
+
+        dinnerInput.type = "text";
+        dinnerInput.placeholder =
+          "Abendessen eintragen";
+        dinnerInput.value =
+          mealPlan[day]?.dinner ||
+          "";
+        dinnerInput.dataset.day =
+          day;
+        dinnerInput.dataset.meal =
+          "dinner";
+
+        lunchInput.addEventListener(
+          "change",
+          () => {
+            saveMealPlanInput(
+              lunchInput
+            );
+          }
+        );
+
+        dinnerInput.addEventListener(
+          "change",
+          () => {
+            saveMealPlanInput(
+              dinnerInput
+            );
+          }
+        );
+
+        lunchCell.appendChild(
+          lunchInput
+        );
+
+        dinnerCell.appendChild(
+          dinnerInput
+        );
+
+        row.append(
+          dayCell,
+          lunchCell,
+          dinnerCell
+        );
+
+        tableBody.appendChild(row);
+      });
+
+      /*
+        Fokus nach einer Aktualisierung
+        möglichst wiederherstellen.
+      */
+      if (
+        activeDay &&
+        activeMeal
+      ) {
+        const matchingInput =
+          Array.from(
+            document.querySelectorAll(
+              "#mealPlanBody input"
+            )
+          ).find((input) => {
+            return (
+              input.dataset.day ===
+                activeDay &&
+              input.dataset.meal ===
+                activeMeal
+            );
+          });
+
+        if (matchingInput) {
+          matchingInput.focus();
+
+          if (
+            cursorPosition !== null
+          ) {
+            const position =
+              Math.min(
+                cursorPosition,
+                matchingInput.value
+                  .length
+              );
+
+            matchingInput
+              .setSelectionRange(
+                position,
+                position
+              );
+          }
+        }
+      }
+    }
+
+    /*
+      Diese Funktion wird vom
+      Firebase-Modul aufgerufen, sobald
+      Firestore neue Daten liefert.
+    */
+    window.updateMealPlanFromCloud =
+      function (cloudMealPlan) {
+        if (
+          cloudMealPlan &&
+          typeof cloudMealPlan ===
+            "object" &&
+          !Array.isArray(
+            cloudMealPlan
+          )
+        ) {
+          mealPlan =
+            cloudMealPlan;
+        } else {
+          mealPlan = {};
+        }
+
+        mealPlanCloudReady =
+          true;
+
+        renderMealPlan();
+      };
+
+    window.setMealPlanCloudState =
+      function (isReady) {
+        mealPlanCloudReady =
+          Boolean(isReady);
+      };
+
+    async function clearMealPlan() {
+      const shouldClear =
+        window.confirm(
+          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
+        );
+
+      if (!shouldClear) {
+        return;
+      }
+
+      if (
+        typeof window
+          .saveMealPlanToCloud !==
+          "function" ||
+        !mealPlanCloudReady
+      ) {
+        showMealPlanMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+        return;
+      }
+
+      const previousMealPlan =
+        mealPlan;
+
+      mealPlan = {};
+
+      try {
+        await window
+          .saveMealPlanToCloud(
+            mealPlan
+          );
+
+        renderMealPlan();
+
+        showMealPlanMessage(
+          "Der Wochenplan wurde vollständig gelöscht.",
+          "success"
+        );
+      } catch (error) {
+        mealPlan =
+          previousMealPlan;
+
+        renderMealPlan();
+
+        console.error(
+          "Wochenplan konnte nicht gelöscht werden:",
+          error
+        );
+
+        showMealPlanMessage(
+          "Der Wochenplan konnte nicht aus der Cloud gelöscht werden.",
+          "error"
+        );
+      }
+    }
+
+    document
+      .getElementById(
+        "clearMealPlanButton"
+      )
+      .addEventListener(
+        "click",
+        clearMealPlan
+      );
+
+    renderMealPlan();
+
+    /* Rezeptideen */
+    let recipes =
+      JSON.parse(
+        localStorage.getItem(
+          "recipes"
+        )
+      ) || [];
+
+    function renderRecipes() {
+      const recipeList =
+        document.getElementById(
+          "recipeList"
+        );
+
+      recipeList.innerHTML = "";
+
+      recipes.forEach(
+        (recipe, index) => {
+          const listItem =
+            document.createElement(
+              "li"
+            );
+
+          const content =
+            document.createElement(
+              "div"
+            );
+
+          const name =
+            document.createElement(
+              "strong"
+            );
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+          listItem.style.display =
+            "flex";
+
+          listItem.style
+            .justifyContent =
+              "space-between";
+
+          listItem.style
+            .alignItems =
+              "center";
+
+          listItem.style.gap =
+            "10px";
+
+          name.textContent =
+            recipe.name;
+
+          content.appendChild(
+            name
+          );
+
+          if (recipe.url) {
+            const lineBreak =
+              document.createElement(
+                "br"
+              );
+
+            const link =
+              document.createElement(
+                "a"
+              );
+
+            link.href =
+              recipe.url;
+
+            link.target =
+              "_blank";
+
+            link.rel =
+              "noopener noreferrer";
+
+            link.className =
+              "recipe-link";
+
+            link.textContent =
+              recipe.url;
+
+            content.appendChild(
+              lineBreak
+            );
+
+            content.appendChild(
+              link
+            );
+          }
+
+          deleteButton.type =
+            "button";
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "Löschen";
+
+          deleteButton
+            .addEventListener(
+              "click",
+              () => {
+                recipes.splice(
+                  index,
+                  1
+                );
+
+                localStorage
+                  .setItem(
+                    "recipes",
+                    JSON.stringify(
+                      recipes
+                    )
+                  );
+
+                renderRecipes();
+              }
+            );
+
+          listItem.append(
+            content,
+            deleteButton
+          );
+
+          recipeList.appendChild(
+            listItem
+          );
+        }
+      );
+    }
+
+    function addRecipe() {
+      const nameInput =
+        document.getElementById(
+          "recipeName"
+        );
+
+      const urlInput =
+        document.getElementById(
+          "recipeUrl"
+        );
+
+      const message =
+        document.getElementById(
+          "recipeMessage"
+        );
+
+      const name =
+        nameInput.value.trim();
+
+      const url =
+        urlInput.value.trim();
+
+      message.textContent = "";
+
+      message.className =
+        "form-message";
+
+      if (!name) {
+        message.textContent =
+          "Bitte gib den Namen des Gerichts ein.";
+
+        message.className =
+          "form-message error";
+
+        return;
+      }
+
+      if (url) {
+        try {
+          const parsedUrl =
+            new URL(url);
+
+          if (
+            parsedUrl.protocol !==
+              "http:" &&
+            parsedUrl.protocol !==
+              "https:"
+          ) {
+            throw new Error(
+              "Ungültiges Protokoll"
+            );
+          }
+        } catch (error) {
+          message.textContent =
+            "Bitte gib eine gültige URL ein.";
+
+          message.className =
+            "form-message error";
+
+          return;
+        }
+      }
+
+      recipes.push({
+        name,
+        url
+      });
+
+      localStorage.setItem(
+        "recipes",
+        JSON.stringify(recipes)
+      );
+
+      nameInput.value = "";
+      urlInput.value = "";
+
+      message.textContent =
+        "Rezeptidee wurde gespeichert.";
+
+      message.className =
+        "form-message success";
+
+      renderRecipes();
+    }
+
+    document
+      .getElementById(
+        "addRecipeButton"
+      )
+      .addEventListener(
+        "click",
+        addRecipe
+      );
+
+    document
+      .getElementById(
+        "recipeName"
+      )
+      .addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Enter"
+          ) {
+            addRecipe();
+          }
+        }
+      );
+
+    document
+      .getElementById(
+        "recipeUrl"
+      )
+      .addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Enter"
+          ) {
+            addRecipe();
+          }
+        }
+      );
+
+    renderRecipes();
+
+    /* Zählerstände */
     let readings =
       JSON.parse(
         localStorage.getItem(
@@ -888,18 +1486,16 @@
         )
       ) || [];
 
-
     function getSortedReadings() {
-
       return [...readings].sort(
         (a, b) =>
-          a.date.localeCompare(b.date)
+          a.date.localeCompare(
+            b.date
+          )
       );
     }
 
-
     function formatValue(value) {
-
       if (
         value === null ||
         value === undefined
@@ -907,44 +1503,43 @@
         return "–";
       }
 
-
       const number =
         Number(value);
 
-
-      return Number.isFinite(number)
+      return Number.isFinite(
+        number
+      )
         ? new Intl.NumberFormat(
             "de-DE",
             {
-              maximumFractionDigits: 3
+              maximumFractionDigits:
+                3
             }
           ).format(number)
         : "–";
     }
 
-
     function formatDate(date) {
-
-      return new Intl.DateTimeFormat(
-        "de-DE"
-      ).format(
-        new Date(
-          date + "T00:00:00"
+      return new Intl
+        .DateTimeFormat(
+          "de-DE"
         )
-      );
+        .format(
+          new Date(
+            date +
+              "T00:00:00"
+          )
+        );
     }
-
 
     function calculateConsumption(
       currentReading,
       previousReading,
       property
     ) {
-
       if (!previousReading) {
         return null;
       }
-
 
       const consumption =
         Number(
@@ -954,7 +1549,6 @@
           previousReading[property]
         );
 
-
       return Number.isFinite(
         consumption
       )
@@ -962,20 +1556,16 @@
         : null;
     }
 
-
     function getTableRows() {
-
       const sortedReadings =
         getSortedReadings();
 
-
       return sortedReadings.map(
         (reading, index) => {
-
           const previousReading =
-            sortedReadings[index - 1] ||
-            null;
-
+            sortedReadings[
+              index - 1
+            ] || null;
 
           return {
             reading,
@@ -1005,9 +1595,7 @@
       );
     }
 
-
     function renderReadings() {
-
       const table =
         document.getElementById(
           "meterTable"
@@ -1018,146 +1606,137 @@
           "emptyTableMessage"
         );
 
-
       table.innerHTML = "";
-
 
       [...getTableRows()]
         .reverse()
-        .forEach(
-          (rowData) => {
+        .forEach((rowData) => {
+          const reading =
+            rowData.reading;
 
-            const reading =
-              rowData.reading;
+          const row =
+            document.createElement(
+              "tr"
+            );
 
-            const row =
-              document.createElement("tr");
+          const values = [
+            formatDate(
+              reading.date
+            ),
 
+            formatValue(
+              reading.strom
+            ),
 
-            const values = [
-              formatDate(reading.date),
+            formatValue(
+              rowData
+                .stromVerbrauch
+            ),
 
-              formatValue(
-                reading.strom
-              ),
+            formatValue(
+              reading.kalt
+            ),
 
-              formatValue(
-                rowData.stromVerbrauch
-              ),
+            formatValue(
+              rowData
+                .kaltVerbrauch
+            ),
 
-              formatValue(
-                reading.kalt
-              ),
+            formatValue(
+              reading.warm
+            ),
 
-              formatValue(
-                rowData.kaltVerbrauch
-              ),
+            formatValue(
+              rowData
+                .warmVerbrauch
+            )
+          ];
 
-              formatValue(
-                reading.warm
-              ),
-
-              formatValue(
-                rowData.warmVerbrauch
-              )
-            ];
-
-
-            values.forEach(
-              (value, index) => {
-
-                const cell =
-                  document.createElement(
+          values.forEach(
+            (value, index) => {
+              const cell =
+                document
+                  .createElement(
                     "td"
                   );
 
+              cell.textContent =
+                value;
 
-                cell.textContent = value;
-
-
-                if (index === 2) {
-
-                  cell.classList.add(
-                    "verbrauch-strom"
-                  );
-                }
-
-
-                if (index === 4) {
-
-                  cell.classList.add(
-                    "verbrauch-kaltwasser"
-                  );
-                }
-
-
-                if (index === 6) {
-
-                  cell.classList.add(
-                    "verbrauch-warmwasser"
-                  );
-                }
-
-
-                row.appendChild(cell);
+              if (index === 2) {
+                cell.classList.add(
+                  "verbrauch-strom"
+                );
               }
+
+              if (index === 4) {
+                cell.classList.add(
+                  "verbrauch-kaltwasser"
+                );
+              }
+
+              if (index === 6) {
+                cell.classList.add(
+                  "verbrauch-warmwasser"
+                );
+              }
+
+              row.appendChild(
+                cell
+              );
+            }
+          );
+
+          const actionCell =
+            document.createElement(
+              "td"
             );
 
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
 
-            const actionCell =
-              document.createElement(
-                "td"
-              );
+          deleteButton.type =
+            "button";
 
-            const deleteButton =
-              document.createElement(
-                "button"
-              );
+          deleteButton.className =
+            "delete-button";
 
+          deleteButton.textContent =
+            "Löschen";
 
-            deleteButton.type =
-              "button";
-
-            deleteButton.className =
-              "delete-button";
-
-            deleteButton.textContent =
-              "Löschen";
-
-
-            deleteButton.addEventListener(
+          deleteButton
+            .addEventListener(
               "click",
               () => {
-
-                deleteReading(
+                const originalIndex =
                   readings.indexOf(
                     reading
-                  )
+                  );
+
+                deleteReading(
+                  originalIndex
                 );
               }
             );
 
+          actionCell.appendChild(
+            deleteButton
+          );
 
-            actionCell.appendChild(
-              deleteButton
-            );
+          row.appendChild(
+            actionCell
+          );
 
-            row.appendChild(
-              actionCell
-            );
-
-            table.appendChild(row);
-          }
-        );
-
+          table.appendChild(row);
+        });
 
       emptyMessage.hidden =
         readings.length > 0;
     }
 
-
     function saveReading() {
-
       const message =
         document.getElementById(
           "formMessage"
@@ -1183,12 +1762,10 @@
           "kaltwasser"
         ).value;
 
-
       message.textContent = "";
 
       message.className =
         "form-message";
-
 
       if (
         !date ||
@@ -1196,7 +1773,6 @@
         warm === "" ||
         kalt === ""
       ) {
-
         message.textContent =
           "Bitte fülle alle Felder aus.";
 
@@ -1206,13 +1782,16 @@
         return;
       }
 
+      const selectedDate =
+        new Date(
+          date +
+            "T00:00:00"
+        );
 
       if (
-        new Date(
-          date + "T00:00:00"
-        ).getDate() !== 1
+        selectedDate.getDate() !==
+        1
       ) {
-
         message.textContent =
           "Zählerstände können nur für den 1. eines Monats gespeichert werden.";
 
@@ -1222,14 +1801,13 @@
         return;
       }
 
-
-      if (
+      const dateAlreadyExists =
         readings.some(
           (reading) =>
             reading.date === date
-        )
-      ) {
+        );
 
+      if (dateAlreadyExists) {
         message.textContent =
           "Für diesen Monat ist bereits ein Zählerstand gespeichert.";
 
@@ -1239,14 +1817,12 @@
         return;
       }
 
-
       const newReading = {
         date,
         strom: Number(strom),
         warm: Number(warm),
         kalt: Number(kalt)
       };
-
 
       const previousReading =
         [...getSortedReadings()]
@@ -1256,21 +1832,17 @@
               reading.date < date
           );
 
-
       if (
         previousReading &&
         (
           newReading.strom <
             previousReading.strom ||
-
           newReading.warm <
             previousReading.warm ||
-
           newReading.kalt <
             previousReading.kalt
         )
       ) {
-
         message.textContent =
           "Ein Zählerstand darf nicht kleiner als der vorherige Zählerstand sein.";
 
@@ -1280,25 +1852,22 @@
         return;
       }
 
-
       readings.push(
         newReading
       );
-
 
       localStorage.setItem(
         "readings",
         JSON.stringify(readings)
       );
 
-
       renderReadings();
-
       renderCharts();
 
-
       document
-        .getElementById("strom")
+        .getElementById(
+          "strom"
+        )
         .value = "";
 
       document
@@ -1313,7 +1882,6 @@
         )
         .value = "";
 
-
       message.textContent =
         "Zählerstand wurde gespeichert.";
 
@@ -1321,88 +1889,84 @@
         "form-message success";
     }
 
-
     function deleteReading(index) {
-
       readings.splice(
         index,
         1
       );
-
 
       localStorage.setItem(
         "readings",
         JSON.stringify(readings)
       );
 
-
       renderReadings();
-
       renderCharts();
     }
 
-
+    /* Excel-Export */
     function exportExcel() {
-
-      if (readings.length === 0) {
-
+      if (
+        readings.length === 0
+      ) {
         alert(
           "Es sind noch keine Zählerstände vorhanden."
         );
-
         return;
       }
 
-
       if (
-        typeof XLSX === "undefined"
+        typeof XLSX ===
+        "undefined"
       ) {
-
         alert(
           "Die Excel-Bibliothek konnte nicht geladen werden."
         );
-
         return;
       }
-
 
       const excelData =
         getTableRows().map(
           (rowData) => {
-
             return {
               "Datum":
                 formatDate(
-                  rowData.reading.date
+                  rowData
+                    .reading.date
                 ),
 
               "Strom Zählerstand (kWh)":
-                rowData.reading.strom,
+                rowData
+                  .reading.strom,
 
               "Strom Verbrauch (kWh)":
-                rowData.stromVerbrauch,
+                rowData
+                  .stromVerbrauch,
 
               "Kaltwasser Zählerstand (m³)":
-                rowData.reading.kalt,
+                rowData
+                  .reading.kalt,
 
               "Kaltwasser Verbrauch (m³)":
-                rowData.kaltVerbrauch,
+                rowData
+                  .kaltVerbrauch,
 
               "Warmwasser Zählerstand (m³)":
-                rowData.reading.warm,
+                rowData
+                  .reading.warm,
 
               "Warmwasser Verbrauch (m³)":
-                rowData.warmVerbrauch
+                rowData
+                  .warmVerbrauch
             };
           }
         );
 
-
       const worksheet =
-        XLSX.utils.json_to_sheet(
-          excelData
-        );
-
+        XLSX.utils
+          .json_to_sheet(
+            excelData
+          );
 
       worksheet["!cols"] = [
         { wch: 14 },
@@ -1414,17 +1978,16 @@
         { wch: 28 }
       ];
 
-
       const workbook =
-        XLSX.utils.book_new();
+        XLSX.utils
+          .book_new();
 
-
-      XLSX.utils.book_append_sheet(
-        workbook,
-        worksheet,
-        "Zählerstände"
-      );
-
+      XLSX.utils
+        .book_append_sheet(
+          workbook,
+          worksheet,
+          "Zählerstände"
+        );
 
       XLSX.writeFile(
         workbook,
@@ -1432,18 +1995,20 @@
       );
     }
 
-
+    /* Liniendiagramme */
     function drawLineChart(
       canvas,
       chartSeries,
       labels
     ) {
-
       const context =
-        canvas.getContext("2d");
+        canvas.getContext(
+          "2d"
+        );
 
       const pixelRatio =
-        window.devicePixelRatio || 1;
+        window.devicePixelRatio ||
+        1;
 
       const width =
         Math.max(
@@ -1453,13 +2018,11 @@
 
       const height = 300;
 
-
       canvas.width =
         width * pixelRatio;
 
       canvas.height =
         height * pixelRatio;
-
 
       context.setTransform(
         pixelRatio,
@@ -1470,14 +2033,12 @@
         0
       );
 
-
       context.clearRect(
         0,
         0,
         width,
         height
       );
-
 
       const allValues =
         chartSeries
@@ -1487,12 +2048,15 @@
           )
           .filter(
             (value) =>
-              Number.isFinite(value)
+              Number.isFinite(
+                value
+              )
           );
 
-
-      if (allValues.length === 0) {
-
+      if (
+        allValues.length ===
+        0
+      ) {
         context.fillStyle =
           "#64748b";
 
@@ -1501,7 +2065,6 @@
 
         context.textAlign =
           "center";
-
 
         context.fillText(
           "Für den Verbrauch werden mindestens zwei Monatsstände benötigt.",
@@ -1512,14 +2075,12 @@
         return;
       }
 
-
       const padding = {
         left: 58,
         right: 20,
         top: 30,
         bottom: 45
       };
-
 
       const maximum =
         Math.max(
@@ -1533,7 +2094,6 @@
           ...allValues
         );
 
-
       const graphWidth =
         width -
         padding.left -
@@ -1544,20 +2104,18 @@
         padding.top -
         padding.bottom;
 
-
       const pointCount =
         Math.max(
           labels.length,
           1
         );
 
-
       function getX(index) {
-
-        if (pointCount <= 1) {
+        if (
+          pointCount <= 1
+        ) {
           return padding.left;
         }
-
 
         return (
           padding.left +
@@ -1567,23 +2125,22 @@
         );
       }
 
-
       function getY(value) {
-
         const range =
-          maximum - minimum || 1;
-
+          maximum -
+          minimum ||
+          1;
 
         return (
           padding.top +
           (
-            maximum - value
+            maximum -
+            value
           ) /
           range *
           graphHeight
         );
       }
-
 
       context.strokeStyle =
         "#cbd5e1";
@@ -1594,13 +2151,11 @@
       context.font =
         "12px Arial";
 
-
       for (
         let index = 0;
         index <= 4;
         index += 1
       ) {
-
         const y =
           padding.top +
           graphHeight *
@@ -1610,11 +2165,11 @@
         const value =
           maximum -
           (
-            maximum - minimum
+            maximum -
+            minimum
           ) *
           index /
           4;
-
 
         context.beginPath();
 
@@ -1624,12 +2179,12 @@
         );
 
         context.lineTo(
-          width - padding.right,
+          width -
+            padding.right,
           y
         );
 
         context.stroke();
-
 
         context.textAlign =
           "right";
@@ -1641,17 +2196,14 @@
         );
       }
 
-
       context.fillStyle =
         "#64748b";
 
       context.textAlign =
         "center";
 
-
       labels.forEach(
         (label, index) => {
-
           context.fillText(
             label,
             getX(index),
@@ -1660,10 +2212,8 @@
         }
       );
 
-
       chartSeries.forEach(
         (series) => {
-
           context.strokeStyle =
             series.color;
 
@@ -1674,19 +2224,18 @@
 
           context.beginPath();
 
-
-          let firstPoint = true;
-
+          let firstPoint =
+            true;
 
           series.values.forEach(
             (value, index) => {
-
               if (
-                !Number.isFinite(value)
+                !Number.isFinite(
+                  value
+                )
               ) {
                 return;
               }
-
 
               const x =
                 getX(index);
@@ -1694,18 +2243,15 @@
               const y =
                 getY(value);
 
-
               if (firstPoint) {
-
                 context.moveTo(
                   x,
                   y
                 );
 
-                firstPoint = false;
-
+                firstPoint =
+                  false;
               } else {
-
                 context.lineTo(
                   x,
                   y
@@ -1714,19 +2260,17 @@
             }
           );
 
-
           context.stroke();
-
 
           series.values.forEach(
             (value, index) => {
-
               if (
-                !Number.isFinite(value)
+                !Number.isFinite(
+                  value
+                )
               ) {
                 return;
               }
-
 
               context.beginPath();
 
@@ -1744,14 +2288,11 @@
         }
       );
 
-
       chartSeries.forEach(
         (series, index) => {
-
           const legendX =
             padding.left +
             index * 150;
-
 
           context.fillStyle =
             series.color;
@@ -1762,7 +2303,6 @@
             12,
             3
           );
-
 
           context.textAlign =
             "left";
@@ -1776,32 +2316,32 @@
       );
     }
 
-
     function renderCharts() {
-
       const rowsWithConsumption =
         getTableRows().slice(1);
-
 
       const labels =
         rowsWithConsumption.map(
           (rowData) => {
-
-            return new Intl.DateTimeFormat(
-              "de-DE",
-              {
-                month: "2-digit",
-                year: "numeric"
-              }
-            ).format(
-              new Date(
-                rowData.reading.date +
-                "T00:00:00"
+            return new Intl
+              .DateTimeFormat(
+                "de-DE",
+                {
+                  month:
+                    "2-digit",
+                  year:
+                    "numeric"
+                }
               )
-            );
+              .format(
+                new Date(
+                  rowData
+                    .reading.date +
+                    "T00:00:00"
+                )
+              );
           }
         );
-
 
       drawLineChart(
         document.getElementById(
@@ -1811,17 +2351,17 @@
           {
             name: "Strom",
             color: "#facc15",
-
             values:
-              rowsWithConsumption.map(
-                (rowData) =>
-                  rowData.stromVerbrauch
-              )
+              rowsWithConsumption
+                .map(
+                  (rowData) =>
+                    rowData
+                      .stromVerbrauch
+                )
           }
         ],
         labels
       );
-
 
       drawLineChart(
         document.getElementById(
@@ -1829,31 +2369,35 @@
         ),
         [
           {
-            name: "Kaltwasser",
-            color: "#2d6cdf",
-
+            name:
+              "Kaltwasser",
+            color:
+              "#2d6cdf",
             values:
-              rowsWithConsumption.map(
-                (rowData) =>
-                  rowData.kaltVerbrauch
-              )
+              rowsWithConsumption
+                .map(
+                  (rowData) =>
+                    rowData
+                      .kaltVerbrauch
+                )
           },
-
           {
-            name: "Warmwasser",
-            color: "#dc2626",
-
+            name:
+              "Warmwasser",
+            color:
+              "#dc2626",
             values:
-              rowsWithConsumption.map(
-                (rowData) =>
-                  rowData.warmVerbrauch
-              )
+              rowsWithConsumption
+                .map(
+                  (rowData) =>
+                    rowData
+                      .warmVerbrauch
+                )
           }
         ],
         labels
       );
     }
-
 
     document
       .getElementById(
@@ -1864,7 +2408,6 @@
         saveReading
       );
 
-
     document
       .getElementById(
         "exportExcelButton"
@@ -1873,7 +2416,6 @@
         "click",
         exportExcel
       );
-
 
     const today =
       new Date();
@@ -1886,20 +2428,19 @@
         "0"
       );
 
-
     document
-      .getElementById("datum")
+      .getElementById(
+        "datum"
+      )
       .value =
         today.getFullYear() +
         "-" +
         currentMonth +
         "-01";
 
-
     window.addEventListener(
       "resize",
       () => {
-
         if (
           document
             .getElementById(
@@ -1915,29 +2456,24 @@
       }
     );
 
-
     renderReadings();
-
   </script>
 
-
+  <!-- Firebase-Anmeldung, Einkaufsliste und Cloud-Essensplanung -->
   <script type="module">
-
     import {
       initializeApp
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
-
 
     import {
       getFirestore,
       collection,
       addDoc,
       deleteDoc,
-      setDoc,
       doc,
-      onSnapshot
+      onSnapshot,
+      setDoc
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
-
 
     import {
       getAuth,
@@ -1945,7 +2481,6 @@
       signOut,
       onAuthStateChanged
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
-
 
     const firebaseConfig = {
       apiKey:
@@ -1967,7 +2502,6 @@
         "1:548614823934:web:3373a1862a42d92350aaaf"
     };
 
-
     const app =
       initializeApp(
         firebaseConfig
@@ -1984,18 +2518,6 @@
         db,
         "shopping"
       );
-
-
-    const weekdays = [
-      "Montag",
-      "Dienstag",
-      "Mittwoch",
-      "Donnerstag",
-      "Freitag",
-      "Samstag",
-      "Sonntag"
-    ];
-
 
     const loginBereich =
       document.getElementById(
@@ -2057,809 +2579,82 @@
         "shoppingMessage"
       );
 
-    const mealPlanBody =
-      document.getElementById(
-        "mealPlanBody"
-      );
-
-    const mealPlanMessage =
-      document.getElementById(
-        "mealPlanMessage"
-      );
-
-    const clearMealPlanButton =
-      document.getElementById(
-        "clearMealPlanButton"
-      );
-
-    const recipeName =
-      document.getElementById(
-        "recipeName"
-      );
-
-    const recipeUrl =
-      document.getElementById(
-        "recipeUrl"
-      );
-
-    const recipeList =
-      document.getElementById(
-        "recipeList"
-      );
-
-    const recipeMessage =
-      document.getElementById(
-        "recipeMessage"
-      );
-
-    const addRecipeButton =
-      document.getElementById(
-        "addRecipeButton"
-      );
-
-
-    let shoppingUnsubscribe = null;
-
-    let mealPlanUnsubscribe = null;
-
-    let recipesUnsubscribe = null;
-
-    let currentMealPlan = {};
-
-    let mealSaveTimer = null;
-
-    let mealMessageTimer = null;
-
-
-    function setMealMessage(
-      text,
-      type = ""
-    ) {
-
-      mealPlanMessage.textContent =
-        text;
-
-      mealPlanMessage.className =
-        type
-          ? "form-message " + type
-          : "form-message";
-
-
-      if (mealMessageTimer) {
-
-        clearTimeout(
-          mealMessageTimer
-        );
-      }
-
-
-      if (text) {
-
-        mealMessageTimer =
-          setTimeout(
-            () => {
-
-              mealPlanMessage.textContent =
-                "";
-
-              mealPlanMessage.className =
-                "form-message";
-            },
-            1800
-          );
-      }
-    }
-
-
-    function renderMealPlan(
-      mealPlan
-    ) {
-
-      const activeElement =
-        document.activeElement;
-
-      const activeDay =
-        activeElement?.dataset?.day;
-
-      const activeMeal =
-        activeElement?.dataset?.meal;
-
-      const cursorPosition =
-        activeElement?.selectionStart;
-
-
-      mealPlanBody.innerHTML = "";
-
-
-      weekdays.forEach((day) => {
-
-        const row =
-          document.createElement("tr");
-
-        const dayCell =
-          document.createElement("th");
-
-        const lunchCell =
-          document.createElement("td");
-
-        const dinnerCell =
-          document.createElement("td");
-
-        const lunchInput =
-          document.createElement("input");
-
-        const dinnerInput =
-          document.createElement("input");
-
-
-        dayCell.textContent = day;
-
-
-        lunchInput.type = "text";
-
-        lunchInput.placeholder =
-          "Mittagessen eintragen";
-
-        lunchInput.value =
-          mealPlan[day]?.lunch || "";
-
-        lunchInput.dataset.day = day;
-
-        lunchInput.dataset.meal =
-          "lunch";
-
-
-        dinnerInput.type = "text";
-
-        dinnerInput.placeholder =
-          "Abendessen eintragen";
-
-        dinnerInput.value =
-          mealPlan[day]?.dinner || "";
-
-        dinnerInput.dataset.day = day;
-
-        dinnerInput.dataset.meal =
-          "dinner";
-
-
-        lunchInput.addEventListener(
-          "input",
-          handleMealInput
-        );
-
-        dinnerInput.addEventListener(
-          "input",
-          handleMealInput
-        );
-
-
-        lunchCell.appendChild(
-          lunchInput
-        );
-
-        dinnerCell.appendChild(
-          dinnerInput
-        );
-
-
-        row.append(
-          dayCell,
-          lunchCell,
-          dinnerCell
-        );
-
-
-        mealPlanBody.appendChild(row);
-      });
-
-
-      if (
-        activeDay &&
-        activeMeal
-      ) {
-
-        const input =
-          mealPlanBody.querySelector(
-            `[data-day="${activeDay}"][data-meal="${activeMeal}"]`
-          );
-
-
-        if (input) {
-
-          input.focus();
-
-
-          if (
-            Number.isInteger(
-              cursorPosition
-            )
-          ) {
-
-            input.setSelectionRange(
-              cursorPosition,
-              cursorPosition
-            );
-          }
-        }
-      }
-    }
-
-
-    function handleMealInput(event) {
-
-      const input =
-        event.currentTarget;
-
-      const day =
-        input.dataset.day;
-
-      const meal =
-        input.dataset.meal;
-
-
-      if (!currentMealPlan[day]) {
-
-        currentMealPlan[day] = {
-          lunch: "",
-          dinner: ""
-        };
-      }
-
-
-      currentMealPlan[day][meal] =
-        input.value;
-
-
-      setMealMessage(
-        "Wird gespeichert ..."
-      );
-
-
-      if (mealSaveTimer) {
-
-        clearTimeout(
-          mealSaveTimer
-        );
-      }
-
-
-      mealSaveTimer =
-        setTimeout(
-          saveMealPlan,
-          400
-        );
-    }
-
-
-    async function saveMealPlan() {
-
-      if (!auth.currentUser) {
-        return;
-      }
-
-
-      const mealPlanRef =
-        doc(
-          db,
-          "users",
-          auth.currentUser.uid,
-          "mealPlanning",
-          "weeklyPlan"
-        );
-
-
-      try {
-
-        await setDoc(
-          mealPlanRef,
-          {
-            days: currentMealPlan
-          }
-        );
-
-
-        setMealMessage(
-          "Geräteübergreifend gespeichert.",
-          "success"
-        );
-
-      } catch (error) {
-
-        console.error(
-          "Wochenplan konnte nicht gespeichert werden:",
-          error
-        );
-
-
-        setMealMessage(
-          "Wochenplan konnte nicht gespeichert werden.",
-          "error"
-        );
-      }
-    }
-
-
-    async function clearMealPlan() {
-
-      if (!auth.currentUser) {
-        return;
-      }
-
-
-      const shouldClear =
-        window.confirm(
-          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
-        );
-
-
-      if (!shouldClear) {
-        return;
-      }
-
-
-      if (mealSaveTimer) {
-
-        clearTimeout(
-          mealSaveTimer
-        );
-      }
-
-
-      currentMealPlan = {};
-
-
-      const mealPlanRef =
-        doc(
-          db,
-          "users",
-          auth.currentUser.uid,
-          "mealPlanning",
-          "weeklyPlan"
-        );
-
-
-      try {
-
-        await setDoc(
-          mealPlanRef,
-          {
-            days: {}
-          }
-        );
-
-
-        setMealMessage(
-          "Der Wochenplan wurde vollständig gelöscht.",
-          "success"
-        );
-
-      } catch (error) {
-
-        console.error(
-          "Wochenplan konnte nicht gelöscht werden:",
-          error
-        );
-
-
-        setMealMessage(
-          "Wochenplan konnte nicht gelöscht werden.",
-          "error"
-        );
-      }
-    }
-
-
-    function startMealPlanListener(
-      user
-    ) {
-
-      if (mealPlanUnsubscribe) {
-
-        mealPlanUnsubscribe();
-      }
-
-
-      const mealPlanRef =
-        doc(
-          db,
-          "users",
-          user.uid,
-          "mealPlanning",
-          "weeklyPlan"
-        );
-
-
-      mealPlanUnsubscribe =
-        onSnapshot(
-          mealPlanRef,
-
-          (snapshot) => {
-
-            currentMealPlan =
-              snapshot.exists()
-                ? snapshot.data().days || {}
-                : {};
-
-
-            renderMealPlan(
-              currentMealPlan
-            );
-          },
-
-          (error) => {
-
-            console.error(
-              "Wochenplan konnte nicht geladen werden:",
-              error
-            );
-
-
-            setMealMessage(
-              "Wochenplan konnte nicht geladen werden.",
-              "error"
-            );
-          }
-        );
-    }
-
-
-    function renderRecipes(
-      snapshot
-    ) {
-
-      recipeList.innerHTML = "";
-
-
-      snapshot.forEach(
-        (recipeDocument) => {
-
-          const recipe =
-            recipeDocument.data();
-
-          const listItem =
-            document.createElement("li");
-
-          const content =
-            document.createElement("div");
-
-          const name =
-            document.createElement(
-              "strong"
-            );
-
-          const deleteButton =
-            document.createElement(
-              "button"
-            );
-
-
-          listItem.style.display =
-            "flex";
-
-          listItem.style
-            .justifyContent =
-              "space-between";
-
-          listItem.style.alignItems =
-            "center";
-
-          listItem.style.gap =
-            "10px";
-
-
-          name.textContent =
-            recipe.name || "";
-
-
-          content.appendChild(name);
-
-
-          if (recipe.url) {
-
-            const lineBreak =
-              document.createElement("br");
-
-            const link =
-              document.createElement("a");
-
-
-            link.href =
-              recipe.url;
-
-            link.target =
-              "_blank";
-
-            link.rel =
-              "noopener noreferrer";
-
-            link.className =
-              "recipe-link";
-
-            link.textContent =
-              recipe.url;
-
-
-            content.append(
-              lineBreak,
-              link
-            );
-          }
-
-
-          deleteButton.type =
-            "button";
-
-          deleteButton.className =
-            "delete-button";
-
-          deleteButton.textContent =
-            "Löschen";
-
-
-          deleteButton.addEventListener(
-            "click",
-            async () => {
-
-              try {
-
-                await deleteDoc(
-                  recipeDocument.ref
-                );
-
-              } catch (error) {
-
-                console.error(
-                  "Rezeptidee konnte nicht gelöscht werden:",
-                  error
-                );
-
-
-                recipeMessage.textContent =
-                  "Rezeptidee konnte nicht gelöscht werden.";
-
-                recipeMessage.className =
-                  "form-message error";
-              }
-            }
-          );
-
-
-          listItem.append(
-            content,
-            deleteButton
-          );
-
-
-          recipeList.appendChild(
-            listItem
-          );
-        }
-      );
-    }
-
-
-    function startRecipesListener(
-      user
-    ) {
-
-      if (recipesUnsubscribe) {
-
-        recipesUnsubscribe();
-      }
-
-
-      const recipesRef =
-        collection(
-          db,
-          "users",
-          user.uid,
-          "recipes"
-        );
-
-
-      recipesUnsubscribe =
-        onSnapshot(
-          recipesRef,
-
-          renderRecipes,
-
-          (error) => {
-
-            console.error(
-              "Rezeptideen konnten nicht geladen werden:",
-              error
-            );
-
-
-            recipeMessage.textContent =
-              "Rezeptideen konnten nicht geladen werden.";
-
-            recipeMessage.className =
-              "form-message error";
-          }
-        );
-    }
-
-
-    async function addRecipe() {
-
-      if (!auth.currentUser) {
-        return;
-      }
-
-
-      const name =
-        recipeName.value.trim();
-
-      const url =
-        recipeUrl.value.trim();
-
-
-      recipeMessage.textContent = "";
-
-      recipeMessage.className =
-        "form-message";
-
-
-      if (!name) {
-
-        recipeMessage.textContent =
-          "Bitte gib den Namen des Gerichts ein.";
-
-        recipeMessage.className =
-          "form-message error";
-
-        return;
-      }
-
-
-      if (url) {
-
-        try {
-
-          const parsedUrl =
-            new URL(url);
-
-
-          if (
-            parsedUrl.protocol !==
-              "http:" &&
-            parsedUrl.protocol !==
-              "https:"
-          ) {
-            throw new Error(
-              "Ungültiges Protokoll"
-            );
-          }
-
-        } catch (error) {
-
-          recipeMessage.textContent =
-            "Bitte gib eine gültige URL ein.";
-
-          recipeMessage.className =
-            "form-message error";
-
-          return;
-        }
-      }
-
-
-      const recipesRef =
-        collection(
-          db,
-          "users",
-          auth.currentUser.uid,
-          "recipes"
-        );
-
-
-      try {
-
-        await addDoc(
-          recipesRef,
-          {
-            name,
-            url
-          }
-        );
-
-
-        recipeName.value = "";
-
-        recipeUrl.value = "";
-
-
-        recipeMessage.textContent =
-          "Rezeptidee wurde geräteübergreifend gespeichert.";
-
-        recipeMessage.className =
-          "form-message success";
-
-      } catch (error) {
-
-        console.error(
-          "Rezeptidee konnte nicht gespeichert werden:",
-          error
-        );
-
-
-        recipeMessage.textContent =
-          "Rezeptidee konnte nicht gespeichert werden.";
-
-        recipeMessage.className =
-          "form-message error";
-      }
-    }
-
+    let shoppingUnsubscribe =
+      null;
+
+    /*
+      Firestore-Verbindung für den
+      Essensplan des angemeldeten
+      Benutzers.
+    */
+    let mealPlanUnsubscribe =
+      null;
+
+    let currentMealPlanRef =
+      null;
 
     function getLoginErrorMessage(
       errorCode
     ) {
-
       switch (errorCode) {
-
         case "auth/invalid-credential":
-
           return (
-            "E-Mail-Adresse oder Passwort ist falsch."
+            "E-Mail-Adresse oder " +
+            "Passwort ist falsch."
           );
 
         case "auth/invalid-email":
-
           return (
-            "Die E-Mail-Adresse ist ungültig."
+            "Die E-Mail-Adresse " +
+            "ist ungültig."
           );
 
         case "auth/user-disabled":
-
           return (
-            "Dieses Benutzerkonto ist deaktiviert."
+            "Dieses Benutzerkonto " +
+            "ist deaktiviert."
           );
 
         case "auth/operation-not-allowed":
-
           return (
-            "E-Mail/Passwort ist in Firebase nicht aktiviert."
+            "E-Mail/Passwort ist " +
+            "in Firebase nicht aktiviert."
           );
 
         case "auth/too-many-requests":
-
           return (
-            "Zu viele Versuche. Bitte später erneut versuchen."
+            "Zu viele Versuche. " +
+            "Bitte später erneut versuchen."
           );
 
         case "auth/network-request-failed":
-
           return (
-            "Netzwerkfehler. Bitte Internetverbindung prüfen."
+            "Netzwerkfehler. Bitte " +
+            "Internetverbindung prüfen."
           );
 
         default:
-
           return errorCode;
       }
     }
 
-
     async function anmelden() {
-
       const email =
         loginEmail.value.trim();
 
       const passwort =
         loginPasswort.value;
 
-
-      loginMessage.textContent = "";
+      loginMessage.textContent =
+        "";
 
       loginMessage.className =
         "form-message";
 
-
-      if (!email || !passwort) {
-
+      if (
+        !email ||
+        !passwort
+      ) {
         loginMessage.textContent =
           "Bitte E-Mail-Adresse und Passwort eingeben.";
 
@@ -2869,32 +2664,27 @@
         return;
       }
 
-
-      loginButton.disabled = true;
+      loginButton.disabled =
+        true;
 
       loginButton.textContent =
         "Anmeldung läuft...";
 
-
       try {
-
         await signInWithEmailAndPassword(
           auth,
           email,
           passwort
         );
 
-
-        loginPasswort.value = "";
-
+        loginPasswort.value =
+          "";
       } catch (error) {
-
         console.error(
           "Firebase-Anmeldefehler:",
           error.code,
           error.message
         );
-
 
         loginMessage.textContent =
           "Anmeldung fehlgeschlagen: " +
@@ -2904,25 +2694,19 @@
 
         loginMessage.className =
           "form-message error";
-
       } finally {
-
-        loginButton.disabled = false;
+        loginButton.disabled =
+          false;
 
         loginButton.textContent =
           "Anmelden";
       }
     }
 
-
     async function abmelden() {
-
       try {
-
         await signOut(auth);
-
       } catch (error) {
-
         console.error(
           "Abmeldung fehlgeschlagen:",
           error
@@ -2930,25 +2714,19 @@
       }
     }
 
-
     async function addItem() {
-
       if (!auth.currentUser) {
         return;
       }
 
-
       const artikel =
         itemInput.value.trim();
-
 
       if (!artikel) {
         return;
       }
 
-
       try {
-
         await addDoc(
           shoppingRef,
           {
@@ -2956,16 +2734,12 @@
           }
         );
 
-
         itemInput.value = "";
-
       } catch (error) {
-
         console.error(
           "Artikel konnte nicht gespeichert werden:",
           error
         );
-
 
         shoppingMessage.textContent =
           "Artikel konnte nicht gespeichert werden.";
@@ -2975,16 +2749,12 @@
       }
     }
 
-
     async function removeItem(id) {
-
       if (!auth.currentUser) {
         return;
       }
 
-
       try {
-
         await deleteDoc(
           doc(
             db,
@@ -2992,9 +2762,7 @@
             id
           )
         );
-
       } catch (error) {
-
         console.error(
           "Artikel konnte nicht gelöscht werden:",
           error
@@ -3002,48 +2770,49 @@
       }
     }
 
-
     function startShoppingListener() {
-
-      if (shoppingUnsubscribe) {
-
+      if (
+        shoppingUnsubscribe
+      ) {
         shoppingUnsubscribe();
       }
-
 
       shoppingUnsubscribe =
         onSnapshot(
           shoppingRef,
-
           (snapshot) => {
-
-            shoppingList.innerHTML = "";
-
+            shoppingList.innerHTML =
+              "";
 
             snapshot.forEach(
-              (itemDocument) => {
-
+              (
+                itemDocument
+              ) => {
                 const data =
-                  itemDocument.data();
+                  itemDocument
+                    .data();
 
                 const listItem =
-                  document.createElement(
-                    "li"
-                  );
+                  document
+                    .createElement(
+                      "li"
+                    );
 
                 const text =
-                  document.createElement(
-                    "span"
-                  );
+                  document
+                    .createElement(
+                      "span"
+                    );
 
                 const button =
-                  document.createElement(
-                    "button"
-                  );
+                  document
+                    .createElement(
+                      "button"
+                    );
 
-
-                listItem.style.display =
-                  "flex";
+                listItem.style
+                  .display =
+                    "flex";
 
                 listItem.style
                   .justifyContent =
@@ -3053,10 +2822,9 @@
                   .alignItems =
                     "center";
 
-
                 text.textContent =
-                  data.name || "";
-
+                  data.name ||
+                  "";
 
                 button.type =
                   "button";
@@ -3064,38 +2832,34 @@
                 button.textContent =
                   "✔";
 
-
-                button.addEventListener(
-                  "click",
-                  () => {
-
-                    removeItem(
-                      itemDocument.id
-                    );
-                  }
-                );
-
+                button
+                  .addEventListener(
+                    "click",
+                    () => {
+                      removeItem(
+                        itemDocument
+                          .id
+                      );
+                    }
+                  );
 
                 listItem.append(
                   text,
                   button
                 );
 
-
-                shoppingList.appendChild(
-                  listItem
-                );
+                shoppingList
+                  .appendChild(
+                    listItem
+                  );
               }
             );
           },
-
           (error) => {
-
             console.error(
               "Einkaufsliste konnte nicht geladen werden:",
               error
             );
-
 
             shoppingMessage.textContent =
               "Einkaufsliste konnte nicht geladen werden.";
@@ -3106,43 +2870,118 @@
         );
     }
 
+    /*
+      Startet die Echtzeit-Synchronisierung
+      der Essensplanung.
 
-    function stopListeners() {
-
-      if (shoppingUnsubscribe) {
-
-        shoppingUnsubscribe();
-
-        shoppingUnsubscribe = null;
-      }
-
-
-      if (mealPlanUnsubscribe) {
-
+      Firestore-Pfad:
+      users/{uid}/mealPlans/currentWeek
+    */
+    function startMealPlanListener(
+      user
+    ) {
+      if (
+        mealPlanUnsubscribe
+      ) {
         mealPlanUnsubscribe();
 
-        mealPlanUnsubscribe = null;
+        mealPlanUnsubscribe =
+          null;
       }
 
+      window
+        .setMealPlanCloudState?.(
+          false
+        );
 
-      if (recipesUnsubscribe) {
+      currentMealPlanRef =
+        doc(
+          db,
+          "users",
+          user.uid,
+          "mealPlans",
+          "currentWeek"
+        );
 
-        recipesUnsubscribe();
+      mealPlanUnsubscribe =
+        onSnapshot(
+          currentMealPlanRef,
+          (
+            documentSnapshot
+          ) => {
+            if (
+              documentSnapshot
+                .exists()
+            ) {
+              const data =
+                documentSnapshot
+                  .data();
 
-        recipesUnsubscribe = null;
-      }
+              window
+                .updateMealPlanFromCloud?.(
+                  data.plan || {}
+                );
+            } else {
+              window
+                .updateMealPlanFromCloud?.(
+                  {}
+                );
+            }
+          },
+          (error) => {
+            console.error(
+              "Essensplanung konnte nicht geladen werden:",
+              error
+            );
+
+            window
+              .setMealPlanCloudState?.(
+                false
+              );
+
+            const message =
+              document
+                .getElementById(
+                  "mealPlanMessage"
+                );
+
+            message.textContent =
+              "Die Essensplanung konnte nicht aus der Cloud geladen werden.";
+
+            message.className =
+              "form-message error";
+          }
+        );
     }
 
+    /*
+      Diese Funktion wird von der
+      normalen Seitenskription beim
+      Ändern der Tabelle aufgerufen.
+    */
+    window.saveMealPlanToCloud =
+      async function (plan) {
+        if (
+          !auth.currentUser ||
+          !currentMealPlanRef
+        ) {
+          throw new Error(
+            "Kein Benutzer angemeldet."
+          );
+        }
+
+        await setDoc(
+          currentMealPlanRef,
+          {
+            plan: plan
+          }
+        );
+      };
 
     onAuthStateChanged(
       auth,
       (user) => {
-
-        stopListeners();
-
-
         if (user) {
-
           loginBereich.hidden =
             true;
 
@@ -3152,127 +2991,103 @@
           loginMessage.textContent =
             "";
 
-          angemeldeterBenutzer.textContent =
-            "Angemeldet als: " +
-            user.email;
-
+          angemeldeterBenutzer
+            .textContent =
+              "Angemeldet als: " +
+              user.email;
 
           startShoppingListener();
 
           startMealPlanListener(
             user
           );
-
-          startRecipesListener(
-            user
-          );
-
         } else {
-
           websiteBereich.hidden =
             true;
 
           loginBereich.hidden =
             false;
 
-          angemeldeterBenutzer.textContent =
-            "";
+          angemeldeterBenutzer
+            .textContent =
+              "";
+
+          if (
+            shoppingUnsubscribe
+          ) {
+            shoppingUnsubscribe();
+
+            shoppingUnsubscribe =
+              null;
+          }
+
+          if (
+            mealPlanUnsubscribe
+          ) {
+            mealPlanUnsubscribe();
+
+            mealPlanUnsubscribe =
+              null;
+          }
+
+          currentMealPlanRef =
+            null;
+
+          window
+            .setMealPlanCloudState?.(
+              false
+            );
+
+          window
+            .updateMealPlanFromCloud?.(
+              {}
+            );
 
           shoppingList.innerHTML =
             "";
-
-          mealPlanBody.innerHTML =
-            "";
-
-          recipeList.innerHTML =
-            "";
-
-          currentMealPlan = {};
         }
       }
     );
-
-
-    clearMealPlanButton
-      .addEventListener(
-        "click",
-        clearMealPlan
-      );
-
-
-    addRecipeButton.addEventListener(
-      "click",
-      addRecipe
-    );
-
-
-    recipeName.addEventListener(
-      "keydown",
-      (event) => {
-
-        if (event.key === "Enter") {
-
-          addRecipe();
-        }
-      }
-    );
-
-
-    recipeUrl.addEventListener(
-      "keydown",
-      (event) => {
-
-        if (event.key === "Enter") {
-
-          addRecipe();
-        }
-      }
-    );
-
 
     loginButton.addEventListener(
       "click",
       anmelden
     );
 
-
     logoutButton.addEventListener(
       "click",
       abmelden
     );
-
 
     addItemButton.addEventListener(
       "click",
       addItem
     );
 
-
-    loginPasswort.addEventListener(
-      "keydown",
-      (event) => {
-
-        if (event.key === "Enter") {
-
-          anmelden();
+    loginPasswort
+      .addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key ===
+            "Enter"
+          ) {
+            anmelden();
+          }
         }
-      }
-    );
-
+      );
 
     itemInput.addEventListener(
       "keydown",
       (event) => {
-
-        if (event.key === "Enter") {
-
+        if (
+          event.key ===
+          "Enter"
+        ) {
           addItem();
         }
       }
     );
-
   </script>
-
 </body>
-
 </html>
