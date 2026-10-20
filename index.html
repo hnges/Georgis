@@ -242,12 +242,10 @@
     }
   </style>
 
-  <!-- Bibliothek für den Excel-Export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
-  <!-- Anmeldung -->
   <section
     id="loginBereich"
     class="tab active"
@@ -292,7 +290,6 @@
     ></p>
   </section>
 
-  <!-- Website wird erst nach der Anmeldung angezeigt -->
   <div id="websiteBereich" hidden>
     <h1>🏠 Georgis</h1>
 
@@ -325,7 +322,6 @@
       </button>
     </nav>
 
-    <!-- Einkaufsliste -->
     <section
       id="einkauf"
       class="tab active"
@@ -357,7 +353,6 @@
       <ul id="shoppingList"></ul>
     </section>
 
-    <!-- Essensplanung -->
     <section
       id="essensplanung"
       class="tab"
@@ -385,7 +380,6 @@
         </button>
       </nav>
 
-      <!-- Unterreiter: Essensplanung der Woche -->
       <div
         id="wochenplanung"
         class="meal-tab active-meal"
@@ -426,7 +420,6 @@
         ></p>
       </div>
 
-      <!-- Unterreiter: Rezeptideen -->
       <div
         id="rezeptideen"
         class="meal-tab"
@@ -471,7 +464,6 @@
       </div>
     </section>
 
-    <!-- Zählerstände -->
     <section
       id="zaehler"
       class="tab"
@@ -507,7 +499,6 @@
         </button>
       </nav>
 
-      <!-- Unterreiter: Eingabe -->
       <div
         id="eingabe"
         class="meter-tab active-meter"
@@ -572,7 +563,6 @@
         ></p>
       </div>
 
-      <!-- Unterreiter: Datentabelle -->
       <div
         id="tabelle"
         class="meter-tab"
@@ -603,12 +593,10 @@
                 <th class="verbrauch-strom">
                   Verbrauch
                 </th>
-
                 <th>Zählerstand</th>
                 <th class="verbrauch-kaltwasser">
                   Verbrauch
                 </th>
-
                 <th>Zählerstand</th>
                 <th class="verbrauch-warmwasser">
                   Verbrauch
@@ -628,7 +616,6 @@
         </p>
       </div>
 
-      <!-- Unterreiter: Diagramme -->
       <div
         id="diagramme"
         class="meter-tab"
@@ -647,7 +634,6 @@
       </div>
     </section>
 
-    <!-- Abmeldung -->
     <div
       style="
         margin-top: 20px;
@@ -670,7 +656,6 @@
     </div>
   </div>
 
-  <!-- Navigation, Essensplanung, Zählerstände und Diagramme -->
   <script>
     /* Hauptreiter */
     const tabButtons =
@@ -758,8 +743,8 @@
         (button) => {
           button.classList.toggle(
             "is-active",
-            button.dataset
-              .meterTab === tabId
+            button.dataset.meterTab ===
+              tabId
           );
         }
       );
@@ -782,8 +767,7 @@
           "click",
           () => {
             showMeterTab(
-              button.dataset
-                .meterTab
+              button.dataset.meterTab
             );
           }
         );
@@ -811,8 +795,8 @@
         (button) => {
           button.classList.toggle(
             "is-active",
-            button.dataset
-              .mealTab === tabId
+            button.dataset.mealTab ===
+              tabId
           );
         }
       );
@@ -829,15 +813,14 @@
           "click",
           () => {
             showMealTab(
-              button.dataset
-                .mealTab
+              button.dataset.mealTab
             );
           }
         );
       }
     );
 
-    /* Essensplanung der Woche */
+    /* Essensplanung */
     const weekdays = [
       "Montag",
       "Dienstag",
@@ -848,16 +831,12 @@
       "Sonntag"
     ];
 
-    /*
-      Der Essensplan wird nicht mehr aus
-      localStorage geladen, sondern aus
-      Firestore.
-    */
     let mealPlan = {};
     let mealPlanCloudReady =
       false;
-
     let mealPlanMessageTimeout =
+      null;
+    let mealPlanSaveTimeout =
       null;
 
     function showMealPlanMessage(
@@ -871,7 +850,9 @@
 
       message.textContent = text;
       message.className =
-        "form-message " + type;
+        type
+          ? "form-message " + type
+          : "form-message";
 
       if (
         mealPlanMessageTimeout
@@ -881,24 +862,25 @@
         );
       }
 
-      mealPlanMessageTimeout =
-        setTimeout(
-          () => {
-            message.textContent =
-              "";
-            message.className =
-              "form-message";
-          },
-          1800
-        );
+      if (text) {
+        mealPlanMessageTimeout =
+          setTimeout(
+            () => {
+              message.textContent =
+                "";
+              message.className =
+                "form-message";
+            },
+            1800
+          );
+      }
     }
 
-    async function saveMealPlanInput(
+    function saveMealPlanInput(
       input
     ) {
       const day =
         input.dataset.day;
-
       const meal =
         input.dataset.meal;
 
@@ -910,39 +892,53 @@
         input.value;
 
       if (
-        typeof window
-          .saveMealPlanToCloud !==
-          "function" ||
-        !mealPlanCloudReady
+        mealPlanSaveTimeout
       ) {
-        showMealPlanMessage(
-          "Die Cloud-Verbindung wird noch hergestellt.",
-          "error"
-        );
-        return;
-      }
-
-      try {
-        await window
-          .saveMealPlanToCloud(
-            mealPlan
-          );
-
-        showMealPlanMessage(
-          "Änderung automatisch in der Cloud gespeichert.",
-          "success"
-        );
-      } catch (error) {
-        console.error(
-          "Essensplanung konnte nicht gespeichert werden:",
-          error
-        );
-
-        showMealPlanMessage(
-          "Die Änderung konnte nicht in der Cloud gespeichert werden.",
-          "error"
+        clearTimeout(
+          mealPlanSaveTimeout
         );
       }
+
+      mealPlanSaveTimeout =
+        setTimeout(
+          async () => {
+            if (
+              typeof window
+                .saveMealPlanToCloud !==
+                "function" ||
+              !mealPlanCloudReady
+            ) {
+              showMealPlanMessage(
+                "Die Cloud-Verbindung wird noch hergestellt.",
+                "error"
+              );
+              return;
+            }
+
+            try {
+              await window
+                .saveMealPlanToCloud(
+                  mealPlan
+                );
+
+              showMealPlanMessage(
+                "Änderung automatisch in der Cloud gespeichert.",
+                "success"
+              );
+            } catch (error) {
+              console.error(
+                "Essensplanung konnte nicht gespeichert werden:",
+                error
+              );
+
+              showMealPlanMessage(
+                "Die Änderung konnte nicht in der Cloud gespeichert werden.",
+                "error"
+              );
+            }
+          },
+          500
+        );
     }
 
     function renderMealPlan() {
@@ -951,30 +947,6 @@
           "mealPlanBody"
         );
 
-      /*
-        Aktuell fokussiertes Feld merken.
-        Dadurch wird der Cursor bei einem
-        Firestore-Update wiederhergestellt.
-      */
-      const activeElement =
-        document.activeElement;
-
-      const activeDay =
-        activeElement?.dataset?.day ||
-        null;
-
-      const activeMeal =
-        activeElement?.dataset?.meal ||
-        null;
-
-      const cursorPosition =
-        typeof activeElement
-          ?.selectionStart ===
-          "number"
-          ? activeElement
-              .selectionStart
-          : null;
-
       tableBody.innerHTML = "";
 
       weekdays.forEach((day) => {
@@ -982,27 +954,22 @@
           document.createElement(
             "tr"
           );
-
         const dayCell =
           document.createElement(
             "th"
           );
-
         const lunchCell =
           document.createElement(
             "td"
           );
-
         const dinnerCell =
           document.createElement(
             "td"
           );
-
         const lunchInput =
           document.createElement(
             "input"
           );
-
         const dinnerInput =
           document.createElement(
             "input"
@@ -1033,7 +1000,7 @@
           "dinner";
 
         lunchInput.addEventListener(
-          "change",
+          "input",
           () => {
             saveMealPlanInput(
               lunchInput
@@ -1042,7 +1009,7 @@
         );
 
         dinnerInput.addEventListener(
-          "change",
+          "input",
           () => {
             saveMealPlanInput(
               dinnerInput
@@ -1053,7 +1020,6 @@
         lunchCell.appendChild(
           lunchInput
         );
-
         dinnerCell.appendChild(
           dinnerInput
         );
@@ -1066,77 +1032,38 @@
 
         tableBody.appendChild(row);
       });
-
-      /*
-        Fokus nach einer Aktualisierung
-        möglichst wiederherstellen.
-      */
-      if (
-        activeDay &&
-        activeMeal
-      ) {
-        const matchingInput =
-          Array.from(
-            document.querySelectorAll(
-              "#mealPlanBody input"
-            )
-          ).find((input) => {
-            return (
-              input.dataset.day ===
-                activeDay &&
-              input.dataset.meal ===
-                activeMeal
-            );
-          });
-
-        if (matchingInput) {
-          matchingInput.focus();
-
-          if (
-            cursorPosition !== null
-          ) {
-            const position =
-              Math.min(
-                cursorPosition,
-                matchingInput.value
-                  .length
-              );
-
-            matchingInput
-              .setSelectionRange(
-                position,
-                position
-              );
-          }
-        }
-      }
     }
 
-    /*
-      Diese Funktion wird vom
-      Firebase-Modul aufgerufen, sobald
-      Firestore neue Daten liefert.
-    */
     window.updateMealPlanFromCloud =
       function (cloudMealPlan) {
-        if (
+        mealPlan =
           cloudMealPlan &&
           typeof cloudMealPlan ===
             "object" &&
           !Array.isArray(
             cloudMealPlan
           )
-        ) {
-          mealPlan =
-            cloudMealPlan;
-        } else {
-          mealPlan = {};
-        }
+            ? cloudMealPlan
+            : {};
 
         mealPlanCloudReady =
           true;
 
-        renderMealPlan();
+        /*
+          Während einer Eingabe wird die
+          Tabelle nicht neu aufgebaut.
+        */
+        const activeElement =
+          document.activeElement;
+
+        if (
+          !activeElement ||
+          !activeElement.closest(
+            "#mealPlanBody"
+          )
+        ) {
+          renderMealPlan();
+        }
       };
 
     window.setMealPlanCloudState =
@@ -1215,12 +1142,48 @@
     renderMealPlan();
 
     /* Rezeptideen */
-    let recipes =
-      JSON.parse(
-        localStorage.getItem(
-          "recipes"
-        )
-      ) || [];
+    let recipes = [];
+    let recipesCloudReady =
+      false;
+    let recipeMessageTimeout =
+      null;
+
+    function showRecipeMessage(
+      text,
+      type
+    ) {
+      const message =
+        document.getElementById(
+          "recipeMessage"
+        );
+
+      message.textContent = text;
+      message.className =
+        type
+          ? "form-message " + type
+          : "form-message";
+
+      if (
+        recipeMessageTimeout
+      ) {
+        clearTimeout(
+          recipeMessageTimeout
+        );
+      }
+
+      if (text) {
+        recipeMessageTimeout =
+          setTimeout(
+            () => {
+              message.textContent =
+                "";
+              message.className =
+                "form-message";
+            },
+            2500
+          );
+      }
+    }
 
     function renderRecipes() {
       const recipeList =
@@ -1236,17 +1199,14 @@
             document.createElement(
               "li"
             );
-
           const content =
             document.createElement(
               "div"
             );
-
           const name =
             document.createElement(
               "strong"
             );
-
           const deleteButton =
             document.createElement(
               "button"
@@ -1254,20 +1214,17 @@
 
           listItem.style.display =
             "flex";
-
           listItem.style
             .justifyContent =
               "space-between";
-
           listItem.style
             .alignItems =
               "center";
-
           listItem.style.gap =
             "10px";
 
           name.textContent =
-            recipe.name;
+            recipe.name || "";
 
           content.appendChild(
             name
@@ -1278,7 +1235,6 @@
               document.createElement(
                 "br"
               );
-
             const link =
               document.createElement(
                 "a"
@@ -1286,23 +1242,18 @@
 
             link.href =
               recipe.url;
-
             link.target =
               "_blank";
-
             link.rel =
               "noopener noreferrer";
-
             link.className =
               "recipe-link";
-
             link.textContent =
               recipe.url;
 
             content.appendChild(
               lineBreak
             );
-
             content.appendChild(
               link
             );
@@ -1310,33 +1261,19 @@
 
           deleteButton.type =
             "button";
-
           deleteButton.className =
             "delete-button";
-
           deleteButton.textContent =
             "Löschen";
 
-          deleteButton
-            .addEventListener(
-              "click",
-              () => {
-                recipes.splice(
-                  index,
-                  1
-                );
-
-                localStorage
-                  .setItem(
-                    "recipes",
-                    JSON.stringify(
-                      recipes
-                    )
-                  );
-
-                renderRecipes();
-              }
-            );
+          deleteButton.addEventListener(
+            "click",
+            () => {
+              deleteRecipe(
+                index
+              );
+            }
+          );
 
           listItem.append(
             content,
@@ -1350,40 +1287,52 @@
       );
     }
 
-    function addRecipe() {
+    window.updateRecipesFromCloud =
+      function (cloudRecipes) {
+        recipes =
+          Array.isArray(
+            cloudRecipes
+          )
+            ? cloudRecipes
+            : [];
+
+        recipesCloudReady =
+          true;
+
+        renderRecipes();
+      };
+
+    window.setRecipesCloudState =
+      function (isReady) {
+        recipesCloudReady =
+          Boolean(isReady);
+      };
+
+    async function addRecipe() {
       const nameInput =
         document.getElementById(
           "recipeName"
         );
-
       const urlInput =
         document.getElementById(
           "recipeUrl"
         );
 
-      const message =
-        document.getElementById(
-          "recipeMessage"
-        );
-
       const name =
         nameInput.value.trim();
-
       const url =
         urlInput.value.trim();
 
-      message.textContent = "";
-
-      message.className =
-        "form-message";
+      showRecipeMessage(
+        "",
+        ""
+      );
 
       if (!name) {
-        message.textContent =
-          "Bitte gib den Namen des Gerichts ein.";
-
-        message.className =
-          "form-message error";
-
+        showRecipeMessage(
+          "Bitte gib den Namen des Gerichts ein.",
+          "error"
+        );
         return;
       }
 
@@ -1403,36 +1352,121 @@
             );
           }
         } catch (error) {
-          message.textContent =
-            "Bitte gib eine gültige URL ein.";
-
-          message.className =
-            "form-message error";
-
+          showRecipeMessage(
+            "Bitte gib eine gültige URL ein.",
+            "error"
+          );
           return;
         }
       }
 
-      recipes.push({
-        name,
-        url
-      });
+      if (
+        typeof window
+          .saveRecipesToCloud !==
+          "function" ||
+        !recipesCloudReady
+      ) {
+        showRecipeMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+        return;
+      }
 
-      localStorage.setItem(
-        "recipes",
-        JSON.stringify(recipes)
-      );
+      const updatedRecipes = [
+        ...recipes,
+        {
+          name,
+          url
+        }
+      ];
 
-      nameInput.value = "";
-      urlInput.value = "";
+      try {
+        await window
+          .saveRecipesToCloud(
+            updatedRecipes
+          );
 
-      message.textContent =
-        "Rezeptidee wurde gespeichert.";
+        recipes =
+          updatedRecipes;
 
-      message.className =
-        "form-message success";
+        nameInput.value = "";
+        urlInput.value = "";
 
-      renderRecipes();
+        renderRecipes();
+
+        showRecipeMessage(
+          "Rezeptidee wurde in der Cloud gespeichert.",
+          "success"
+        );
+      } catch (error) {
+        console.error(
+          "Rezeptidee konnte nicht gespeichert werden:",
+          error
+        );
+
+        showRecipeMessage(
+          "Die Rezeptidee konnte nicht in der Cloud gespeichert werden.",
+          "error"
+        );
+      }
+    }
+
+    async function deleteRecipe(
+      index
+    ) {
+      if (
+        typeof window
+          .saveRecipesToCloud !==
+          "function" ||
+        !recipesCloudReady
+      ) {
+        showRecipeMessage(
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+        return;
+      }
+
+      const updatedRecipes =
+        recipes.filter(
+          (
+            recipe,
+            recipeIndex
+          ) => {
+            return (
+              recipeIndex !==
+              index
+            );
+          }
+        );
+
+      try {
+        await window
+          .saveRecipesToCloud(
+            updatedRecipes
+          );
+
+        recipes =
+          updatedRecipes;
+
+        renderRecipes();
+
+        showRecipeMessage(
+          "Rezeptidee wurde gelöscht.",
+          "success"
+        );
+      } catch (error) {
+        console.error(
+          "Rezeptidee konnte nicht gelöscht werden:",
+          error
+        );
+
+        showRecipeMessage(
+          "Die Rezeptidee konnte nicht gelöscht werden.",
+          "error"
+        );
+      }
     }
 
     document
@@ -1569,21 +1603,18 @@
 
           return {
             reading,
-
             stromVerbrauch:
               calculateConsumption(
                 reading,
                 previousReading,
                 "strom"
               ),
-
             kaltVerbrauch:
               calculateConsumption(
                 reading,
                 previousReading,
                 "kalt"
               ),
-
             warmVerbrauch:
               calculateConsumption(
                 reading,
@@ -1600,7 +1631,6 @@
         document.getElementById(
           "meterTable"
         );
-
       const emptyMessage =
         document.getElementById(
           "emptyTableMessage"
@@ -1613,7 +1643,6 @@
         .forEach((rowData) => {
           const reading =
             rowData.reading;
-
           const row =
             document.createElement(
               "tr"
@@ -1623,29 +1652,23 @@
             formatDate(
               reading.date
             ),
-
             formatValue(
               reading.strom
             ),
-
             formatValue(
               rowData
                 .stromVerbrauch
             ),
-
             formatValue(
               reading.kalt
             ),
-
             formatValue(
               rowData
                 .kaltVerbrauch
             ),
-
             formatValue(
               reading.warm
             ),
-
             formatValue(
               rowData
                 .warmVerbrauch
@@ -1655,10 +1678,9 @@
           values.forEach(
             (value, index) => {
               const cell =
-                document
-                  .createElement(
-                    "td"
-                  );
+                document.createElement(
+                  "td"
+                );
 
               cell.textContent =
                 value;
@@ -1691,7 +1713,6 @@
             document.createElement(
               "td"
             );
-
           const deleteButton =
             document.createElement(
               "button"
@@ -1699,36 +1720,31 @@
 
           deleteButton.type =
             "button";
-
           deleteButton.className =
             "delete-button";
-
           deleteButton.textContent =
             "Löschen";
 
-          deleteButton
-            .addEventListener(
-              "click",
-              () => {
-                const originalIndex =
-                  readings.indexOf(
-                    reading
-                  );
-
-                deleteReading(
-                  originalIndex
+          deleteButton.addEventListener(
+            "click",
+            () => {
+              const originalIndex =
+                readings.indexOf(
+                  reading
                 );
-              }
-            );
+
+              deleteReading(
+                originalIndex
+              );
+            }
+          );
 
           actionCell.appendChild(
             deleteButton
           );
-
           row.appendChild(
             actionCell
           );
-
           table.appendChild(row);
         });
 
@@ -1741,29 +1757,24 @@
         document.getElementById(
           "formMessage"
         );
-
       const date =
         document.getElementById(
           "datum"
         ).value;
-
       const strom =
         document.getElementById(
           "strom"
         ).value;
-
       const warm =
         document.getElementById(
           "warmwasser"
         ).value;
-
       const kalt =
         document.getElementById(
           "kaltwasser"
         ).value;
 
       message.textContent = "";
-
       message.className =
         "form-message";
 
@@ -1775,10 +1786,8 @@
       ) {
         message.textContent =
           "Bitte fülle alle Felder aus.";
-
         message.className =
           "form-message error";
-
         return;
       }
 
@@ -1794,10 +1803,8 @@
       ) {
         message.textContent =
           "Zählerstände können nur für den 1. eines Monats gespeichert werden.";
-
         message.className =
           "form-message error";
-
         return;
       }
 
@@ -1810,10 +1817,8 @@
       if (dateAlreadyExists) {
         message.textContent =
           "Für diesen Monat ist bereits ein Zählerstand gespeichert.";
-
         message.className =
           "form-message error";
-
         return;
       }
 
@@ -1845,10 +1850,8 @@
       ) {
         message.textContent =
           "Ein Zählerstand darf nicht kleiner als der vorherige Zählerstand sein.";
-
         message.className =
           "form-message error";
-
         return;
       }
 
@@ -1865,9 +1868,7 @@
       renderCharts();
 
       document
-        .getElementById(
-          "strom"
-        )
+        .getElementById("strom")
         .value = "";
 
       document
@@ -1884,7 +1885,6 @@
 
       message.textContent =
         "Zählerstand wurde gespeichert.";
-
       message.className =
         "form-message success";
     }
@@ -1904,7 +1904,6 @@
       renderCharts();
     }
 
-    /* Excel-Export */
     function exportExcel() {
       if (
         readings.length === 0
@@ -1934,27 +1933,21 @@
                   rowData
                     .reading.date
                 ),
-
               "Strom Zählerstand (kWh)":
                 rowData
                   .reading.strom,
-
               "Strom Verbrauch (kWh)":
                 rowData
                   .stromVerbrauch,
-
               "Kaltwasser Zählerstand (m³)":
                 rowData
                   .reading.kalt,
-
               "Kaltwasser Verbrauch (m³)":
                 rowData
                   .kaltVerbrauch,
-
               "Warmwasser Zählerstand (m³)":
                 rowData
                   .reading.warm,
-
               "Warmwasser Verbrauch (m³)":
                 rowData
                   .warmVerbrauch
@@ -1995,7 +1988,6 @@
       );
     }
 
-    /* Liniendiagramme */
     function drawLineChart(
       canvas,
       chartSeries,
@@ -2005,22 +1997,18 @@
         canvas.getContext(
           "2d"
         );
-
       const pixelRatio =
         window.devicePixelRatio ||
         1;
-
       const width =
         Math.max(
           canvas.clientWidth,
           300
         );
-
       const height = 300;
 
       canvas.width =
         width * pixelRatio;
-
       canvas.height =
         height * pixelRatio;
 
@@ -2059,10 +2047,8 @@
       ) {
         context.fillStyle =
           "#64748b";
-
         context.font =
           "15px Arial";
-
         context.textAlign =
           "center";
 
@@ -2087,23 +2073,19 @@
           ...allValues,
           1
         );
-
       const minimum =
         Math.min(
           0,
           ...allValues
         );
-
       const graphWidth =
         width -
         padding.left -
         padding.right;
-
       const graphHeight =
         height -
         padding.top -
         padding.bottom;
-
       const pointCount =
         Math.max(
           labels.length,
@@ -2144,10 +2126,8 @@
 
       context.strokeStyle =
         "#cbd5e1";
-
       context.fillStyle =
         "#64748b";
-
       context.font =
         "12px Arial";
 
@@ -2161,7 +2141,6 @@
           graphHeight *
             index /
             4;
-
         const value =
           maximum -
           (
@@ -2172,23 +2151,18 @@
           4;
 
         context.beginPath();
-
         context.moveTo(
           padding.left,
           y
         );
-
         context.lineTo(
           width -
             padding.right,
           y
         );
-
         context.stroke();
-
         context.textAlign =
           "right";
-
         context.fillText(
           formatValue(value),
           padding.left - 8,
@@ -2198,7 +2172,6 @@
 
       context.fillStyle =
         "#64748b";
-
       context.textAlign =
         "center";
 
@@ -2216,12 +2189,9 @@
         (series) => {
           context.strokeStyle =
             series.color;
-
           context.fillStyle =
             series.color;
-
           context.lineWidth = 2;
-
           context.beginPath();
 
           let firstPoint =
@@ -2239,7 +2209,6 @@
 
               const x =
                 getX(index);
-
               const y =
                 getY(value);
 
@@ -2248,7 +2217,6 @@
                   x,
                   y
                 );
-
                 firstPoint =
                   false;
               } else {
@@ -2273,7 +2241,6 @@
               }
 
               context.beginPath();
-
               context.arc(
                 getX(index),
                 getY(value),
@@ -2281,7 +2248,6 @@
                 0,
                 Math.PI * 2
               );
-
               context.fill();
             }
           );
@@ -2296,17 +2262,14 @@
 
           context.fillStyle =
             series.color;
-
           context.fillRect(
             legendX,
             8,
             12,
             3
           );
-
           context.textAlign =
             "left";
-
           context.fillText(
             series.name,
             legendX + 17,
@@ -2459,7 +2422,6 @@
     renderReadings();
   </script>
 
-  <!-- Firebase-Anmeldung, Einkaufsliste und Cloud-Essensplanung -->
   <script type="module">
     import {
       initializeApp
@@ -2485,19 +2447,14 @@
     const firebaseConfig = {
       apiKey:
         "AIzaSyB5J64XqojmnqEpNxpZ4KnA-rgFaKXYw_M",
-
       authDomain:
         "die-georgis.firebaseapp.com",
-
       projectId:
         "die-georgis",
-
       storageBucket:
         "die-georgis.firebasestorage.app",
-
       messagingSenderId:
         "548614823934",
-
       appId:
         "1:548614823934:web:3373a1862a42d92350aaaf"
     };
@@ -2506,10 +2463,8 @@
       initializeApp(
         firebaseConfig
       );
-
     const db =
       getFirestore(app);
-
     const auth =
       getAuth(app);
 
@@ -2523,57 +2478,46 @@
       document.getElementById(
         "loginBereich"
       );
-
     const websiteBereich =
       document.getElementById(
         "websiteBereich"
       );
-
     const loginEmail =
       document.getElementById(
         "loginEmail"
       );
-
     const loginPasswort =
       document.getElementById(
         "loginPasswort"
       );
-
     const loginButton =
       document.getElementById(
         "loginButton"
       );
-
     const loginMessage =
       document.getElementById(
         "loginMessage"
       );
-
     const logoutButton =
       document.getElementById(
         "logoutButton"
       );
-
     const angemeldeterBenutzer =
       document.getElementById(
         "angemeldeterBenutzer"
       );
-
     const itemInput =
       document.getElementById(
         "itemInput"
       );
-
     const addItemButton =
       document.getElementById(
         "addItemButton"
       );
-
     const shoppingList =
       document.getElementById(
         "shoppingList"
       );
-
     const shoppingMessage =
       document.getElementById(
         "shoppingMessage"
@@ -2581,16 +2525,13 @@
 
     let shoppingUnsubscribe =
       null;
-
-    /*
-      Firestore-Verbindung für den
-      Essensplan des angemeldeten
-      Benutzers.
-    */
     let mealPlanUnsubscribe =
       null;
-
     let currentMealPlanRef =
+      null;
+    let recipesUnsubscribe =
+      null;
+    let currentRecipesRef =
       null;
 
     function getLoginErrorMessage(
@@ -2641,13 +2582,11 @@
     async function anmelden() {
       const email =
         loginEmail.value.trim();
-
       const passwort =
         loginPasswort.value;
 
       loginMessage.textContent =
         "";
-
       loginMessage.className =
         "form-message";
 
@@ -2657,16 +2596,13 @@
       ) {
         loginMessage.textContent =
           "Bitte E-Mail-Adresse und Passwort eingeben.";
-
         loginMessage.className =
           "form-message error";
-
         return;
       }
 
       loginButton.disabled =
         true;
-
       loginButton.textContent =
         "Anmeldung läuft...";
 
@@ -2697,7 +2633,6 @@
       } finally {
         loginButton.disabled =
           false;
-
         loginButton.textContent =
           "Anmelden";
       }
@@ -2743,7 +2678,6 @@
 
         shoppingMessage.textContent =
           "Artikel konnte nicht gespeichert werden.";
-
         shoppingMessage.className =
           "form-message error";
       }
@@ -2791,19 +2725,16 @@
                 const data =
                   itemDocument
                     .data();
-
                 const listItem =
                   document
                     .createElement(
                       "li"
                     );
-
                 const text =
                   document
                     .createElement(
                       "span"
                     );
-
                 const button =
                   document
                     .createElement(
@@ -2813,35 +2744,29 @@
                 listItem.style
                   .display =
                     "flex";
-
                 listItem.style
                   .justifyContent =
                     "space-between";
-
                 listItem.style
                   .alignItems =
                     "center";
 
                 text.textContent =
-                  data.name ||
-                  "";
+                  data.name || "";
 
                 button.type =
                   "button";
-
                 button.textContent =
                   "✔";
 
-                button
-                  .addEventListener(
-                    "click",
-                    () => {
-                      removeItem(
-                        itemDocument
-                          .id
-                      );
-                    }
-                  );
+                button.addEventListener(
+                  "click",
+                  () => {
+                    removeItem(
+                      itemDocument.id
+                    );
+                  }
+                );
 
                 listItem.append(
                   text,
@@ -2863,20 +2788,12 @@
 
             shoppingMessage.textContent =
               "Einkaufsliste konnte nicht geladen werden.";
-
             shoppingMessage.className =
               "form-message error";
           }
         );
     }
 
-    /*
-      Startet die Echtzeit-Synchronisierung
-      der Essensplanung.
-
-      Firestore-Pfad:
-      users/{uid}/mealPlans/currentWeek
-    */
     function startMealPlanListener(
       user
     ) {
@@ -2884,7 +2801,6 @@
         mealPlanUnsubscribe
       ) {
         mealPlanUnsubscribe();
-
         mealPlanUnsubscribe =
           null;
       }
@@ -2940,25 +2856,18 @@
               );
 
             const message =
-              document
-                .getElementById(
-                  "mealPlanMessage"
-                );
+              document.getElementById(
+                "mealPlanMessage"
+              );
 
             message.textContent =
               "Die Essensplanung konnte nicht aus der Cloud geladen werden.";
-
             message.className =
               "form-message error";
           }
         );
     }
 
-    /*
-      Diese Funktion wird von der
-      normalen Seitenskription beim
-      Ändern der Tabelle aufgerufen.
-    */
     window.saveMealPlanToCloud =
       async function (plan) {
         if (
@@ -2973,7 +2882,201 @@
         await setDoc(
           currentMealPlanRef,
           {
-            plan: plan
+            plan
+          }
+        );
+      };
+
+    function startRecipesListener(
+      user
+    ) {
+      if (
+        recipesUnsubscribe
+      ) {
+        recipesUnsubscribe();
+        recipesUnsubscribe =
+          null;
+      }
+
+      window
+        .setRecipesCloudState?.(
+          false
+        );
+
+      currentRecipesRef =
+        doc(
+          db,
+          "users",
+          user.uid,
+          "recipeData",
+          "recipes"
+        );
+
+      let firstSnapshot =
+        true;
+
+      recipesUnsubscribe =
+        onSnapshot(
+          currentRecipesRef,
+          async (
+            documentSnapshot
+          ) => {
+            if (
+              documentSnapshot
+                .exists()
+            ) {
+              const data =
+                documentSnapshot
+                  .data();
+
+              const cloudRecipes =
+                Array.isArray(
+                  data.recipes
+                )
+                  ? data.recipes
+                  : [];
+
+              window
+                .updateRecipesFromCloud?.(
+                  cloudRecipes
+                );
+
+              localStorage
+                .removeItem(
+                  "recipes"
+                );
+            } else if (
+              firstSnapshot
+            ) {
+              let localRecipes =
+                [];
+
+              try {
+                const storedRecipes =
+                  JSON.parse(
+                    localStorage
+                      .getItem(
+                        "recipes"
+                      ) || "[]"
+                  );
+
+                if (
+                  Array.isArray(
+                    storedRecipes
+                  )
+                ) {
+                  localRecipes =
+                    storedRecipes;
+                }
+              } catch (error) {
+                console.error(
+                  "Lokale Rezeptideen konnten nicht gelesen werden:",
+                  error
+                );
+              }
+
+              if (
+                localRecipes.length >
+                0
+              ) {
+                try {
+                  await setDoc(
+                    currentRecipesRef,
+                    {
+                      recipes:
+                        localRecipes
+                    }
+                  );
+
+                  window
+                    .updateRecipesFromCloud?.(
+                      localRecipes
+                    );
+
+                  localStorage
+                    .removeItem(
+                      "recipes"
+                    );
+                } catch (error) {
+                  console.error(
+                    "Lokale Rezeptideen konnten nicht übertragen werden:",
+                    error
+                  );
+
+                  window
+                    .setRecipesCloudState?.(
+                      false
+                    );
+
+                  const message =
+                    document
+                      .getElementById(
+                        "recipeMessage"
+                      );
+
+                  message.textContent =
+                    "Die bisherigen Rezeptideen konnten nicht in die Cloud übertragen werden.";
+                  message.className =
+                    "form-message error";
+                }
+              } else {
+                window
+                  .updateRecipesFromCloud?.(
+                    []
+                  );
+              }
+            } else {
+              window
+                .updateRecipesFromCloud?.(
+                  []
+                );
+            }
+
+            firstSnapshot =
+              false;
+          },
+          (error) => {
+            console.error(
+              "Rezeptideen konnten nicht geladen werden:",
+              error
+            );
+
+            window
+              .setRecipesCloudState?.(
+                false
+              );
+
+            const message =
+              document.getElementById(
+                "recipeMessage"
+              );
+
+            message.textContent =
+              "Die Rezeptideen konnten nicht aus der Cloud geladen werden.";
+            message.className =
+              "form-message error";
+          }
+        );
+    }
+
+    window.saveRecipesToCloud =
+      async function (
+        updatedRecipes
+      ) {
+        if (
+          !auth.currentUser ||
+          !currentRecipesRef
+        ) {
+          throw new Error(
+            "Kein Benutzer angemeldet."
+          );
+        }
+
+        await setDoc(
+          currentRecipesRef,
+          {
+            recipes:
+              updatedRecipes
           }
         );
       };
@@ -2984,10 +3087,8 @@
         if (user) {
           loginBereich.hidden =
             true;
-
           websiteBereich.hidden =
             false;
-
           loginMessage.textContent =
             "";
 
@@ -3001,13 +3102,15 @@
           startMealPlanListener(
             user
           );
+
+          startRecipesListener(
+            user
+          );
         } else {
           websiteBereich.hidden =
             true;
-
           loginBereich.hidden =
             false;
-
           angemeldeterBenutzer
             .textContent =
               "";
@@ -3016,7 +3119,6 @@
             shoppingUnsubscribe
           ) {
             shoppingUnsubscribe();
-
             shoppingUnsubscribe =
               null;
           }
@@ -3025,12 +3127,21 @@
             mealPlanUnsubscribe
           ) {
             mealPlanUnsubscribe();
-
             mealPlanUnsubscribe =
               null;
           }
 
+          if (
+            recipesUnsubscribe
+          ) {
+            recipesUnsubscribe();
+            recipesUnsubscribe =
+              null;
+          }
+
           currentMealPlanRef =
+            null;
+          currentRecipesRef =
             null;
 
           window
@@ -3041,6 +3152,16 @@
           window
             .updateMealPlanFromCloud?.(
               {}
+            );
+
+          window
+            .setRecipesCloudState?.(
+              false
+            );
+
+          window
+            .updateRecipesFromCloud?.(
+              []
             );
 
           shoppingList.innerHTML =
