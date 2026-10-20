@@ -72,12 +72,14 @@
     }
 
     .tab,
-    .meter-tab {
+    .meter-tab,
+    .meal-tab {
       display: none;
     }
 
     .tab.active,
-    .meter-tab.active-meter {
+    .meter-tab.active-meter,
+    .meal-tab.active-meal {
       display: block;
     }
 
@@ -181,6 +183,15 @@
 
     .verbrauch-warmwasser {
       background: #fee2e2;
+    }
+
+    .meal-plan-table input {
+      min-width: 180px;
+    }
+
+    .recipe-link {
+      color: #2d6cdf;
+      overflow-wrap: anywhere;
     }
 
     .empty-message,
@@ -299,17 +310,17 @@
       <button
         class="tab-button"
         type="button"
-        data-tab="zaehler"
+        data-tab="essensplanung"
       >
-        Zählerstände
+        Essensplanung
       </button>
 
       <button
         class="tab-button"
         type="button"
-        data-tab="zukunft"
+        data-tab="zaehler"
       >
-        Zukunft
+        Zählerstände
       </button>
     </nav>
 
@@ -345,6 +356,123 @@
       ></p>
 
       <ul id="shoppingList"></ul>
+    </section>
+
+
+    <!-- Essensplanung -->
+
+    <section
+      id="essensplanung"
+      class="tab"
+    >
+      <h2>🍽️ Essensplanung</h2>
+
+      <nav
+        class="subtabs"
+        aria-label="Essensplanung-Navigation"
+      >
+        <button
+          class="subtab-button is-active"
+          type="button"
+          data-meal-tab="wochenplanung"
+        >
+          Essensplanung der Woche
+        </button>
+
+        <button
+          class="subtab-button"
+          type="button"
+          data-meal-tab="rezeptideen"
+        >
+          Rezeptideen
+        </button>
+      </nav>
+
+
+      <!-- Unterreiter: Essensplanung der Woche -->
+
+      <div
+        id="wochenplanung"
+        class="meal-tab active-meal"
+      >
+        <h3>Essensplanung der Woche</h3>
+
+        <div class="table-wrapper">
+          <table class="meal-plan-table">
+            <thead>
+              <tr>
+                <th>Tag</th>
+                <th>Mittagessen</th>
+                <th>Abendessen</th>
+              </tr>
+            </thead>
+
+            <tbody id="mealPlanBody"></tbody>
+          </table>
+        </div>
+
+        <button
+          class="primary-button"
+          type="button"
+          id="saveMealPlanButton"
+        >
+          Wochenplan speichern
+        </button>
+
+        <p
+          id="mealPlanMessage"
+          class="form-message"
+          aria-live="polite"
+        ></p>
+      </div>
+
+
+      <!-- Unterreiter: Rezeptideen -->
+
+      <div
+        id="rezeptideen"
+        class="meal-tab"
+      >
+        <h3>Rezeptideen</h3>
+
+        <div class="form-grid">
+          <label>
+            Gericht
+
+            <input
+              type="text"
+              id="recipeName"
+              placeholder="Name des Gerichts"
+            >
+          </label>
+
+          <label>
+            URL
+
+            <input
+              type="url"
+              id="recipeUrl"
+              placeholder="https://beispiel.de/rezept"
+            >
+          </label>
+        </div>
+
+        <button
+          class="primary-button"
+          type="button"
+          id="addRecipeButton"
+        >
+          Rezeptidee hinzufügen
+        </button>
+
+        <p
+          id="recipeMessage"
+          class="form-message"
+          aria-live="polite"
+        ></p>
+
+        <ul id="recipeList"></ul>
+      </div>
     </section>
 
 
@@ -555,20 +683,6 @@
     </section>
 
 
-    <!-- Zukunft -->
-
-    <section
-      id="zukunft"
-      class="tab"
-    >
-      <h2>🚧 Bereich in Planung</h2>
-
-      <p>
-        Hier können später weitere Funktionen ergänzt werden.
-      </p>
-    </section>
-
-
     <!-- Abmeldung -->
 
     <div
@@ -595,14 +709,16 @@
   </div>
 
 
-  <!-- Zählerstände, Tabellen und Diagramme -->
+  <!-- Navigation, Essensplanung, Zählerstände und Diagramme -->
 
   <script>
 
     /* Hauptreiter */
 
     const tabButtons =
-      document.querySelectorAll("[data-tab]");
+      document.querySelectorAll(
+        "[data-tab]"
+      );
 
 
     function showTab(tabId) {
@@ -639,7 +755,9 @@
           .classList
           .contains("active-meter")
       ) {
-        requestAnimationFrame(renderCharts);
+        requestAnimationFrame(
+          renderCharts
+        );
       }
     }
 
@@ -655,7 +773,7 @@
     });
 
 
-    /* Unterreiter */
+    /* Unterreiter Zählerstände */
 
     const meterTabButtons =
       document.querySelectorAll(
@@ -714,6 +832,507 @@
     );
 
 
+    /* Unterreiter Essensplanung */
+
+    const mealTabButtons =
+      document.querySelectorAll(
+        "[data-meal-tab]"
+      );
+
+
+    function showMealTab(tabId) {
+
+      document
+        .querySelectorAll(".meal-tab")
+        .forEach((tab) => {
+
+          tab.classList.remove(
+            "active-meal"
+          );
+        });
+
+
+      mealTabButtons.forEach(
+        (button) => {
+
+          button.classList.toggle(
+            "is-active",
+            button.dataset.mealTab ===
+              tabId
+          );
+        }
+      );
+
+
+      document
+        .getElementById(tabId)
+        .classList
+        .add("active-meal");
+    }
+
+
+    mealTabButtons.forEach(
+      (button) => {
+
+        button.addEventListener(
+          "click",
+          () => showMealTab(
+            button.dataset.mealTab
+          )
+        );
+      }
+    );
+
+
+    /* Essensplanung der Woche */
+
+    const weekdays = [
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+      "Sonntag"
+    ];
+
+
+    let mealPlan =
+      JSON.parse(
+        localStorage.getItem(
+          "mealPlan"
+        )
+      ) || {};
+
+
+    function renderMealPlan() {
+
+      const tableBody =
+        document.getElementById(
+          "mealPlanBody"
+        );
+
+
+      tableBody.innerHTML = "";
+
+
+      weekdays.forEach((day) => {
+
+        const row =
+          document.createElement("tr");
+
+        const dayCell =
+          document.createElement("th");
+
+        const lunchCell =
+          document.createElement("td");
+
+        const dinnerCell =
+          document.createElement("td");
+
+        const lunchInput =
+          document.createElement("input");
+
+        const dinnerInput =
+          document.createElement("input");
+
+
+        dayCell.textContent = day;
+
+
+        lunchInput.type = "text";
+
+        lunchInput.placeholder =
+          "Mittagessen eintragen";
+
+        lunchInput.value =
+          mealPlan[day]?.lunch || "";
+
+        lunchInput.dataset.day = day;
+
+        lunchInput.dataset.meal =
+          "lunch";
+
+
+        dinnerInput.type = "text";
+
+        dinnerInput.placeholder =
+          "Abendessen eintragen";
+
+        dinnerInput.value =
+          mealPlan[day]?.dinner || "";
+
+        dinnerInput.dataset.day = day;
+
+        dinnerInput.dataset.meal =
+          "dinner";
+
+
+        lunchCell.appendChild(
+          lunchInput
+        );
+
+        dinnerCell.appendChild(
+          dinnerInput
+        );
+
+
+        row.append(
+          dayCell,
+          lunchCell,
+          dinnerCell
+        );
+
+
+        tableBody.appendChild(row);
+      });
+    }
+
+
+    function saveMealPlan() {
+
+      const inputs =
+        document.querySelectorAll(
+          "#mealPlanBody input"
+        );
+
+
+      inputs.forEach((input) => {
+
+        const day =
+          input.dataset.day;
+
+        const meal =
+          input.dataset.meal;
+
+
+        if (!mealPlan[day]) {
+          mealPlan[day] = {};
+        }
+
+
+        mealPlan[day][meal] =
+          input.value.trim();
+      });
+
+
+      localStorage.setItem(
+        "mealPlan",
+        JSON.stringify(mealPlan)
+      );
+
+
+      const message =
+        document.getElementById(
+          "mealPlanMessage"
+        );
+
+
+      message.textContent =
+        "Wochenplan wurde gespeichert.";
+
+      message.className =
+        "form-message success";
+    }
+
+
+    document
+      .getElementById(
+        "saveMealPlanButton"
+      )
+      .addEventListener(
+        "click",
+        saveMealPlan
+      );
+
+
+    renderMealPlan();
+
+
+    /* Rezeptideen */
+
+    let recipes =
+      JSON.parse(
+        localStorage.getItem(
+          "recipes"
+        )
+      ) || [];
+
+
+    function renderRecipes() {
+
+      const recipeList =
+        document.getElementById(
+          "recipeList"
+        );
+
+
+      recipeList.innerHTML = "";
+
+
+      recipes.forEach(
+        (recipe, index) => {
+
+          const listItem =
+            document.createElement("li");
+
+          const content =
+            document.createElement("div");
+
+          const name =
+            document.createElement(
+              "strong"
+            );
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+
+          listItem.style.display =
+            "flex";
+
+          listItem.style
+            .justifyContent =
+              "space-between";
+
+          listItem.style.alignItems =
+            "center";
+
+          listItem.style.gap =
+            "10px";
+
+
+          name.textContent =
+            recipe.name;
+
+
+          content.appendChild(name);
+
+
+          if (recipe.url) {
+
+            const lineBreak =
+              document.createElement("br");
+
+            const link =
+              document.createElement("a");
+
+
+            link.href = recipe.url;
+
+            link.target = "_blank";
+
+            link.rel =
+              "noopener noreferrer";
+
+            link.className =
+              "recipe-link";
+
+            link.textContent =
+              recipe.url;
+
+
+            content.appendChild(
+              lineBreak
+            );
+
+            content.appendChild(link);
+          }
+
+
+          deleteButton.type =
+            "button";
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "Löschen";
+
+
+          deleteButton.addEventListener(
+            "click",
+            () => {
+
+              recipes.splice(
+                index,
+                1
+              );
+
+
+              localStorage.setItem(
+                "recipes",
+                JSON.stringify(recipes)
+              );
+
+
+              renderRecipes();
+            }
+          );
+
+
+          listItem.append(
+            content,
+            deleteButton
+          );
+
+
+          recipeList.appendChild(
+            listItem
+          );
+        }
+      );
+    }
+
+
+    function addRecipe() {
+
+      const nameInput =
+        document.getElementById(
+          "recipeName"
+        );
+
+      const urlInput =
+        document.getElementById(
+          "recipeUrl"
+        );
+
+      const message =
+        document.getElementById(
+          "recipeMessage"
+        );
+
+
+      const name =
+        nameInput.value.trim();
+
+      const url =
+        urlInput.value.trim();
+
+
+      message.textContent = "";
+
+      message.className =
+        "form-message";
+
+
+      if (!name) {
+
+        message.textContent =
+          "Bitte gib den Namen des Gerichts ein.";
+
+        message.className =
+          "form-message error";
+
+        return;
+      }
+
+
+      if (url) {
+
+        try {
+
+          const parsedUrl =
+            new URL(url);
+
+
+          if (
+            parsedUrl.protocol !==
+              "http:" &&
+            parsedUrl.protocol !==
+              "https:"
+          ) {
+            throw new Error(
+              "Ungültiges Protokoll"
+            );
+          }
+
+        } catch (error) {
+
+          message.textContent =
+            "Bitte gib eine gültige URL ein.";
+
+          message.className =
+            "form-message error";
+
+          return;
+        }
+      }
+
+
+      recipes.push({
+        name,
+        url
+      });
+
+
+      localStorage.setItem(
+        "recipes",
+        JSON.stringify(recipes)
+      );
+
+
+      nameInput.value = "";
+
+      urlInput.value = "";
+
+
+      message.textContent =
+        "Rezeptidee wurde gespeichert.";
+
+      message.className =
+        "form-message success";
+
+
+      renderRecipes();
+    }
+
+
+    document
+      .getElementById(
+        "addRecipeButton"
+      )
+      .addEventListener(
+        "click",
+        addRecipe
+      );
+
+
+    document
+      .getElementById(
+        "recipeName"
+      )
+      .addEventListener(
+        "keydown",
+        (event) => {
+
+          if (event.key === "Enter") {
+            addRecipe();
+          }
+        }
+      );
+
+
+    document
+      .getElementById(
+        "recipeUrl"
+      )
+      .addEventListener(
+        "keydown",
+        (event) => {
+
+          if (event.key === "Enter") {
+            addRecipe();
+          }
+        }
+      );
+
+
+    renderRecipes();
+
+
     /* Zählerstände */
 
     let readings =
@@ -742,7 +1361,10 @@
         return "–";
       }
 
-      const number = Number(value);
+
+      const number =
+        Number(value);
+
 
       return Number.isFinite(number)
         ? new Intl.NumberFormat(
@@ -777,6 +1399,7 @@
         return null;
       }
 
+
       const consumption =
         Number(
           currentReading[property]
@@ -784,6 +1407,7 @@
         Number(
           previousReading[property]
         );
+
 
       return Number.isFinite(
         consumption
@@ -809,7 +1433,6 @@
 
           return {
             reading,
-            previousReading,
 
             stromVerbrauch:
               calculateConsumption(
@@ -898,24 +1521,32 @@
               (value, index) => {
 
                 const cell =
-                  document.createElement("td");
+                  document.createElement(
+                    "td"
+                  );
+
 
                 cell.textContent = value;
 
 
                 if (index === 2) {
+
                   cell.classList.add(
                     "verbrauch-strom"
                   );
                 }
 
+
                 if (index === 4) {
+
                   cell.classList.add(
                     "verbrauch-kaltwasser"
                   );
                 }
 
+
                 if (index === 6) {
+
                   cell.classList.add(
                     "verbrauch-warmwasser"
                   );
@@ -928,7 +1559,9 @@
 
 
             const actionCell =
-              document.createElement("td");
+              document.createElement(
+                "td"
+              );
 
             const deleteButton =
               document.createElement(
@@ -936,7 +1569,8 @@
               );
 
 
-            deleteButton.type = "button";
+            deleteButton.type =
+              "button";
 
             deleteButton.className =
               "delete-button";
@@ -953,6 +1587,7 @@
                   readings.indexOf(
                     reading
                   );
+
 
                 deleteReading(
                   originalIndex
@@ -1008,6 +1643,7 @@
 
 
       message.textContent = "";
+
       message.className =
         "form-message";
 
@@ -1121,6 +1757,7 @@
 
 
       renderReadings();
+
       renderCharts();
 
 
@@ -1129,11 +1766,15 @@
         .value = "";
 
       document
-        .getElementById("warmwasser")
+        .getElementById(
+          "warmwasser"
+        )
         .value = "";
 
       document
-        .getElementById("kaltwasser")
+        .getElementById(
+          "kaltwasser"
+        )
         .value = "";
 
 
@@ -1160,6 +1801,7 @@
 
 
       renderReadings();
+
       renderCharts();
     }
 
@@ -1384,6 +2026,7 @@
           return padding.left;
         }
 
+
         return (
           padding.left +
           graphWidth *
@@ -1397,6 +2040,7 @@
 
         const range =
           maximum - minimum || 1;
+
 
         return (
           padding.top +
@@ -1988,6 +2632,7 @@
           passwort
         );
 
+
         loginPasswort.value = "";
 
       } catch (error) {
@@ -2058,6 +2703,7 @@
             name: artikel
           }
         );
+
 
         itemInput.value = "";
 
@@ -2132,6 +2778,16 @@
                     "li"
                   );
 
+                const text =
+                  document.createElement(
+                    "span"
+                  );
+
+                const button =
+                  document.createElement(
+                    "button"
+                  );
+
 
                 listItem.style.display =
                   "flex";
@@ -2145,19 +2801,9 @@
                     "center";
 
 
-                const text =
-                  document.createElement(
-                    "span"
-                  );
-
                 text.textContent =
                   data.name || "";
 
-
-                const button =
-                  document.createElement(
-                    "button"
-                  );
 
                 button.type = "button";
 
@@ -2179,6 +2825,7 @@
                   text,
                   button
                 );
+
 
                 shoppingList.appendChild(
                   listItem
@@ -2220,6 +2867,7 @@
           angemeldeterBenutzer.textContent =
             "Angemeldet als: " +
             user.email;
+
 
           startShoppingListener();
 
