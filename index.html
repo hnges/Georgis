@@ -49,6 +49,11 @@
       font-size: 0.95rem;
     }
 
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
     .tab-button {
       padding: 12px 20px;
       background: #2d6cdf;
@@ -245,13 +250,10 @@
     }
   </style>
 
-  <!-- Bibliothek für den Excel-Export -->
   <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
-
-  <!-- Anmeldung -->
 
   <section
     id="loginBereich"
@@ -301,8 +303,6 @@
   </section>
 
 
-  <!-- Website wird erst nach der Anmeldung angezeigt -->
-
   <div id="websiteBereich" hidden>
 
     <h1>🏠 Georgis</h1>
@@ -337,8 +337,6 @@
     </nav>
 
 
-    <!-- Einkaufsliste -->
-
     <section
       id="einkauf"
       class="tab active"
@@ -371,8 +369,6 @@
     </section>
 
 
-    <!-- Essensplanung -->
-
     <section
       id="essensplanung"
       class="tab"
@@ -401,8 +397,6 @@
       </nav>
 
 
-      <!-- Unterreiter: Essensplanung der Woche -->
-
       <div
         id="wochenplanung"
         class="meal-tab active-meal"
@@ -410,7 +404,7 @@
         <h3>Essensplanung der Woche</h3>
 
         <p class="empty-message">
-          Änderungen werden automatisch gespeichert.
+          Änderungen werden automatisch und geräteübergreifend gespeichert.
         </p>
 
         <div class="table-wrapper">
@@ -444,8 +438,6 @@
         ></p>
       </div>
 
-
-      <!-- Unterreiter: Rezeptideen -->
 
       <div
         id="rezeptideen"
@@ -494,8 +486,6 @@
     </section>
 
 
-    <!-- Zählerstände -->
-
     <section
       id="zaehler"
       class="tab"
@@ -531,8 +521,6 @@
         </button>
       </nav>
 
-
-      <!-- Unterreiter: Eingabe -->
 
       <div
         id="eingabe"
@@ -603,8 +591,6 @@
       </div>
 
 
-      <!-- Unterreiter: Datentabelle -->
-
       <div
         id="tabelle"
         class="meter-tab"
@@ -623,9 +609,7 @@
           <table>
             <thead>
               <tr>
-                <th rowspan="2">
-                  Datum
-                </th>
+                <th rowspan="2">Datum</th>
 
                 <th colspan="2">
                   Strom (kWh)
@@ -639,9 +623,7 @@
                   Warmwasser (m³)
                 </th>
 
-                <th rowspan="2">
-                  Aktion
-                </th>
+                <th rowspan="2">Aktion</th>
               </tr>
 
               <tr>
@@ -678,8 +660,6 @@
       </div>
 
 
-      <!-- Unterreiter: Diagramme -->
-
       <div
         id="diagramme"
         class="meter-tab"
@@ -700,8 +680,6 @@
       </div>
     </section>
 
-
-    <!-- Abmeldung -->
 
     <div
       style="
@@ -727,11 +705,9 @@
   </div>
 
 
-  <!-- Navigation, Essensplanung, Zählerstände und Diagramme -->
-
   <script>
 
-    /* Hauptreiter */
+    /* Hauptnavigation */
 
     const tabButtons =
       document.querySelectorAll(
@@ -830,6 +806,7 @@
 
 
       if (tabId === "diagramme") {
+
         requestAnimationFrame(
           renderCharts
         );
@@ -902,543 +879,7 @@
     );
 
 
-    /* Essensplanung der Woche */
-
-    const weekdays = [
-      "Montag",
-      "Dienstag",
-      "Mittwoch",
-      "Donnerstag",
-      "Freitag",
-      "Samstag",
-      "Sonntag"
-    ];
-
-
-    let mealPlan =
-      JSON.parse(
-        localStorage.getItem(
-          "mealPlan"
-        )
-      ) || {};
-
-
-    let mealPlanMessageTimeout =
-      null;
-
-
-    function showMealPlanMessage(
-      text,
-      type
-    ) {
-
-      const message =
-        document.getElementById(
-          "mealPlanMessage"
-        );
-
-
-      message.textContent = text;
-
-      message.className =
-        "form-message " + type;
-
-
-      if (mealPlanMessageTimeout) {
-
-        clearTimeout(
-          mealPlanMessageTimeout
-        );
-      }
-
-
-      mealPlanMessageTimeout =
-        setTimeout(
-          () => {
-
-            message.textContent = "";
-
-            message.className =
-              "form-message";
-          },
-          1800
-        );
-    }
-
-
-    function saveMealPlanInput(input) {
-
-      const day =
-        input.dataset.day;
-
-      const meal =
-        input.dataset.meal;
-
-
-      if (!mealPlan[day]) {
-        mealPlan[day] = {};
-      }
-
-
-      mealPlan[day][meal] =
-        input.value;
-
-
-      localStorage.setItem(
-        "mealPlan",
-        JSON.stringify(mealPlan)
-      );
-
-
-      showMealPlanMessage(
-        "Änderung automatisch gespeichert.",
-        "success"
-      );
-    }
-
-
-    function renderMealPlan() {
-
-      const tableBody =
-        document.getElementById(
-          "mealPlanBody"
-        );
-
-
-      tableBody.innerHTML = "";
-
-
-      weekdays.forEach((day) => {
-
-        const row =
-          document.createElement("tr");
-
-        const dayCell =
-          document.createElement("th");
-
-        const lunchCell =
-          document.createElement("td");
-
-        const dinnerCell =
-          document.createElement("td");
-
-        const lunchInput =
-          document.createElement("input");
-
-        const dinnerInput =
-          document.createElement("input");
-
-
-        dayCell.textContent = day;
-
-
-        lunchInput.type = "text";
-
-        lunchInput.placeholder =
-          "Mittagessen eintragen";
-
-        lunchInput.value =
-          mealPlan[day]?.lunch || "";
-
-        lunchInput.dataset.day = day;
-
-        lunchInput.dataset.meal =
-          "lunch";
-
-
-        dinnerInput.type = "text";
-
-        dinnerInput.placeholder =
-          "Abendessen eintragen";
-
-        dinnerInput.value =
-          mealPlan[day]?.dinner || "";
-
-        dinnerInput.dataset.day = day;
-
-        dinnerInput.dataset.meal =
-          "dinner";
-
-
-        lunchInput.addEventListener(
-          "input",
-          () => {
-
-            saveMealPlanInput(
-              lunchInput
-            );
-          }
-        );
-
-
-        dinnerInput.addEventListener(
-          "input",
-          () => {
-
-            saveMealPlanInput(
-              dinnerInput
-            );
-          }
-        );
-
-
-        lunchCell.appendChild(
-          lunchInput
-        );
-
-        dinnerCell.appendChild(
-          dinnerInput
-        );
-
-
-        row.append(
-          dayCell,
-          lunchCell,
-          dinnerCell
-        );
-
-
-        tableBody.appendChild(row);
-      });
-    }
-
-
-    function clearMealPlan() {
-
-      const shouldClear =
-        window.confirm(
-          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
-        );
-
-
-      if (!shouldClear) {
-        return;
-      }
-
-
-      mealPlan = {};
-
-
-      localStorage.removeItem(
-        "mealPlan"
-      );
-
-
-      document
-        .querySelectorAll(
-          "#mealPlanBody input"
-        )
-        .forEach((input) => {
-
-          input.value = "";
-        });
-
-
-      showMealPlanMessage(
-        "Der Wochenplan wurde vollständig gelöscht.",
-        "success"
-      );
-    }
-
-
-    document
-      .getElementById(
-        "clearMealPlanButton"
-      )
-      .addEventListener(
-        "click",
-        clearMealPlan
-      );
-
-
-    renderMealPlan();
-
-
-    /* Rezeptideen */
-
-    let recipes =
-      JSON.parse(
-        localStorage.getItem(
-          "recipes"
-        )
-      ) || [];
-
-
-    function renderRecipes() {
-
-      const recipeList =
-        document.getElementById(
-          "recipeList"
-        );
-
-
-      recipeList.innerHTML = "";
-
-
-      recipes.forEach(
-        (recipe, index) => {
-
-          const listItem =
-            document.createElement("li");
-
-          const content =
-            document.createElement("div");
-
-          const name =
-            document.createElement(
-              "strong"
-            );
-
-          const deleteButton =
-            document.createElement(
-              "button"
-            );
-
-
-          listItem.style.display =
-            "flex";
-
-          listItem.style
-            .justifyContent =
-              "space-between";
-
-          listItem.style.alignItems =
-            "center";
-
-          listItem.style.gap =
-            "10px";
-
-
-          name.textContent =
-            recipe.name;
-
-
-          content.appendChild(name);
-
-
-          if (recipe.url) {
-
-            const lineBreak =
-              document.createElement("br");
-
-            const link =
-              document.createElement("a");
-
-
-            link.href = recipe.url;
-
-            link.target = "_blank";
-
-            link.rel =
-              "noopener noreferrer";
-
-            link.className =
-              "recipe-link";
-
-            link.textContent =
-              recipe.url;
-
-
-            content.appendChild(
-              lineBreak
-            );
-
-            content.appendChild(link);
-          }
-
-
-          deleteButton.type =
-            "button";
-
-          deleteButton.className =
-            "delete-button";
-
-          deleteButton.textContent =
-            "Löschen";
-
-
-          deleteButton.addEventListener(
-            "click",
-            () => {
-
-              recipes.splice(
-                index,
-                1
-              );
-
-
-              localStorage.setItem(
-                "recipes",
-                JSON.stringify(recipes)
-              );
-
-
-              renderRecipes();
-            }
-          );
-
-
-          listItem.append(
-            content,
-            deleteButton
-          );
-
-
-          recipeList.appendChild(
-            listItem
-          );
-        }
-      );
-    }
-
-
-    function addRecipe() {
-
-      const nameInput =
-        document.getElementById(
-          "recipeName"
-        );
-
-      const urlInput =
-        document.getElementById(
-          "recipeUrl"
-        );
-
-      const message =
-        document.getElementById(
-          "recipeMessage"
-        );
-
-
-      const name =
-        nameInput.value.trim();
-
-      const url =
-        urlInput.value.trim();
-
-
-      message.textContent = "";
-
-      message.className =
-        "form-message";
-
-
-      if (!name) {
-
-        message.textContent =
-          "Bitte gib den Namen des Gerichts ein.";
-
-        message.className =
-          "form-message error";
-
-        return;
-      }
-
-
-      if (url) {
-
-        try {
-
-          const parsedUrl =
-            new URL(url);
-
-
-          if (
-            parsedUrl.protocol !==
-              "http:" &&
-            parsedUrl.protocol !==
-              "https:"
-          ) {
-            throw new Error(
-              "Ungültiges Protokoll"
-            );
-          }
-
-        } catch (error) {
-
-          message.textContent =
-            "Bitte gib eine gültige URL ein.";
-
-          message.className =
-            "form-message error";
-
-          return;
-        }
-      }
-
-
-      recipes.push({
-        name,
-        url
-      });
-
-
-      localStorage.setItem(
-        "recipes",
-        JSON.stringify(recipes)
-      );
-
-
-      nameInput.value = "";
-
-      urlInput.value = "";
-
-
-      message.textContent =
-        "Rezeptidee wurde gespeichert.";
-
-      message.className =
-        "form-message success";
-
-
-      renderRecipes();
-    }
-
-
-    document
-      .getElementById(
-        "addRecipeButton"
-      )
-      .addEventListener(
-        "click",
-        addRecipe
-      );
-
-
-    document
-      .getElementById(
-        "recipeName"
-      )
-      .addEventListener(
-        "keydown",
-        (event) => {
-
-          if (event.key === "Enter") {
-            addRecipe();
-          }
-        }
-      );
-
-
-    document
-      .getElementById(
-        "recipeUrl"
-      )
-      .addEventListener(
-        "keydown",
-        (event) => {
-
-          if (event.key === "Enter") {
-            addRecipe();
-          }
-        }
-      );
-
-
-    renderRecipes();
-
-
-    /* Zählerstände */
+    /* Zählerstände bleiben lokal gespeichert */
 
     let readings =
       JSON.parse(
@@ -1688,14 +1129,10 @@
               "click",
               () => {
 
-                const originalIndex =
+                deleteReading(
                   readings.indexOf(
                     reading
-                  );
-
-
-                deleteReading(
-                  originalIndex
+                  )
                 );
               }
             );
@@ -1770,14 +1207,10 @@
       }
 
 
-      const selectedDate =
+      if (
         new Date(
           date + "T00:00:00"
-        );
-
-
-      if (
-        selectedDate.getDate() !== 1
+        ).getDate() !== 1
       ) {
 
         message.textContent =
@@ -1790,14 +1223,12 @@
       }
 
 
-      const dateAlreadyExists =
+      if (
         readings.some(
           (reading) =>
             reading.date === date
-        );
-
-
-      if (dateAlreadyExists) {
+        )
+      ) {
 
         message.textContent =
           "Für diesen Monat ist bereits ein Zählerstand gespeichert.";
@@ -1911,8 +1342,6 @@
     }
 
 
-    /* Excel-Export */
-
     function exportExcel() {
 
       if (readings.length === 0) {
@@ -2003,8 +1432,6 @@
       );
     }
 
-
-    /* Liniendiagramme */
 
     function drawLineChart(
       canvas,
@@ -2494,8 +1921,6 @@
   </script>
 
 
-  <!-- Firebase-Anmeldung und Einkaufsliste -->
-
   <script type="module">
 
     import {
@@ -2508,6 +1933,7 @@
       collection,
       addDoc,
       deleteDoc,
+      setDoc,
       doc,
       onSnapshot
     } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
@@ -2558,6 +1984,17 @@
         db,
         "shopping"
       );
+
+
+    const weekdays = [
+      "Montag",
+      "Dienstag",
+      "Mittwoch",
+      "Donnerstag",
+      "Freitag",
+      "Samstag",
+      "Sonntag"
+    ];
 
 
     const loginBereich =
@@ -2620,9 +2057,741 @@
         "shoppingMessage"
       );
 
+    const mealPlanBody =
+      document.getElementById(
+        "mealPlanBody"
+      );
 
-    let shoppingUnsubscribe =
-      null;
+    const mealPlanMessage =
+      document.getElementById(
+        "mealPlanMessage"
+      );
+
+    const clearMealPlanButton =
+      document.getElementById(
+        "clearMealPlanButton"
+      );
+
+    const recipeName =
+      document.getElementById(
+        "recipeName"
+      );
+
+    const recipeUrl =
+      document.getElementById(
+        "recipeUrl"
+      );
+
+    const recipeList =
+      document.getElementById(
+        "recipeList"
+      );
+
+    const recipeMessage =
+      document.getElementById(
+        "recipeMessage"
+      );
+
+    const addRecipeButton =
+      document.getElementById(
+        "addRecipeButton"
+      );
+
+
+    let shoppingUnsubscribe = null;
+
+    let mealPlanUnsubscribe = null;
+
+    let recipesUnsubscribe = null;
+
+    let currentMealPlan = {};
+
+    let mealSaveTimer = null;
+
+    let mealMessageTimer = null;
+
+
+    function setMealMessage(
+      text,
+      type = ""
+    ) {
+
+      mealPlanMessage.textContent =
+        text;
+
+      mealPlanMessage.className =
+        type
+          ? "form-message " + type
+          : "form-message";
+
+
+      if (mealMessageTimer) {
+
+        clearTimeout(
+          mealMessageTimer
+        );
+      }
+
+
+      if (text) {
+
+        mealMessageTimer =
+          setTimeout(
+            () => {
+
+              mealPlanMessage.textContent =
+                "";
+
+              mealPlanMessage.className =
+                "form-message";
+            },
+            1800
+          );
+      }
+    }
+
+
+    function renderMealPlan(
+      mealPlan
+    ) {
+
+      const activeElement =
+        document.activeElement;
+
+      const activeDay =
+        activeElement?.dataset?.day;
+
+      const activeMeal =
+        activeElement?.dataset?.meal;
+
+      const cursorPosition =
+        activeElement?.selectionStart;
+
+
+      mealPlanBody.innerHTML = "";
+
+
+      weekdays.forEach((day) => {
+
+        const row =
+          document.createElement("tr");
+
+        const dayCell =
+          document.createElement("th");
+
+        const lunchCell =
+          document.createElement("td");
+
+        const dinnerCell =
+          document.createElement("td");
+
+        const lunchInput =
+          document.createElement("input");
+
+        const dinnerInput =
+          document.createElement("input");
+
+
+        dayCell.textContent = day;
+
+
+        lunchInput.type = "text";
+
+        lunchInput.placeholder =
+          "Mittagessen eintragen";
+
+        lunchInput.value =
+          mealPlan[day]?.lunch || "";
+
+        lunchInput.dataset.day = day;
+
+        lunchInput.dataset.meal =
+          "lunch";
+
+
+        dinnerInput.type = "text";
+
+        dinnerInput.placeholder =
+          "Abendessen eintragen";
+
+        dinnerInput.value =
+          mealPlan[day]?.dinner || "";
+
+        dinnerInput.dataset.day = day;
+
+        dinnerInput.dataset.meal =
+          "dinner";
+
+
+        lunchInput.addEventListener(
+          "input",
+          handleMealInput
+        );
+
+        dinnerInput.addEventListener(
+          "input",
+          handleMealInput
+        );
+
+
+        lunchCell.appendChild(
+          lunchInput
+        );
+
+        dinnerCell.appendChild(
+          dinnerInput
+        );
+
+
+        row.append(
+          dayCell,
+          lunchCell,
+          dinnerCell
+        );
+
+
+        mealPlanBody.appendChild(row);
+      });
+
+
+      if (
+        activeDay &&
+        activeMeal
+      ) {
+
+        const input =
+          mealPlanBody.querySelector(
+            `[data-day="${activeDay}"][data-meal="${activeMeal}"]`
+          );
+
+
+        if (input) {
+
+          input.focus();
+
+
+          if (
+            Number.isInteger(
+              cursorPosition
+            )
+          ) {
+
+            input.setSelectionRange(
+              cursorPosition,
+              cursorPosition
+            );
+          }
+        }
+      }
+    }
+
+
+    function handleMealInput(event) {
+
+      const input =
+        event.currentTarget;
+
+      const day =
+        input.dataset.day;
+
+      const meal =
+        input.dataset.meal;
+
+
+      if (!currentMealPlan[day]) {
+
+        currentMealPlan[day] = {
+          lunch: "",
+          dinner: ""
+        };
+      }
+
+
+      currentMealPlan[day][meal] =
+        input.value;
+
+
+      setMealMessage(
+        "Wird gespeichert ..."
+      );
+
+
+      if (mealSaveTimer) {
+
+        clearTimeout(
+          mealSaveTimer
+        );
+      }
+
+
+      mealSaveTimer =
+        setTimeout(
+          saveMealPlan,
+          400
+        );
+    }
+
+
+    async function saveMealPlan() {
+
+      if (!auth.currentUser) {
+        return;
+      }
+
+
+      const mealPlanRef =
+        doc(
+          db,
+          "users",
+          auth.currentUser.uid,
+          "mealPlanning",
+          "weeklyPlan"
+        );
+
+
+      try {
+
+        await setDoc(
+          mealPlanRef,
+          {
+            days: currentMealPlan
+          }
+        );
+
+
+        setMealMessage(
+          "Geräteübergreifend gespeichert.",
+          "success"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Wochenplan konnte nicht gespeichert werden:",
+          error
+        );
+
+
+        setMealMessage(
+          "Wochenplan konnte nicht gespeichert werden.",
+          "error"
+        );
+      }
+    }
+
+
+    async function clearMealPlan() {
+
+      if (!auth.currentUser) {
+        return;
+      }
+
+
+      const shouldClear =
+        window.confirm(
+          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
+        );
+
+
+      if (!shouldClear) {
+        return;
+      }
+
+
+      if (mealSaveTimer) {
+
+        clearTimeout(
+          mealSaveTimer
+        );
+      }
+
+
+      currentMealPlan = {};
+
+
+      const mealPlanRef =
+        doc(
+          db,
+          "users",
+          auth.currentUser.uid,
+          "mealPlanning",
+          "weeklyPlan"
+        );
+
+
+      try {
+
+        await setDoc(
+          mealPlanRef,
+          {
+            days: {}
+          }
+        );
+
+
+        setMealMessage(
+          "Der Wochenplan wurde vollständig gelöscht.",
+          "success"
+        );
+
+      } catch (error) {
+
+        console.error(
+          "Wochenplan konnte nicht gelöscht werden:",
+          error
+        );
+
+
+        setMealMessage(
+          "Wochenplan konnte nicht gelöscht werden.",
+          "error"
+        );
+      }
+    }
+
+
+    function startMealPlanListener(
+      user
+    ) {
+
+      if (mealPlanUnsubscribe) {
+
+        mealPlanUnsubscribe();
+      }
+
+
+      const mealPlanRef =
+        doc(
+          db,
+          "users",
+          user.uid,
+          "mealPlanning",
+          "weeklyPlan"
+        );
+
+
+      mealPlanUnsubscribe =
+        onSnapshot(
+          mealPlanRef,
+
+          (snapshot) => {
+
+            currentMealPlan =
+              snapshot.exists()
+                ? snapshot.data().days || {}
+                : {};
+
+
+            renderMealPlan(
+              currentMealPlan
+            );
+          },
+
+          (error) => {
+
+            console.error(
+              "Wochenplan konnte nicht geladen werden:",
+              error
+            );
+
+
+            setMealMessage(
+              "Wochenplan konnte nicht geladen werden.",
+              "error"
+            );
+          }
+        );
+    }
+
+
+    function renderRecipes(
+      snapshot
+    ) {
+
+      recipeList.innerHTML = "";
+
+
+      snapshot.forEach(
+        (recipeDocument) => {
+
+          const recipe =
+            recipeDocument.data();
+
+          const listItem =
+            document.createElement("li");
+
+          const content =
+            document.createElement("div");
+
+          const name =
+            document.createElement(
+              "strong"
+            );
+
+          const deleteButton =
+            document.createElement(
+              "button"
+            );
+
+
+          listItem.style.display =
+            "flex";
+
+          listItem.style
+            .justifyContent =
+              "space-between";
+
+          listItem.style.alignItems =
+            "center";
+
+          listItem.style.gap =
+            "10px";
+
+
+          name.textContent =
+            recipe.name || "";
+
+
+          content.appendChild(name);
+
+
+          if (recipe.url) {
+
+            const lineBreak =
+              document.createElement("br");
+
+            const link =
+              document.createElement("a");
+
+
+            link.href =
+              recipe.url;
+
+            link.target =
+              "_blank";
+
+            link.rel =
+              "noopener noreferrer";
+
+            link.className =
+              "recipe-link";
+
+            link.textContent =
+              recipe.url;
+
+
+            content.append(
+              lineBreak,
+              link
+            );
+          }
+
+
+          deleteButton.type =
+            "button";
+
+          deleteButton.className =
+            "delete-button";
+
+          deleteButton.textContent =
+            "Löschen";
+
+
+          deleteButton.addEventListener(
+            "click",
+            async () => {
+
+              try {
+
+                await deleteDoc(
+                  recipeDocument.ref
+                );
+
+              } catch (error) {
+
+                console.error(
+                  "Rezeptidee konnte nicht gelöscht werden:",
+                  error
+                );
+
+
+                recipeMessage.textContent =
+                  "Rezeptidee konnte nicht gelöscht werden.";
+
+                recipeMessage.className =
+                  "form-message error";
+              }
+            }
+          );
+
+
+          listItem.append(
+            content,
+            deleteButton
+          );
+
+
+          recipeList.appendChild(
+            listItem
+          );
+        }
+      );
+    }
+
+
+    function startRecipesListener(
+      user
+    ) {
+
+      if (recipesUnsubscribe) {
+
+        recipesUnsubscribe();
+      }
+
+
+      const recipesRef =
+        collection(
+          db,
+          "users",
+          user.uid,
+          "recipes"
+        );
+
+
+      recipesUnsubscribe =
+        onSnapshot(
+          recipesRef,
+
+          renderRecipes,
+
+          (error) => {
+
+            console.error(
+              "Rezeptideen konnten nicht geladen werden:",
+              error
+            );
+
+
+            recipeMessage.textContent =
+              "Rezeptideen konnten nicht geladen werden.";
+
+            recipeMessage.className =
+              "form-message error";
+          }
+        );
+    }
+
+
+    async function addRecipe() {
+
+      if (!auth.currentUser) {
+        return;
+      }
+
+
+      const name =
+        recipeName.value.trim();
+
+      const url =
+        recipeUrl.value.trim();
+
+
+      recipeMessage.textContent = "";
+
+      recipeMessage.className =
+        "form-message";
+
+
+      if (!name) {
+
+        recipeMessage.textContent =
+          "Bitte gib den Namen des Gerichts ein.";
+
+        recipeMessage.className =
+          "form-message error";
+
+        return;
+      }
+
+
+      if (url) {
+
+        try {
+
+          const parsedUrl =
+            new URL(url);
+
+
+          if (
+            parsedUrl.protocol !==
+              "http:" &&
+            parsedUrl.protocol !==
+              "https:"
+          ) {
+            throw new Error(
+              "Ungültiges Protokoll"
+            );
+          }
+
+        } catch (error) {
+
+          recipeMessage.textContent =
+            "Bitte gib eine gültige URL ein.";
+
+          recipeMessage.className =
+            "form-message error";
+
+          return;
+        }
+      }
+
+
+      const recipesRef =
+        collection(
+          db,
+          "users",
+          auth.currentUser.uid,
+          "recipes"
+        );
+
+
+      try {
+
+        await addDoc(
+          recipesRef,
+          {
+            name,
+            url
+          }
+        );
+
+
+        recipeName.value = "";
+
+        recipeUrl.value = "";
+
+
+        recipeMessage.textContent =
+          "Rezeptidee wurde geräteübergreifend gespeichert.";
+
+        recipeMessage.className =
+          "form-message success";
+
+      } catch (error) {
+
+        console.error(
+          "Rezeptidee konnte nicht gespeichert werden:",
+          error
+        );
+
+
+        recipeMessage.textContent =
+          "Rezeptidee konnte nicht gespeichert werden.";
+
+        recipeMessage.className =
+          "form-message error";
+      }
+    }
 
 
     function getLoginErrorMessage(
@@ -2634,50 +2803,38 @@
         case "auth/invalid-credential":
 
           return (
-            "E-Mail-Adresse oder " +
-            "Passwort ist falsch."
+            "E-Mail-Adresse oder Passwort ist falsch."
           );
-
 
         case "auth/invalid-email":
 
           return (
-            "Die E-Mail-Adresse " +
-            "ist ungültig."
+            "Die E-Mail-Adresse ist ungültig."
           );
-
 
         case "auth/user-disabled":
 
           return (
-            "Dieses Benutzerkonto " +
-            "ist deaktiviert."
+            "Dieses Benutzerkonto ist deaktiviert."
           );
-
 
         case "auth/operation-not-allowed":
 
           return (
-            "E-Mail/Passwort ist " +
-            "in Firebase nicht aktiviert."
+            "E-Mail/Passwort ist in Firebase nicht aktiviert."
           );
-
 
         case "auth/too-many-requests":
 
           return (
-            "Zu viele Versuche. " +
-            "Bitte später erneut versuchen."
+            "Zu viele Versuche. Bitte später erneut versuchen."
           );
-
 
         case "auth/network-request-failed":
 
           return (
-            "Netzwerkfehler. Bitte " +
-            "Internetverbindung prüfen."
+            "Netzwerkfehler. Bitte Internetverbindung prüfen."
           );
-
 
         default:
 
@@ -2849,6 +3006,7 @@
     function startShoppingListener() {
 
       if (shoppingUnsubscribe) {
+
         shoppingUnsubscribe();
       }
 
@@ -2900,9 +3058,11 @@
                   data.name || "";
 
 
-                button.type = "button";
+                button.type =
+                  "button";
 
-                button.textContent = "✔";
+                button.textContent =
+                  "✔";
 
 
                 button.addEventListener(
@@ -2947,17 +3107,50 @@
     }
 
 
+    function stopListeners() {
+
+      if (shoppingUnsubscribe) {
+
+        shoppingUnsubscribe();
+
+        shoppingUnsubscribe = null;
+      }
+
+
+      if (mealPlanUnsubscribe) {
+
+        mealPlanUnsubscribe();
+
+        mealPlanUnsubscribe = null;
+      }
+
+
+      if (recipesUnsubscribe) {
+
+        recipesUnsubscribe();
+
+        recipesUnsubscribe = null;
+      }
+    }
+
+
     onAuthStateChanged(
       auth,
       (user) => {
 
+        stopListeners();
+
+
         if (user) {
 
-          loginBereich.hidden = true;
+          loginBereich.hidden =
+            true;
 
-          websiteBereich.hidden = false;
+          websiteBereich.hidden =
+            false;
 
-          loginMessage.textContent = "";
+          loginMessage.textContent =
+            "";
 
           angemeldeterBenutzer.textContent =
             "Angemeldet als: " +
@@ -2966,26 +3159,72 @@
 
           startShoppingListener();
 
+          startMealPlanListener(
+            user
+          );
+
+          startRecipesListener(
+            user
+          );
+
         } else {
 
-          websiteBereich.hidden = true;
+          websiteBereich.hidden =
+            true;
 
-          loginBereich.hidden = false;
+          loginBereich.hidden =
+            false;
 
           angemeldeterBenutzer.textContent =
             "";
 
+          shoppingList.innerHTML =
+            "";
 
-          if (shoppingUnsubscribe) {
+          mealPlanBody.innerHTML =
+            "";
 
-            shoppingUnsubscribe();
+          recipeList.innerHTML =
+            "";
 
-            shoppingUnsubscribe =
-              null;
-          }
+          currentMealPlan = {};
+        }
+      }
+    );
 
 
-          shoppingList.innerHTML = "";
+    clearMealPlanButton
+      .addEventListener(
+        "click",
+        clearMealPlan
+      );
+
+
+    addRecipeButton.addEventListener(
+      "click",
+      addRecipe
+    );
+
+
+    recipeName.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+
+          addRecipe();
+        }
+      }
+    );
+
+
+    recipeUrl.addEventListener(
+      "keydown",
+      (event) => {
+
+        if (event.key === "Enter") {
+
+          addRecipe();
         }
       }
     );
@@ -3014,6 +3253,7 @@
       (event) => {
 
         if (event.key === "Enter") {
+
           anmelden();
         }
       }
@@ -3025,6 +3265,7 @@
       (event) => {
 
         if (event.key === "Enter") {
+
           addItem();
         }
       }
