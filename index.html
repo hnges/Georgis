@@ -130,9 +130,20 @@
       padding: 6px 9px;
     }
 
+    .delete-button:hover {
+      background: #b91c1c;
+    }
+
     .shopping-row {
       display: flex;
       gap: 10px;
+    }
+
+    .meal-plan-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 15px;
     }
 
     ul {
@@ -227,7 +238,8 @@
 
       .tabs,
       .subtabs,
-      .shopping-row {
+      .shopping-row,
+      .meal-plan-actions {
         flex-direction: column;
       }
     }
@@ -397,6 +409,10 @@
       >
         <h3>Essensplanung der Woche</h3>
 
+        <p class="empty-message">
+          Änderungen werden automatisch gespeichert.
+        </p>
+
         <div class="table-wrapper">
           <table class="meal-plan-table">
             <thead>
@@ -411,13 +427,15 @@
           </table>
         </div>
 
-        <button
-          class="primary-button"
-          type="button"
-          id="saveMealPlanButton"
-        >
-          Wochenplan speichern
-        </button>
+        <div class="meal-plan-actions">
+          <button
+            class="delete-button"
+            type="button"
+            id="clearMealPlanButton"
+          >
+            Wochenplan vollständig löschen
+          </button>
+        </div>
 
         <p
           id="mealPlanMessage"
@@ -905,6 +923,80 @@
       ) || {};
 
 
+    let mealPlanMessageTimeout =
+      null;
+
+
+    function showMealPlanMessage(
+      text,
+      type
+    ) {
+
+      const message =
+        document.getElementById(
+          "mealPlanMessage"
+        );
+
+
+      message.textContent = text;
+
+      message.className =
+        "form-message " + type;
+
+
+      if (mealPlanMessageTimeout) {
+
+        clearTimeout(
+          mealPlanMessageTimeout
+        );
+      }
+
+
+      mealPlanMessageTimeout =
+        setTimeout(
+          () => {
+
+            message.textContent = "";
+
+            message.className =
+              "form-message";
+          },
+          1800
+        );
+    }
+
+
+    function saveMealPlanInput(input) {
+
+      const day =
+        input.dataset.day;
+
+      const meal =
+        input.dataset.meal;
+
+
+      if (!mealPlan[day]) {
+        mealPlan[day] = {};
+      }
+
+
+      mealPlan[day][meal] =
+        input.value;
+
+
+      localStorage.setItem(
+        "mealPlan",
+        JSON.stringify(mealPlan)
+      );
+
+
+      showMealPlanMessage(
+        "Änderung automatisch gespeichert.",
+        "success"
+      );
+    }
+
+
     function renderMealPlan() {
 
       const tableBody =
@@ -968,6 +1060,28 @@
           "dinner";
 
 
+        lunchInput.addEventListener(
+          "input",
+          () => {
+
+            saveMealPlanInput(
+              lunchInput
+            );
+          }
+        );
+
+
+        dinnerInput.addEventListener(
+          "input",
+          () => {
+
+            saveMealPlanInput(
+              dinnerInput
+            );
+          }
+        );
+
+
         lunchCell.appendChild(
           lunchInput
         );
@@ -989,60 +1103,51 @@
     }
 
 
-    function saveMealPlan() {
+    function clearMealPlan() {
 
-      const inputs =
-        document.querySelectorAll(
-          "#mealPlanBody input"
+      const shouldClear =
+        window.confirm(
+          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
         );
 
 
-      inputs.forEach((input) => {
-
-        const day =
-          input.dataset.day;
-
-        const meal =
-          input.dataset.meal;
+      if (!shouldClear) {
+        return;
+      }
 
 
-        if (!mealPlan[day]) {
-          mealPlan[day] = {};
-        }
+      mealPlan = {};
 
 
-        mealPlan[day][meal] =
-          input.value.trim();
-      });
-
-
-      localStorage.setItem(
-        "mealPlan",
-        JSON.stringify(mealPlan)
+      localStorage.removeItem(
+        "mealPlan"
       );
 
 
-      const message =
-        document.getElementById(
-          "mealPlanMessage"
-        );
+      document
+        .querySelectorAll(
+          "#mealPlanBody input"
+        )
+        .forEach((input) => {
+
+          input.value = "";
+        });
 
 
-      message.textContent =
-        "Wochenplan wurde gespeichert.";
-
-      message.className =
-        "form-message success";
+      showMealPlanMessage(
+        "Der Wochenplan wurde vollständig gelöscht.",
+        "success"
+      );
     }
 
 
     document
       .getElementById(
-        "saveMealPlanButton"
+        "clearMealPlanButton"
       )
       .addEventListener(
         "click",
-        saveMealPlan
+        clearMealPlan
       );
 
 
@@ -2053,8 +2158,6 @@
       }
 
 
-      /* Gitternetz und Y-Achse */
-
       context.strokeStyle =
         "#cbd5e1";
 
@@ -2112,8 +2215,6 @@
       }
 
 
-      /* X-Achsen-Beschriftung */
-
       context.fillStyle =
         "#64748b";
 
@@ -2132,8 +2233,6 @@
         }
       );
 
-
-      /* Linien zeichnen */
 
       chartSeries.forEach(
         (series) => {
@@ -2218,8 +2317,6 @@
         }
       );
 
-
-      /* Legende */
 
       chartSeries.forEach(
         (series, index) => {
@@ -2350,8 +2447,6 @@
         exportExcel
       );
 
-
-    /* Datum automatisch auf den 1. setzen */
 
     const today =
       new Date();
