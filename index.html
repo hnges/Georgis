@@ -53,14 +53,15 @@
       opacity: 0.65;
     }
 
-    .tab-button {
-      padding: 12px 20px;
+    .tab-button,
+    .primary-button {
       background: #2d6cdf;
       color: white;
     }
 
     .tab-button:hover,
-    .tab-button.is-active {
+    .tab-button.is-active,
+    .primary-button:hover {
       background: #1f4fa8;
     }
 
@@ -91,15 +92,18 @@
       background: white;
       padding: 20px;
       border-radius: 10px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+      box-shadow:
+        0 4px 14px
+        rgba(0, 0, 0, 0.06);
     }
 
     .form-grid {
       display: grid;
-      grid-template-columns: repeat(
-        auto-fit,
-        minmax(180px, 1fr)
-      );
+      grid-template-columns:
+        repeat(
+          auto-fit,
+          minmax(180px, 1fr)
+        );
       gap: 12px;
       margin-bottom: 15px;
     }
@@ -119,13 +123,9 @@
       font: inherit;
     }
 
-    .primary-button {
-      background: #2d6cdf;
-      color: white;
-    }
-
-    .primary-button:hover {
-      background: #1f4fa8;
+    input:disabled {
+      background: #f1f5f9;
+      color: #64748b;
     }
 
     .delete-button {
@@ -163,7 +163,8 @@
 
     .list-row {
       display: flex;
-      justify-content: space-between;
+      justify-content:
+        space-between;
       align-items: center;
       gap: 10px;
     }
@@ -244,7 +245,8 @@
     .footer-row {
       margin-top: 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content:
+        space-between;
       align-items: center;
       gap: 10px;
       flex-wrap: wrap;
@@ -317,8 +319,11 @@
     ></p>
   </section>
 
-  <!-- Inhalte nach Anmeldung -->
-  <div id="websiteBereich" hidden>
+  <!-- Website nach Anmeldung -->
+  <div
+    id="websiteBereich"
+    hidden
+  >
     <h1>🏠 Georgis</h1>
 
     <nav
@@ -415,14 +420,20 @@
         id="wochenplanung"
         class="meal-tab active-meal"
       >
-        <h3>Essensplanung der Woche</h3>
+        <h3>
+          Essensplanung der Woche
+        </h3>
 
         <p class="empty-message">
-          Änderungen werden automatisch gespeichert.
+          Änderungen werden gespeichert,
+          sobald das Eingabefeld verlassen
+          wird.
         </p>
 
         <div class="table-wrapper">
-          <table class="meal-plan-table">
+          <table
+            class="meal-plan-table"
+          >
             <thead>
               <tr>
                 <th>Tag</th>
@@ -431,12 +442,15 @@
               </tr>
             </thead>
 
-            <tbody id="mealPlanBody"></tbody>
+            <tbody
+              id="mealPlanBody"
+            ></tbody>
           </table>
         </div>
 
         <p class="empty-message">
-          Hier können weitere Essen als Liste gespeichert werden.
+          Hier können weitere Essen als
+          Liste gespeichert werden.
         </p>
 
         <div class="shopping-row">
@@ -461,9 +475,13 @@
           aria-live="polite"
         ></p>
 
-        <ul id="additionalMealList"></ul>
+        <ul
+          id="additionalMealList"
+        ></ul>
 
-        <div class="meal-plan-actions">
+        <div
+          class="meal-plan-actions"
+        >
           <button
             class="delete-button"
             type="button"
@@ -568,7 +586,9 @@
         id="eingabe"
         class="meter-tab active-meter"
       >
-        <h3>Neuen Zählerstand eintragen</h3>
+        <h3>
+          Neuen Zählerstand eintragen
+        </h3>
 
         <div class="form-grid">
           <label>
@@ -637,7 +657,9 @@
         id="tabelle"
         class="meter-tab"
       >
-        <h3>Gespeicherte Zählerstände</h3>
+        <h3>
+          Gespeicherte Zählerstände
+        </h3>
 
         <button
           class="primary-button"
@@ -651,35 +673,57 @@
           <table>
             <thead>
               <tr>
-                <th rowspan="2">Datum</th>
-                <th colspan="2">Strom (kWh)</th>
-                <th colspan="2">Kaltwasser (m³)</th>
-                <th colspan="2">Warmwasser (m³)</th>
-                <th rowspan="2">Aktion</th>
+                <th rowspan="2">
+                  Datum
+                </th>
+
+                <th colspan="2">
+                  Strom (kWh)
+                </th>
+
+                <th colspan="2">
+                  Kaltwasser (m³)
+                </th>
+
+                <th colspan="2">
+                  Warmwasser (m³)
+                </th>
+
+                <th rowspan="2">
+                  Aktion
+                </th>
               </tr>
 
               <tr>
                 <th>Zählerstand</th>
 
-                <th class="verbrauch-strom">
+                <th
+                  class="verbrauch-strom"
+                >
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
 
-                <th class="verbrauch-kaltwasser">
+                <th
+                  class="verbrauch-kaltwasser"
+                >
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
 
-                <th class="verbrauch-warmwasser">
+                <th
+                  class="verbrauch-warmwasser"
+                >
                   Verbrauch
                 </th>
               </tr>
             </thead>
 
-            <tbody id="meterTable"></tbody>
+            <tbody
+              id="meterTable"
+            ></tbody>
           </table>
         </div>
 
@@ -687,7 +731,8 @@
           id="emptyTableMessage"
           class="empty-message"
         >
-          Noch keine Zählerstände gespeichert.
+          Noch keine Zählerstände
+          gespeichert.
         </p>
       </div>
 
@@ -696,23 +741,33 @@
         id="diagramme"
         class="meter-tab"
       >
-        <h3>Verbrauch zum Vormonat</h3>
+        <h3>
+          Verbrauch zum Vormonat
+        </h3>
 
         <div class="chart-card">
           <h4>Stromverbrauch</h4>
-          <canvas id="stromChart"></canvas>
+
+          <canvas
+            id="stromChart"
+          ></canvas>
         </div>
 
         <div class="chart-card">
           <h4>Wasserverbrauch</h4>
-          <canvas id="wasserChart"></canvas>
+
+          <canvas
+            id="wasserChart"
+          ></canvas>
         </div>
       </div>
     </section>
 
     <!-- Abmeldung -->
     <div class="footer-row">
-      <span id="angemeldeterBenutzer"></span>
+      <span
+        id="angemeldeterBenutzer"
+      ></span>
 
       <button
         type="button"
@@ -724,10 +779,12 @@
     </div>
   </div>
 
-  <!-- Normales JavaScript -->
+  <!-- Bedienung der Website -->
   <script>
     function getElement(id) {
-      return document.getElementById(id);
+      return document.getElementById(
+        id
+      );
     }
 
     function showMessage(
@@ -858,7 +915,7 @@
       }
     );
 
-    /* Essensplanung-Unterreiter */
+    /* Essensplan-Unterreiter */
     const mealTabButtons =
       document.querySelectorAll(
         "[data-meal-tab]"
@@ -917,7 +974,8 @@
     let mealPlan = {};
     let additionalMeals = [];
     let mealPlanCloudReady = false;
-    let mealPlanSaveTimeout = null;
+    let mealPlanSaveInProgress =
+      false;
 
     window.setMealPlanCloudState =
       function (isReady) {
@@ -945,15 +1003,30 @@
             cloudAdditionalMeals
           )
             ? cloudAdditionalMeals
+                .filter(
+                  (meal) => {
+                    return (
+                      typeof meal ===
+                        "string" &&
+                      meal.trim() !==
+                        ""
+                    );
+                  }
+                )
             : [];
 
         mealPlanCloudReady = true;
 
-        renderMealPlan();
+        if (
+          !mealPlanSaveInProgress
+        ) {
+          renderMealPlan();
+        }
+
         renderAdditionalMeals();
       };
 
-    function saveMealPlanInput(
+    async function saveMealPlanInput(
       input
     ) {
       const day =
@@ -962,60 +1035,114 @@
       const meal =
         input.dataset.meal;
 
+      const newValue =
+        input.value.trim();
+
       if (!mealPlan[day]) {
         mealPlan[day] = {};
       }
 
-      mealPlan[day][meal] =
-        input.value;
+      const previousValue =
+        mealPlan[day][meal] || "";
 
-      clearTimeout(
-        mealPlanSaveTimeout
+      if (
+        previousValue === newValue
+      ) {
+        return;
+      }
+
+      if (
+        !mealPlanCloudReady ||
+        typeof window
+          .saveMealPlanToCloud !==
+          "function"
+      ) {
+        input.value =
+          previousValue;
+
+        showMessage(
+          "mealPlanMessage",
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+
+        return;
+      }
+
+      mealPlan[day][meal] =
+        newValue;
+
+      mealPlanSaveInProgress =
+        true;
+
+      input.disabled = true;
+
+      showMessage(
+        "mealPlanMessage",
+        "Änderung wird gespeichert...",
+        ""
       );
 
-      mealPlanSaveTimeout =
-        setTimeout(
-          async () => {
-            if (
-              !mealPlanCloudReady ||
-              typeof window
-                .saveMealPlanToCloud !==
-                "function"
-            ) {
-              showMessage(
-                "mealPlanMessage",
-                "Die Cloud-Verbindung wird noch hergestellt.",
-                "error"
-              );
+      try {
+        await window
+          .saveMealPlanToCloud(
+            mealPlan
+          );
 
-              return;
-            }
-
-            try {
-              await window
-                .saveMealPlanToCloud(
-                  mealPlan
-                );
-
-              showMessage(
-                "mealPlanMessage",
-                "Änderung wurde gespeichert.",
-                "success"
-              );
-            } catch (error) {
-              console.error(
-                error
-              );
-
-              showMessage(
-                "mealPlanMessage",
-                "Die Änderung konnte nicht gespeichert werden.",
-                "error"
-              );
-            }
-          },
-          500
+        showMessage(
+          "mealPlanMessage",
+          "Änderung wurde gespeichert.",
+          "success"
         );
+      } catch (error) {
+        console.error(
+          "Essensplanung konnte nicht gespeichert werden:",
+          error
+        );
+
+        mealPlan[day][meal] =
+          previousValue;
+
+        input.value =
+          previousValue;
+
+        showMessage(
+          "mealPlanMessage",
+          "Die Änderung konnte nicht gespeichert werden.",
+          "error"
+        );
+      } finally {
+        mealPlanSaveInProgress =
+          false;
+
+        input.disabled = false;
+      }
+    }
+
+    function addMealFieldEvents(
+      input
+    ) {
+      input.addEventListener(
+        "blur",
+        () => {
+          saveMealPlanInput(
+            input
+          );
+        }
+      );
+
+      input.addEventListener(
+        "keydown",
+        (event) => {
+          if (
+            event.key === "Enter"
+          ) {
+            event.preventDefault();
+
+            input.blur();
+          }
+        }
+      );
     }
 
     function renderMealPlan() {
@@ -1060,43 +1187,47 @@
         dayCell.textContent = day;
 
         lunchInput.type = "text";
+
         lunchInput.placeholder =
           "Mittagessen eintragen";
+
         lunchInput.value =
           mealPlan[day]?.lunch ||
           "";
+
         lunchInput.dataset.day =
           day;
+
         lunchInput.dataset.meal =
           "lunch";
 
+        lunchInput.autocomplete =
+          "off";
+
         dinnerInput.type = "text";
+
         dinnerInput.placeholder =
           "Abendessen eintragen";
+
         dinnerInput.value =
           mealPlan[day]?.dinner ||
           "";
+
         dinnerInput.dataset.day =
           day;
+
         dinnerInput.dataset.meal =
           "dinner";
 
-        lunchInput.addEventListener(
-          "input",
-          () => {
-            saveMealPlanInput(
-              lunchInput
-            );
-          }
+        dinnerInput.autocomplete =
+          "off";
+
+        addMealFieldEvents(
+          lunchInput
         );
 
-        dinnerInput.addEventListener(
-          "input",
-          () => {
-            saveMealPlanInput(
-              dinnerInput
-            );
-          }
+        addMealFieldEvents(
+          dinnerInput
         );
 
         lunchCell.appendChild(
@@ -1236,13 +1367,15 @@
         return;
       }
 
+      const updatedMeals = [
+        ...additionalMeals,
+        meal
+      ];
+
       try {
         await window
           .saveAdditionalMealsToCloud(
-            [
-              ...additionalMeals,
-              meal
-            ]
+            updatedMeals
           );
 
         input.value = "";
@@ -1266,23 +1399,29 @@
     async function deleteAdditionalMeal(
       index
     ) {
-      try {
-        const updatedMeals =
-          additionalMeals.filter(
-            (
-              meal,
-              mealIndex
-            ) => {
-              return (
-                mealIndex !== index
-              );
-            }
-          );
+      const updatedMeals =
+        additionalMeals.filter(
+          (
+            meal,
+            mealIndex
+          ) => {
+            return (
+              mealIndex !== index
+            );
+          }
+        );
 
+      try {
         await window
           .saveAdditionalMealsToCloud(
             updatedMeals
           );
+
+        showMessage(
+          "additionalMealMessage",
+          "Das Essen wurde gelöscht.",
+          "success"
+        );
       } catch (error) {
         console.error(error);
 
@@ -1304,9 +1443,33 @@
         return;
       }
 
+      if (
+        !mealPlanCloudReady ||
+        typeof window
+          .saveMealPlanToCloud !==
+          "function"
+      ) {
+        showMessage(
+          "mealPlanMessage",
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+
+        return;
+      }
+
+      const previousMealPlan =
+        mealPlan;
+
+      mealPlan = {};
+
       try {
         await window
-          .saveMealPlanToCloud({});
+          .saveMealPlanToCloud(
+            mealPlan
+          );
+
+        renderMealPlan();
 
         showMessage(
           "mealPlanMessage",
@@ -1314,6 +1477,11 @@
           "success"
         );
       } catch (error) {
+        mealPlan =
+          previousMealPlan;
+
+        renderMealPlan();
+
         console.error(error);
 
         showMessage(
@@ -1336,7 +1504,11 @@
     ).addEventListener(
       "keydown",
       (event) => {
-        if (event.key === "Enter") {
+        if (
+          event.key === "Enter"
+        ) {
+          event.preventDefault();
+
           addAdditionalMeal();
         }
       }
@@ -1413,7 +1585,7 @@
           content.appendChild(name);
 
           if (recipe.url) {
-            const lineBreak =
+            const breakElement =
               document.createElement(
                 "br"
               );
@@ -1423,11 +1595,8 @@
                 "a"
               );
 
-            link.href =
-              recipe.url;
-
-            link.target =
-              "_blank";
+            link.href = recipe.url;
+            link.target = "_blank";
 
             link.rel =
               "noopener noreferrer";
@@ -1439,7 +1608,7 @@
               recipe.url;
 
             content.append(
-              lineBreak,
+              breakElement,
               link
             );
           }
@@ -1565,23 +1734,29 @@
     async function deleteRecipe(
       index
     ) {
-      try {
-        const updatedRecipes =
-          recipes.filter(
-            (
-              recipe,
-              recipeIndex
-            ) => {
-              return (
-                recipeIndex !== index
-              );
-            }
-          );
+      const updatedRecipes =
+        recipes.filter(
+          (
+            recipe,
+            recipeIndex
+          ) => {
+            return (
+              recipeIndex !== index
+            );
+          }
+        );
 
+      try {
         await window
           .saveRecipesToCloud(
             updatedRecipes
           );
+
+        showMessage(
+          "recipeMessage",
+          "Rezeptidee wurde gelöscht.",
+          "success"
+        );
       } catch (error) {
         console.error(error);
 
@@ -1622,8 +1797,11 @@
       }
     );
 
+    renderRecipes();
+
     /* Zählerstände */
     let readings = [];
+
     let meterReadingsCloudReady =
       false;
 
@@ -1667,9 +1845,7 @@
       const number =
         Number(value);
 
-      return Number.isFinite(
-        number
-      )
+      return Number.isFinite(number)
         ? new Intl.NumberFormat(
             "de-DE",
             {
@@ -1702,7 +1878,7 @@
         return null;
       }
 
-      const consumption =
+      const value =
         Number(
           currentReading[property]
         ) -
@@ -1710,10 +1886,8 @@
           previousReading[property]
         );
 
-      return Number.isFinite(
-        consumption
-      )
-        ? consumption
+      return Number.isFinite(value)
+        ? value
         : null;
     }
 
@@ -1841,9 +2015,7 @@
                   );
                 }
 
-                row.appendChild(
-                  cell
-                );
+                row.appendChild(cell);
               }
             );
 
@@ -1908,26 +2080,11 @@
           "kaltwasser"
         );
 
-      const stromValue =
-        stromInput.value;
-
-      const warmValue =
-        warmInput.value;
-
-      const kaltValue =
-        kaltInput.value;
-
-      showMessage(
-        "formMessage",
-        "",
-        ""
-      );
-
       if (
         !date ||
-        stromValue === "" ||
-        warmValue === "" ||
-        kaltValue === ""
+        stromInput.value === "" ||
+        warmInput.value === "" ||
+        kaltInput.value === ""
       ) {
         showMessage(
           "formMessage",
@@ -1953,15 +2110,10 @@
         return;
       }
 
-      const selectedDate =
-        new Date(
-          date +
-            "T00:00:00"
-        );
-
       if (
-        selectedDate.getDate() !==
-        1
+        new Date(
+          date + "T00:00:00"
+        ).getDate() !== 1
       ) {
         showMessage(
           "formMessage",
@@ -1972,16 +2124,15 @@
         return;
       }
 
-      const dateAlreadyExists =
+      if (
         readings.some(
           (reading) => {
             return (
               reading.date === date
             );
           }
-        );
-
-      if (dateAlreadyExists) {
+        )
+      ) {
         showMessage(
           "formMessage",
           "Für diesen Monat ist bereits ein Zählerstand gespeichert.",
@@ -1993,36 +2144,22 @@
 
       const newReading = {
         date,
+
         strom:
-          Number(stromValue),
+          Number(
+            stromInput.value
+          ),
+
         warm:
-          Number(warmValue),
+          Number(
+            warmInput.value
+          ),
+
         kalt:
-          Number(kaltValue)
+          Number(
+            kaltInput.value
+          )
       };
-
-      if (
-        !Number.isFinite(
-          newReading.strom
-        ) ||
-        !Number.isFinite(
-          newReading.warm
-        ) ||
-        !Number.isFinite(
-          newReading.kalt
-        ) ||
-        newReading.strom < 0 ||
-        newReading.warm < 0 ||
-        newReading.kalt < 0
-      ) {
-        showMessage(
-          "formMessage",
-          "Bitte gib gültige, nicht negative Werte ein.",
-          "error"
-        );
-
-        return;
-      }
 
       const previousReading =
         [...getSortedReadings()]
@@ -2068,8 +2205,6 @@
         );
 
       saveButton.disabled = true;
-      saveButton.textContent =
-        "Speichert...";
 
       try {
         await window
@@ -2087,27 +2222,15 @@
           "success"
         );
       } catch (error) {
-        console.error(
-          "Zählerstand konnte nicht gespeichert werden:",
-          error
-        );
+        console.error(error);
 
         showMessage(
           "formMessage",
-          "Speichern fehlgeschlagen: " +
-            (
-              error.code ||
-              error.message ||
-              "Unbekannter Fehler"
-            ),
+          "Der Zählerstand konnte nicht gespeichert werden.",
           "error"
         );
       } finally {
-        saveButton.disabled =
-          false;
-
-        saveButton.textContent =
-          "Speichern";
+        saveButton.disabled = false;
       }
     }
 
@@ -2115,32 +2238,14 @@
       documentId
     ) {
       if (!documentId) {
-        window.alert(
-          "Die Dokument-ID fehlt."
-        );
-
         return;
       }
 
       if (
-        !meterReadingsCloudReady ||
-        typeof window
-          .deleteMeterReadingFromCloud !==
-          "function"
-      ) {
-        window.alert(
-          "Die Cloud-Verbindung wird noch hergestellt."
-        );
-
-        return;
-      }
-
-      const shouldDelete =
-        window.confirm(
+        !window.confirm(
           "Möchtest du diesen Zählerstand wirklich löschen?"
-        );
-
-      if (!shouldDelete) {
+        )
+      ) {
         return;
       }
 
@@ -2150,25 +2255,18 @@
             documentId
           );
       } catch (error) {
-        console.error(
-          "Zählerstand konnte nicht gelöscht werden:",
-          error
-        );
+        console.error(error);
 
         window.alert(
-          "Löschen fehlgeschlagen: " +
-            (
-              error.code ||
-              error.message ||
-              "Unbekannter Fehler"
-            )
+          "Der Zählerstand konnte nicht gelöscht werden."
         );
       }
     }
 
-    /* Excel-Export */
     function exportExcel() {
-      if (readings.length === 0) {
+      if (
+        readings.length === 0
+      ) {
         window.alert(
           "Es sind noch keine Zählerstände vorhanden."
         );
@@ -2230,16 +2328,6 @@
             excelData
           );
 
-      worksheet["!cols"] = [
-        { wch: 14 },
-        { wch: 26 },
-        { wch: 24 },
-        { wch: 30 },
-        { wch: 28 },
-        { wch: 30 },
-        { wch: 28 }
-      ];
-
       const workbook =
         XLSX.utils
           .book_new();
@@ -2257,7 +2345,6 @@
       );
     }
 
-    /* Diagramme */
     function drawLineChart(
       canvas,
       chartSeries,
@@ -2315,7 +2402,9 @@
             }
           );
 
-      if (allValues.length === 0) {
+      if (
+        allValues.length === 0
+      ) {
         context.fillStyle =
           "#64748b";
 
@@ -2559,11 +2648,11 @@
     }
 
     function renderCharts() {
-      const rowsWithConsumption =
+      const rows =
         getTableRows().slice(1);
 
       const labels =
-        rowsWithConsumption.map(
+        rows.map(
           (rowData) => {
             return new Intl
               .DateTimeFormat(
@@ -2586,54 +2675,47 @@
         );
 
       drawLineChart(
-        getElement(
-          "stromChart"
-        ),
+        getElement("stromChart"),
         [
           {
             name: "Strom",
             color: "#facc15",
             values:
-              rowsWithConsumption
-                .map(
-                  (rowData) => {
-                    return rowData
-                      .stromVerbrauch;
-                  }
-                )
+              rows.map(
+                (rowData) => {
+                  return rowData
+                    .stromVerbrauch;
+                }
+              )
           }
         ],
         labels
       );
 
       drawLineChart(
-        getElement(
-          "wasserChart"
-        ),
+        getElement("wasserChart"),
         [
           {
             name: "Kaltwasser",
             color: "#2d6cdf",
             values:
-              rowsWithConsumption
-                .map(
-                  (rowData) => {
-                    return rowData
-                      .kaltVerbrauch;
-                  }
-                )
+              rows.map(
+                (rowData) => {
+                  return rowData
+                    .kaltVerbrauch;
+                }
+              )
           },
           {
             name: "Warmwasser",
             color: "#dc2626",
             values:
-              rowsWithConsumption
-                .map(
-                  (rowData) => {
-                    return rowData
-                      .warmVerbrauch;
-                  }
-                )
+              rows.map(
+                (rowData) => {
+                  return rowData
+                    .warmVerbrauch;
+                }
+              )
           }
         ],
         labels
@@ -2685,7 +2767,6 @@
       }
     );
 
-    renderRecipes();
     renderReadings();
   </script>
 
@@ -2896,6 +2977,7 @@
       }
 
       loginButton.disabled = true;
+
       loginButton.textContent =
         "Anmeldung läuft...";
 
@@ -2908,10 +2990,7 @@
 
         loginPasswort.value = "";
       } catch (error) {
-        console.error(
-          "Anmeldefehler:",
-          error
-        );
+        console.error(error);
 
         loginMessage.textContent =
           "Anmeldung fehlgeschlagen: " +
@@ -2934,10 +3013,7 @@
       try {
         await signOut(auth);
       } catch (error) {
-        console.error(
-          "Abmeldung fehlgeschlagen:",
-          error
-        );
+        console.error(error);
       }
     }
 
@@ -2979,20 +3055,13 @@
         return;
       }
 
-      try {
-        await deleteDoc(
-          doc(
-            db,
-            "shopping",
-            id
-          )
-        );
-      } catch (error) {
-        console.error(
-          "Artikel konnte nicht gelöscht werden:",
-          error
-        );
-      }
+      await deleteDoc(
+        doc(
+          db,
+          "shopping",
+          id
+        )
+      );
     }
 
     function startShoppingListener() {
@@ -3063,11 +3132,7 @@
             console.error(error);
 
             shoppingMessage.textContent =
-              "Einkaufsliste konnte nicht geladen werden: " +
-              (
-                error.code ||
-                error.message
-              );
+              "Einkaufsliste konnte nicht geladen werden.";
 
             shoppingMessage.className =
               "form-message error";
@@ -3140,11 +3205,7 @@
               );
 
             message.textContent =
-              "Essensplanung konnte nicht geladen werden: " +
-              (
-                error.code ||
-                error.message
-              );
+              "Essensplanung konnte nicht geladen werden.";
 
             message.className =
               "form-message error";
@@ -3261,11 +3322,7 @@
               );
 
             message.textContent =
-              "Rezeptideen konnten nicht geladen werden: " +
-              (
-                error.code ||
-                error.message
-              );
+              "Rezeptideen konnten nicht geladen werden.";
 
             message.className =
               "form-message error";
@@ -3303,9 +3360,6 @@
         meterReadingsUnsubscribe
       ) {
         meterReadingsUnsubscribe();
-
-        meterReadingsUnsubscribe =
-          null;
       }
 
       window
@@ -3334,34 +3388,28 @@
                   readingDocument
                     .data();
 
-                if (
-                  typeof data.date ===
-                    "string" &&
-                  data.date !== ""
-                ) {
-                  cloudReadings.push({
-                    id:
-                      readingDocument.id,
+                cloudReadings.push({
+                  id:
+                    readingDocument.id,
 
-                    date:
-                      data.date,
+                  date:
+                    data.date,
 
-                    strom:
-                      Number(
-                        data.strom
-                      ),
+                  strom:
+                    Number(
+                      data.strom
+                    ),
 
-                    warm:
-                      Number(
-                        data.warm
-                      ),
+                  warm:
+                    Number(
+                      data.warm
+                    ),
 
-                    kalt:
-                      Number(
-                        data.kalt
-                      )
-                  });
-                }
+                  kalt:
+                    Number(
+                      data.kalt
+                    )
+                });
               }
             );
 
@@ -3376,10 +3424,7 @@
               );
           },
           (error) => {
-            console.error(
-              "Zählerstände konnten nicht geladen werden:",
-              error
-            );
+            console.error(error);
 
             window
               .setMeterReadingsCloudState?.(
@@ -3392,12 +3437,7 @@
               );
 
             message.textContent =
-              "Zählerstände konnten nicht geladen werden: " +
-              (
-                error.code ||
-                error.message ||
-                "Unbekannter Fehler"
-              );
+              "Zählerstände konnten nicht geladen werden.";
 
             message.className =
               "form-message error";
@@ -3431,12 +3471,6 @@
         if (!auth.currentUser) {
           throw new Error(
             "Kein Benutzer angemeldet."
-          );
-        }
-
-        if (!documentId) {
-          throw new Error(
-            "Keine Dokument-ID vorhanden."
           );
         }
 
