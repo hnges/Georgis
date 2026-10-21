@@ -1917,13 +1917,26 @@
     renderRecipes();
 
     /* Zählerstände */
-    let readings =
-      JSON.parse(
-        localStorage.getItem(
-          "readings"
-        )
-      ) || [];
+    let readings = [];
+    let meterReadingsCloudReady = false;
 
+    window.setMeterReadingsCloudState =
+      function (isReady) {
+        meterReadingsCloudReady =
+          Boolean(isReady);
+      };
+
+    window.updateMeterReadingsFromCloud =
+      function (cloudReadings) {
+        readings =
+          Array.isArray(cloudReadings)
+            ? cloudReadings
+            : [];
+
+        renderReadings();
+        renderCharts();
+      };
+    
     function getSortedReadings() {
       return [...readings].sort(
         (a, b) => {
