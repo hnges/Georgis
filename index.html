@@ -23,9 +23,9 @@
       font-family: Arial, sans-serif;
       max-width: 1000px;
       margin: auto;
-      background: #f4f4f4;
       padding: 20px;
       color: #1f2937;
+      background: #f4f4f4;
     }
 
     h1 {
@@ -55,8 +55,8 @@
 
     .tab-button,
     .primary-button {
-      background: #2d6cdf;
       color: white;
+      background: #2d6cdf;
     }
 
     .tab-button:hover,
@@ -66,14 +66,14 @@
     }
 
     .subtab-button {
-      background: #e5e7eb;
       color: #1f2937;
+      background: #e5e7eb;
     }
 
     .subtab-button:hover,
     .subtab-button.is-active {
-      background: #374151;
       color: white;
+      background: #374151;
     }
 
     .tab,
@@ -89,9 +89,9 @@
     }
 
     .tab {
-      background: white;
       padding: 20px;
       border-radius: 10px;
+      background: white;
       box-shadow:
         0 4px 14px
         rgba(0, 0, 0, 0.06);
@@ -124,14 +124,14 @@
     }
 
     input:disabled {
-      background: #f1f5f9;
       color: #64748b;
+      background: #f1f5f9;
     }
 
     .delete-button {
-      background: #dc2626;
-      color: white;
       padding: 6px 9px;
+      color: white;
+      background: #dc2626;
     }
 
     .delete-button:hover {
@@ -150,21 +150,20 @@
     }
 
     ul {
-      list-style: none;
       padding: 0;
+      list-style: none;
     }
 
     li {
-      background: #e8e8e8;
-      margin: 5px 0;
       padding: 10px;
+      margin: 5px 0;
       border-radius: 5px;
+      background: #e8e8e8;
     }
 
     .list-row {
       display: flex;
-      justify-content:
-        space-between;
+      justify-content: space-between;
       align-items: center;
       gap: 10px;
     }
@@ -175,8 +174,8 @@
 
     table {
       width: 100%;
-      border-collapse: collapse;
       margin-top: 15px;
+      border-collapse: collapse;
     }
 
     table,
@@ -230,8 +229,8 @@
     }
 
     .chart-card {
-      margin-top: 18px;
       padding: 15px;
+      margin-top: 18px;
       border: 1px solid #e5e7eb;
       border-radius: 10px;
     }
@@ -243,13 +242,12 @@
     }
 
     .footer-row {
-      margin-top: 20px;
       display: flex;
-      justify-content:
-        space-between;
+      justify-content: space-between;
       align-items: center;
-      gap: 10px;
       flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
     }
 
     @media (max-width: 600px) {
@@ -415,25 +413,19 @@
         </button>
       </nav>
 
-      <!-- Wochenplanung -->
       <div
         id="wochenplanung"
         class="meal-tab active-meal"
       >
-        <h3>
-          Essensplanung der Woche
-        </h3>
+        <h3>Essensplanung der Woche</h3>
 
         <p class="empty-message">
           Änderungen werden gespeichert,
-          sobald das Eingabefeld verlassen
-          wird.
+          sobald das Eingabefeld verlassen wird.
         </p>
 
         <div class="table-wrapper">
-          <table
-            class="meal-plan-table"
-          >
+          <table class="meal-plan-table">
             <thead>
               <tr>
                 <th>Tag</th>
@@ -442,15 +434,13 @@
               </tr>
             </thead>
 
-            <tbody
-              id="mealPlanBody"
-            ></tbody>
+            <tbody id="mealPlanBody"></tbody>
           </table>
         </div>
 
         <p class="empty-message">
-          Hier können weitere Essen als
-          Liste gespeichert werden.
+          Hier können weitere Essen als Liste
+          gespeichert werden.
         </p>
 
         <div class="shopping-row">
@@ -475,13 +465,9 @@
           aria-live="polite"
         ></p>
 
-        <ul
-          id="additionalMealList"
-        ></ul>
+        <ul id="additionalMealList"></ul>
 
-        <div
-          class="meal-plan-actions"
-        >
+        <div class="meal-plan-actions">
           <button
             class="delete-button"
             type="button"
@@ -498,7 +484,6 @@
         ></p>
       </div>
 
-      <!-- Rezeptideen -->
       <div
         id="rezeptideen"
         class="meal-tab"
@@ -581,14 +566,11 @@
         </button>
       </nav>
 
-      <!-- Eingabe -->
       <div
         id="eingabe"
         class="meter-tab active-meter"
       >
-        <h3>
-          Neuen Zählerstand eintragen
-        </h3>
+        <h3>Neuen Zählerstand eintragen</h3>
 
         <div class="form-grid">
           <label>
@@ -652,14 +634,11 @@
         ></p>
       </div>
 
-      <!-- Datentabelle -->
       <div
         id="tabelle"
         class="meter-tab"
       >
-        <h3>
-          Gespeicherte Zählerstände
-        </h3>
+        <h3>Gespeicherte Zählerstände</h3>
 
         <button
           class="primary-button"
@@ -697,33 +676,25 @@
               <tr>
                 <th>Zählerstand</th>
 
-                <th
-                  class="verbrauch-strom"
-                >
+                <th class="verbrauch-strom">
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
 
-                <th
-                  class="verbrauch-kaltwasser"
-                >
+                <th class="verbrauch-kaltwasser">
                   Verbrauch
                 </th>
 
                 <th>Zählerstand</th>
 
-                <th
-                  class="verbrauch-warmwasser"
-                >
+                <th class="verbrauch-warmwasser">
                   Verbrauch
                 </th>
               </tr>
             </thead>
 
-            <tbody
-              id="meterTable"
-            ></tbody>
+            <tbody id="meterTable"></tbody>
           </table>
         </div>
 
@@ -731,43 +702,30 @@
           id="emptyTableMessage"
           class="empty-message"
         >
-          Noch keine Zählerstände
-          gespeichert.
+          Noch keine Zählerstände gespeichert.
         </p>
       </div>
 
-      <!-- Diagramme -->
       <div
         id="diagramme"
         class="meter-tab"
       >
-        <h3>
-          Verbrauch zum Vormonat
-        </h3>
+        <h3>Verbrauch zum Vormonat</h3>
 
         <div class="chart-card">
           <h4>Stromverbrauch</h4>
-
-          <canvas
-            id="stromChart"
-          ></canvas>
+          <canvas id="stromChart"></canvas>
         </div>
 
         <div class="chart-card">
           <h4>Wasserverbrauch</h4>
-
-          <canvas
-            id="wasserChart"
-          ></canvas>
+          <canvas id="wasserChart"></canvas>
         </div>
       </div>
     </section>
 
-    <!-- Abmeldung -->
     <div class="footer-row">
-      <span
-        id="angemeldeterBenutzer"
-      ></span>
+      <span id="angemeldeterBenutzer"></span>
 
       <button
         type="button"
@@ -782,15 +740,13 @@
   <!-- Bedienung der Website -->
   <script>
     function getElement(id) {
-      return document.getElementById(
-        id
-      );
+      return document.getElementById(id);
     }
 
     function showMessage(
       elementId,
       text,
-      type
+      type = ""
     ) {
       const message =
         getElement(elementId);
@@ -1038,12 +994,9 @@
       const newValue =
         input.value.trim();
 
-      if (!mealPlan[day]) {
-        mealPlan[day] = {};
-      }
-
       const previousValue =
-        mealPlan[day][meal] || "";
+        mealPlan[day]?.[meal] ||
+        "";
 
       if (
         previousValue === newValue
@@ -1069,6 +1022,10 @@
         return;
       }
 
+      if (!mealPlan[day]) {
+        mealPlan[day] = {};
+      }
+
       mealPlan[day][meal] =
         newValue;
 
@@ -1079,8 +1036,7 @@
 
       showMessage(
         "mealPlanMessage",
-        "Änderung wird gespeichert...",
-        ""
+        "Änderung wird gespeichert..."
       );
 
       try {
@@ -1119,7 +1075,7 @@
       }
     }
 
-    function addMealFieldEvents(
+    function addMealInputEvents(
       input
     ) {
       input.addEventListener(
@@ -1222,11 +1178,11 @@
         dinnerInput.autocomplete =
           "off";
 
-        addMealFieldEvents(
+        addMealInputEvents(
           lunchInput
         );
 
-        addMealFieldEvents(
+        addMealInputEvents(
           dinnerInput
         );
 
@@ -1327,12 +1283,7 @@
         return;
       }
 
-      if (
-        !mealPlanCloudReady ||
-        typeof window
-          .saveAdditionalMealsToCloud !==
-          "function"
-      ) {
+      if (!mealPlanCloudReady) {
         showMessage(
           "additionalMealMessage",
           "Die Cloud-Verbindung wird noch hergestellt.",
@@ -1367,15 +1318,13 @@
         return;
       }
 
-      const updatedMeals = [
-        ...additionalMeals,
-        meal
-      ];
-
       try {
         await window
           .saveAdditionalMealsToCloud(
-            updatedMeals
+            [
+              ...additionalMeals,
+              meal
+            ]
           );
 
         input.value = "";
@@ -1399,6 +1348,14 @@
     async function deleteAdditionalMeal(
       index
     ) {
+      if (
+        !window.confirm(
+          "Möchtest du dieses Essen wirklich löschen?"
+        )
+      ) {
+        return;
+      }
+
       const updatedMeals =
         additionalMeals.filter(
           (
@@ -1434,27 +1391,11 @@
     }
 
     async function clearMealPlan() {
-      const shouldClear =
-        window.confirm(
-          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
-        );
-
-      if (!shouldClear) {
-        return;
-      }
-
       if (
-        !mealPlanCloudReady ||
-        typeof window
-          .saveMealPlanToCloud !==
-          "function"
+        !window.confirm(
+          "Möchtest du wirklich alle Einträge des Wochenplans löschen?"
+        )
       ) {
-        showMessage(
-          "mealPlanMessage",
-          "Die Cloud-Verbindung wird noch hergestellt.",
-          "error"
-        );
-
         return;
       }
 
@@ -1734,6 +1675,14 @@
     async function deleteRecipe(
       index
     ) {
+      if (
+        !window.confirm(
+          "Möchtest du diese Rezeptidee wirklich löschen?"
+        )
+      ) {
+        return;
+      }
+
       const updatedRecipes =
         recipes.filter(
           (
@@ -1801,7 +1750,6 @@
 
     /* Zählerstände */
     let readings = [];
-
     let meterReadingsCloudReady =
       false;
 
@@ -2096,10 +2044,7 @@
       }
 
       if (
-        !meterReadingsCloudReady ||
-        typeof window
-          .saveMeterReadingToCloud !==
-          "function"
+        !meterReadingsCloudReady
       ) {
         showMessage(
           "formMessage",
@@ -2161,6 +2106,29 @@
           )
       };
 
+      if (
+        !Number.isFinite(
+          newReading.strom
+        ) ||
+        !Number.isFinite(
+          newReading.warm
+        ) ||
+        !Number.isFinite(
+          newReading.kalt
+        ) ||
+        newReading.strom < 0 ||
+        newReading.warm < 0 ||
+        newReading.kalt < 0
+      ) {
+        showMessage(
+          "formMessage",
+          "Bitte gib gültige, nicht negative Werte ein.",
+          "error"
+        );
+
+        return;
+      }
+
       const previousReading =
         [...getSortedReadings()]
           .reverse()
@@ -2218,7 +2186,7 @@
 
         showMessage(
           "formMessage",
-          "Zählerstand wurde in der Cloud gespeichert.",
+          "Zählerstand wurde gespeichert.",
           "success"
         );
       } catch (error) {
@@ -2237,10 +2205,6 @@
     async function deleteReading(
       documentId
     ) {
-      if (!documentId) {
-        return;
-      }
-
       if (
         !window.confirm(
           "Möchtest du diesen Zählerstand wirklich löschen?"
@@ -2327,6 +2291,16 @@
           .json_to_sheet(
             excelData
           );
+
+      worksheet["!cols"] = [
+        { wch: 14 },
+        { wch: 26 },
+        { wch: 24 },
+        { wch: 30 },
+        { wch: 28 },
+        { wch: 30 },
+        { wch: 28 }
+      ];
 
       const workbook =
         XLSX.utils
@@ -2824,6 +2798,12 @@
     const auth =
       getAuth(app);
 
+    /*
+     * Feste gemeinsame Haushalts-ID.
+     */
+    const householdId =
+      "georgis";
+
     const shoppingRef =
       collection(
         db,
@@ -3017,7 +2997,7 @@
       }
     }
 
-    /* Einkaufsliste */
+    /* Gemeinsame Einkaufsliste */
     async function addItem() {
       if (!auth.currentUser) {
         return;
@@ -3027,6 +3007,12 @@
         itemInput.value.trim();
 
       if (!artikel) {
+        shoppingMessage.textContent =
+          "Bitte gib einen Artikel ein.";
+
+        shoppingMessage.className =
+          "form-message error";
+
         return;
       }
 
@@ -3039,6 +3025,9 @@
         );
 
         itemInput.value = "";
+
+        shoppingMessage.textContent =
+          "";
       } catch (error) {
         console.error(error);
 
@@ -3055,19 +3044,27 @@
         return;
       }
 
-      await deleteDoc(
-        doc(
-          db,
-          "shopping",
-          id
-        )
-      );
+      try {
+        await deleteDoc(
+          doc(
+            db,
+            "shopping",
+            id
+          )
+        );
+      } catch (error) {
+        console.error(error);
+
+        shoppingMessage.textContent =
+          "Artikel konnte nicht gelöscht werden.";
+
+        shoppingMessage.className =
+          "form-message error";
+      }
     }
 
     function startShoppingListener() {
-      if (shoppingUnsubscribe) {
-        shoppingUnsubscribe();
-      }
+      shoppingUnsubscribe?.();
 
       shoppingUnsubscribe =
         onSnapshot(
@@ -3140,13 +3137,11 @@
         );
     }
 
-    /* Essensplanung */
-    function startMealPlanListener(
-      user
-    ) {
-      if (mealPlanUnsubscribe) {
-        mealPlanUnsubscribe();
-      }
+    /*
+     * Gemeinsame Essensplanung
+     */
+    function startMealPlanListener() {
+      mealPlanUnsubscribe?.();
 
       window
         .setMealPlanCloudState?.(
@@ -3156,8 +3151,8 @@
       currentMealPlanRef =
         doc(
           db,
-          "users",
-          user.uid,
+          "households",
+          householdId,
           "mealPlans",
           "currentWeek"
         );
@@ -3166,30 +3161,20 @@
         onSnapshot(
           currentMealPlanRef,
           (documentSnapshot) => {
-            if (
-              documentSnapshot
-                .exists()
-            ) {
-              const data =
-                documentSnapshot
-                  .data();
+            const data =
+              documentSnapshot.exists()
+                ? documentSnapshot.data()
+                : {};
 
-              window
-                .updateMealPlanFromCloud?.(
-                  data.plan || {},
-                  Array.isArray(
-                    data.additionalMeals
-                  )
-                    ? data.additionalMeals
-                    : []
-                );
-            } else {
-              window
-                .updateMealPlanFromCloud?.(
-                  {},
-                  []
-                );
-            }
+            window
+              .updateMealPlanFromCloud?.(
+                data.plan || {},
+                Array.isArray(
+                  data.additionalMeals
+                )
+                  ? data.additionalMeals
+                  : []
+              );
           },
           (error) => {
             console.error(error);
@@ -3205,7 +3190,11 @@
               );
 
             message.textContent =
-              "Essensplanung konnte nicht geladen werden.";
+              "Essensplanung konnte nicht geladen werden: " +
+              (
+                error.code ||
+                error.message
+              );
 
             message.className =
               "form-message error";
@@ -3259,13 +3248,11 @@
         );
       };
 
-    /* Rezeptideen */
-    function startRecipesListener(
-      user
-    ) {
-      if (recipesUnsubscribe) {
-        recipesUnsubscribe();
-      }
+    /*
+     * Gemeinsame Rezeptideen
+     */
+    function startRecipesListener() {
+      recipesUnsubscribe?.();
 
       window
         .setRecipesCloudState?.(
@@ -3275,8 +3262,8 @@
       currentRecipesRef =
         doc(
           db,
-          "users",
-          user.uid,
+          "households",
+          householdId,
           "recipeData",
           "recipes"
         );
@@ -3285,28 +3272,19 @@
         onSnapshot(
           currentRecipesRef,
           (documentSnapshot) => {
-            if (
-              documentSnapshot
-                .exists()
-            ) {
-              const data =
-                documentSnapshot
-                  .data();
+            const data =
+              documentSnapshot.exists()
+                ? documentSnapshot.data()
+                : {};
 
-              window
-                .updateRecipesFromCloud?.(
-                  Array.isArray(
-                    data.recipes
-                  )
-                    ? data.recipes
-                    : []
-                );
-            } else {
-              window
-                .updateRecipesFromCloud?.(
-                  []
-                );
-            }
+            window
+              .updateRecipesFromCloud?.(
+                Array.isArray(
+                  data.recipes
+                )
+                  ? data.recipes
+                  : []
+              );
           },
           (error) => {
             console.error(error);
@@ -3322,7 +3300,11 @@
               );
 
             message.textContent =
-              "Rezeptideen konnten nicht geladen werden.";
+              "Rezeptideen konnten nicht geladen werden: " +
+              (
+                error.code ||
+                error.message
+              );
 
             message.className =
               "form-message error";
@@ -3352,15 +3334,11 @@
         );
       };
 
-    /* Zählerstände */
-    function startMeterReadingsListener(
-      user
-    ) {
-      if (
-        meterReadingsUnsubscribe
-      ) {
-        meterReadingsUnsubscribe();
-      }
+    /*
+     * Gemeinsame Zählerstände
+     */
+    function startMeterReadingsListener() {
+      meterReadingsUnsubscribe?.();
 
       window
         .setMeterReadingsCloudState?.(
@@ -3370,8 +3348,8 @@
       currentMeterReadingsRef =
         collection(
           db,
-          "users",
-          user.uid,
+          "households",
+          householdId,
           "meterreadings"
         );
 
@@ -3385,8 +3363,15 @@
             snapshot.forEach(
               (readingDocument) => {
                 const data =
-                  readingDocument
-                    .data();
+                  readingDocument.data();
+
+                if (
+                  typeof data.date !==
+                    "string" ||
+                  data.date === ""
+                ) {
+                  return;
+                }
 
                 cloudReadings.push({
                   id:
@@ -3437,7 +3422,11 @@
               );
 
             message.textContent =
-              "Zählerstände konnten nicht geladen werden.";
+              "Zählerstände konnten nicht geladen werden: " +
+              (
+                error.code ||
+                error.message
+              );
 
             message.className =
               "form-message error";
@@ -3477,15 +3466,27 @@
         await deleteDoc(
           doc(
             db,
-            "users",
-            auth.currentUser.uid,
+            "households",
+            householdId,
             "meterreadings",
             documentId
           )
         );
       };
 
-    /* Anmeldung überwachen */
+    function stopAllListeners() {
+      shoppingUnsubscribe?.();
+      mealPlanUnsubscribe?.();
+      recipesUnsubscribe?.();
+      meterReadingsUnsubscribe?.();
+
+      shoppingUnsubscribe = null;
+      mealPlanUnsubscribe = null;
+      recipesUnsubscribe = null;
+      meterReadingsUnsubscribe =
+        null;
+    }
+
     onAuthStateChanged(
       auth,
       (user) => {
@@ -3505,19 +3506,12 @@
               user.email;
 
           startShoppingListener();
-
-          startMealPlanListener(
-            user
-          );
-
-          startRecipesListener(
-            user
-          );
-
-          startMeterReadingsListener(
-            user
-          );
+          startMealPlanListener();
+          startRecipesListener();
+          startMeterReadingsListener();
         } else {
+          stopAllListeners();
+
           websiteBereich.hidden =
             true;
 
@@ -3527,42 +3521,6 @@
           angemeldeterBenutzer
             .textContent =
               "";
-
-          if (
-            shoppingUnsubscribe
-          ) {
-            shoppingUnsubscribe();
-
-            shoppingUnsubscribe =
-              null;
-          }
-
-          if (
-            mealPlanUnsubscribe
-          ) {
-            mealPlanUnsubscribe();
-
-            mealPlanUnsubscribe =
-              null;
-          }
-
-          if (
-            recipesUnsubscribe
-          ) {
-            recipesUnsubscribe();
-
-            recipesUnsubscribe =
-              null;
-          }
-
-          if (
-            meterReadingsUnsubscribe
-          ) {
-            meterReadingsUnsubscribe();
-
-            meterReadingsUnsubscribe =
-              null;
-          }
 
           currentMealPlanRef =
             null;
