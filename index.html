@@ -2796,7 +2796,8 @@
     function drawYearComparisonChart(
       canvas,
       yearlySeries,
-      baseColor
+      baseColor,
+      yStep
     ) {
       const context =
         canvas.getContext("2d");
@@ -2888,16 +2889,25 @@
         bottom: 45
       };
 
-      const maximum =
+      const dataMaximum =
         Math.max(
           ...allValues,
-          1
+          0
         );
 
-      const minimum =
-        Math.min(
-          0,
-          ...allValues
+      const maximum =
+        Math.max(
+          yStep,
+          Math.ceil(
+            dataMaximum / yStep
+          ) * yStep
+        );
+
+      const minimum = 0;
+
+      const yDivisionCount =
+        Math.round(
+          maximum / yStep
         );
 
       const graphWidth =
@@ -2938,22 +2948,15 @@
 
       for (
         let index = 0;
-        index <= 4;
+        index <= yDivisionCount;
         index += 1
       ) {
-        const y =
-          padding.top +
-          graphHeight *
-            index /
-            4;
-
         const value =
           maximum -
-          (
-            maximum - minimum
-          ) *
-          index /
-          4;
+          yStep * index;
+
+        const y =
+          getY(value);
 
         context.strokeStyle =
           "#cbd5e1";
@@ -3195,7 +3198,8 @@
         getYearlySeries(
           "stromVerbrauch"
         ),
-        "#facc15"
+        "#facc15",
+        25
       );
 
       drawYearComparisonChart(
@@ -3205,7 +3209,8 @@
         getYearlySeries(
           "warmVerbrauch"
         ),
-        "#dc2626"
+        "#dc2626",
+        0.25
       );
 
       drawYearComparisonChart(
@@ -3215,7 +3220,8 @@
         getYearlySeries(
           "kaltVerbrauch"
         ),
-        "#2d6cdf"
+        "#2d6cdf",
+        1
       );
     }
 
