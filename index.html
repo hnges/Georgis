@@ -223,6 +223,36 @@
       flex-shrink: 0;
     }
 
+    .recipe-action-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .recipe-edit-button {
+      padding: 6px 9px;
+      color: #1f2937;
+      background: #e5e7eb;
+    }
+
+    .recipe-edit-button:hover {
+      color: white;
+      background: #374151;
+    }
+
+    .recipe-edit-form {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      width: 100%;
+    }
+
+    .recipe-edit-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
     .empty-message,
     .form-message {
       color: #64748b;
@@ -1575,7 +1605,17 @@
               "div"
             );
 
+          const lowerActionRow =
+            document.createElement(
+              "div"
+            );
+
           const cookbookButton =
+            document.createElement(
+              "button"
+            );
+
+          const editButton =
             document.createElement(
               "button"
             );
@@ -1590,6 +1630,9 @@
 
           actions.className =
             "recipe-actions";
+
+          lowerActionRow.className =
+            "recipe-action-row";
 
           name.textContent =
             recipe.name || "";
@@ -1623,13 +1666,10 @@
 
             link.href = recipe.url;
             link.target = "_blank";
-
             link.rel =
               "noopener noreferrer";
-
             link.className =
               "recipe-link";
-
             link.textContent =
               recipe.url;
 
@@ -1641,10 +1681,8 @@
 
           cookbookButton.type =
             "button";
-
           cookbookButton.className =
             "subtab-button";
-
           cookbookButton.textContent =
             recipe.inCookbook
               ? "Kochbuch-Markierung entfernen"
@@ -1659,12 +1697,33 @@
             }
           );
 
+          editButton.type =
+            "button";
+          editButton.className =
+            "recipe-edit-button";
+          editButton.textContent =
+            "✏️";
+          editButton.title =
+            "Rezept bearbeiten";
+          editButton.setAttribute(
+            "aria-label",
+            "Rezept bearbeiten"
+          );
+
+          editButton.addEventListener(
+            "click",
+            () => {
+              showRecipeEditForm(
+                listItem,
+                originalIndex
+              );
+            }
+          );
+
           deleteButton.type =
             "button";
-
           deleteButton.className =
             "delete-button";
-
           deleteButton.textContent =
             "Löschen";
 
@@ -1677,9 +1736,14 @@
             }
           );
 
+          lowerActionRow.append(
+            editButton,
+            deleteButton
+          );
+
           actions.append(
             cookbookButton,
-            deleteButton
+            lowerActionRow
           );
 
           listItem.append(
@@ -1691,6 +1755,218 @@
             listItem
           );
         });
+    }
+
+    function showRecipeEditForm(
+      listItem,
+      index
+    ) {
+      const recipe = recipes[index];
+
+      if (!recipe) {
+        return;
+      }
+
+      const editForm =
+        document.createElement(
+          "div"
+        );
+
+      const nameInput =
+        document.createElement(
+          "input"
+        );
+
+      const urlInput =
+        document.createElement(
+          "input"
+        );
+
+      const editActions =
+        document.createElement(
+          "div"
+        );
+
+      const saveButton =
+        document.createElement(
+          "button"
+        );
+
+      const cancelButton =
+        document.createElement(
+          "button"
+        );
+
+      editForm.className =
+        "recipe-edit-form";
+
+      nameInput.type = "text";
+      nameInput.value =
+        recipe.name || "";
+      nameInput.placeholder =
+        "Name des Gerichts";
+
+      urlInput.type = "url";
+      urlInput.value =
+        recipe.url || "";
+      urlInput.placeholder =
+        "https://beispiel.de/rezept";
+
+      editActions.className =
+        "recipe-edit-actions";
+
+      saveButton.type = "button";
+      saveButton.className =
+        "primary-button";
+      saveButton.textContent =
+        "Speichern";
+
+      cancelButton.type = "button";
+      cancelButton.className =
+        "subtab-button";
+      cancelButton.textContent =
+        "Abbrechen";
+
+      saveButton.addEventListener(
+        "click",
+        () => {
+          saveRecipeChanges(
+            index,
+            nameInput.value,
+            urlInput.value,
+            saveButton
+          );
+        }
+      );
+
+      cancelButton.addEventListener(
+        "click",
+        renderRecipes
+      );
+
+      [nameInput, urlInput].forEach(
+        (input) => {
+          input.addEventListener(
+            "keydown",
+            (event) => {
+              if (event.key === "Enter") {
+                event.preventDefault();
+                saveButton.click();
+              }
+
+              if (event.key === "Escape") {
+                event.preventDefault();
+                renderRecipes();
+              }
+            }
+          );
+        }
+      );
+
+      editActions.append(
+        saveButton,
+        cancelButton
+      );
+
+      editForm.append(
+        nameInput,
+        urlInput,
+        editActions
+      );
+
+      listItem.innerHTML = "";
+      listItem.appendChild(editForm);
+      nameInput.focus();
+      nameInput.select();
+    }
+
+    async function saveRecipeChanges(
+      index,
+      newName,
+      newUrl,
+      saveButton
+    ) {
+      const name = newName.trim();
+      const url = newUrl.trim();
+
+      if (!name) {
+        showMessage(
+          "recipeMessage",
+          "Bitte gib den Namen des Gerichts ein.",
+          "error"
+        );
+        return;
+      }
+
+      if (url) {
+        try {
+          const parsedUrl = new URL(url);
+
+          if (
+            parsedUrl.protocol !== "http:" &&
+            parsedUrl.protocol !== "https:"
+          ) {
+            throw new Error(
+              "Ungültiges Protokoll"
+            );
+          }
+        } catch (error) {
+          showMessage(
+            "recipeMessage",
+            "Bitte gib eine gültige URL ein.",
+            "error"
+          );
+          return;
+        }
+      }
+
+      if (!recipesCloudReady) {
+        showMessage(
+          "recipeMessage",
+          "Die Cloud-Verbindung wird noch hergestellt.",
+          "error"
+        );
+        return;
+      }
+
+      const updatedRecipes =
+        recipes.map(
+          (recipe, recipeIndex) => {
+            if (recipeIndex !== index) {
+              return recipe;
+            }
+
+            return {
+              ...recipe,
+              name,
+              url
+            };
+          }
+        );
+
+      saveButton.disabled = true;
+
+      try {
+        await window
+          .saveRecipesToCloud(
+            updatedRecipes
+          );
+
+        showMessage(
+          "recipeMessage",
+          "Die Rezeptidee wurde aktualisiert.",
+          "success"
+        );
+      } catch (error) {
+        console.error(error);
+        saveButton.disabled = false;
+
+        showMessage(
+          "recipeMessage",
+          "Die Rezeptidee konnte nicht aktualisiert werden.",
+          "error"
+        );
+      }
     }
 
     async function toggleRecipeCookbook(
