@@ -215,6 +215,14 @@
       overflow-wrap: anywhere;
     }
 
+    .recipe-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
     .empty-message,
     .form-message {
       color: #64748b;
@@ -1581,7 +1589,7 @@
             "list-row";
 
           actions.className =
-            "shopping-row";
+            "recipe-actions";
 
           name.textContent =
             recipe.name || "";
@@ -1640,7 +1648,7 @@
           cookbookButton.textContent =
             recipe.inCookbook
               ? "Kochbuch-Markierung entfernen"
-              : "Im Kochbuch markieren";
+              : "Kochbuch-Markierung";
 
           cookbookButton.addEventListener(
             "click",
